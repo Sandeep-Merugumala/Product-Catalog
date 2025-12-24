@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/men_screen.dart';
 import 'dart:async'; 
 import 'dart:math' as math;
+
+import 'package:project_map/features/product_catalog/presentation/screens/sports_catalog_screen.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -485,9 +488,21 @@ class QuickCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categories = [
-      {'name': 'Men', 'img': 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400', 'color': Colors.blue},
-      {'name': 'Women', 'img': 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400', 'color': Colors.pink},
-      {'name': 'Kids', 'img': 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400', 'color': Colors.green},
+      {
+        'name': 'Men',
+        'img': 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400',
+        'color': Colors.blue,
+      },
+      {
+        'name': 'Women',
+        'img': 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400',
+        'color': Colors.pink,
+      },
+      {
+        'name': 'Kids',
+        'img': 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400',
+        'color': Colors.green,
+      },
     ];
 
     return Center(
@@ -499,43 +514,57 @@ class QuickCategories extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: categories.map((cat) {
-              return Container(
-                width: 90,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 75,
-                      width: 75,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: (cat['color'] as Color).withOpacity(0.3),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+              final isMen = cat['name'] == 'Men';
+
+              return GestureDetector(
+                onTap: isMen
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MenScreen(),
                           ),
-                        ],
-                        border: Border.all(color: Colors.white, width: 3),
-                      ),
-                      child: ClipOval(
-                        child: Image.network(
-                          cat['img'] as String,
-                          fit: BoxFit.cover,
+                        );
+                      }
+                    : null,
+                child: Container(
+                  width: 90,
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 75,
+                        width: 75,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: (cat['color'] as Color).withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                          border: Border.all(color: Colors.white, width: 3),
+                        ),
+                        child: ClipOval(
+                          child: Image.network(
+                            cat['img'] as String,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      cat['name'] as String,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: Colors.black87,
+                      const SizedBox(height: 8),
+                      Text(
+                        cat['name'] as String,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }).toList(),
@@ -1186,58 +1215,66 @@ class EnhancedCategoryGrid extends StatelessWidget {
           childAspectRatio: 0.85,
         ),
         itemBuilder: (context, i) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: cats[i]['gradient'] as List<Color>,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: (cats[i]['gradient'] as List<Color>)[0].withOpacity(0.4),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
+          return GestureDetector(
+            onTap: (){
+              if(cats[i]['n']=='Sports'){
+                Navigator.push(context,MaterialPageRoute(builder: (context) => const SportsCatalogScreen()),);
+              }
+            },
+            child : Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: cats[i]['gradient'] as List<Color>,
+                  begin : Alignment.topLeft,
+                  end : Alignment.topRight,
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Opacity(
-                      opacity: 0.3,
-                      child: Image.network(cats[i]['img']! as String, fit: BoxFit.cover),
-                    ),
+                boxShadow: [
+                  BoxShadow(
+                    color: (cats[i]['gradient'] as List<Color>)[0].withOpacity(0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 8),
                   ),
+
+                ],
+              ),
+              child : ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child : Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.3,
+                        child : Image.network(cats[i]['img']! as String, fit : BoxFit.cover),
+
+                      ),
+                    ),
                   Positioned(
-                    bottom: 20,
-                    left: 16,
-                    right: 16,
-                    child: Column(
+                    bottom : 20,
+                    left : 16,
+                    right : 16,
+                    child : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           cats[i]['n']! as String,
-                          style: const TextStyle(
+                          style : const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
-                            fontSize: 22,
+                            fontSize: 22
                           ),
                         ),
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 12,vertical :6),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
+                            color : Colors.white.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            "Explore →",
-                            style: TextStyle(
-                              color: Colors.white,
+                          child : const Text(
+                            "Explore ->",
+                            style : TextStyle(
+                              color : Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
@@ -1248,13 +1285,15 @@ class EnhancedCategoryGrid extends StatelessWidget {
                   ),
                 ],
               ),
+              ),
             ),
+
           );
         },
       ),
     );
   }
-}
+}    
 
 class TrendingProductsGrid extends StatelessWidget {
   const TrendingProductsGrid({super.key});
