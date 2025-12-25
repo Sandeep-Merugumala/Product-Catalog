@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../widgets/skeleton_product_card.dart';
 
 class MenScreen extends StatefulWidget {
   const MenScreen({super.key});
@@ -19,7 +18,6 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
   late AnimationController _pulseController;
 
   bool _showElevation = false;
-  bool _isLoading = true;
   int _selectedCategoryIndex = 0;
   int _currentBannerIndex = 0;
 
@@ -942,8 +940,10 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
                       Colors.transparent
                     ]))),
                     Positioned(
-                      left: 24, top: 20, bottom: 20,
-                      right: 24, // Added right padding to constrain text
+                      left: 24,
+                      top: 20,
+                      bottom: 20,
+                      right: 24,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -1135,25 +1135,6 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildProductGrid() {
-    // Show Skeleton Grid if loading
-    if (_isLoading) {
-      return SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        sliver: SliverGrid(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            childAspectRatio: 0.58,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => const SkeletonProductCard(),
-            childCount: 6, // Show 6 skeleton items
-          ),
-        ),
-      );
-    }
-
     final products = _filteredProducts;
     if (products.isEmpty) {
       return const SliverToBoxAdapter(
@@ -1281,13 +1262,19 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
-                              color: Colors.black,
+                              gradient: LinearGradient(
+                                  // ← NEW: Use gradient instead of solid color
+                                  colors: [
+                                    Colors.blue.shade600,
+                                    Colors.purple.shade600
+                                  ]),
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2))
+                                    color: Colors.blue.withOpacity(
+                                        0.3), // ← Optional: match shadow to gradient
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4))
                               ],
                             ),
                             child: const Center(

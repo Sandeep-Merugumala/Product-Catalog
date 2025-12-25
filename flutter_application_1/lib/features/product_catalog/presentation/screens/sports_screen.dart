@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:math' as math;
 
-class ElectronicsScreen extends StatefulWidget {
-  const ElectronicsScreen({super.key});
+class SportsCatalogScreen extends StatefulWidget {
+  const SportsCatalogScreen({super.key});
 
   @override
-  State<ElectronicsScreen> createState() => _ElectronicsScreenState();
+  State<SportsCatalogScreen> createState() => _SportsCatalogScreenState();
 }
 
-class _ElectronicsScreenState extends State<ElectronicsScreen>
+class _SportsCatalogScreenState extends State<SportsCatalogScreen>
     with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _productSectionKey = GlobalKey();
@@ -25,68 +25,63 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
 
   // Filter State
   String _sortOption = 'default';
-  List<String> _selectedBrands = [];
+  final List<String> _selectedBrands = [];
 
-  // Data
+  // Categories - These names MUST match the product 'category' field exactly
   final List<Map<String, dynamic>> _categories = [
     {
       'name': 'All',
       'icon': Icons.grid_view,
-      'gradient': [const Color(0xFF667eea), const Color(0xFF764ba2)]
+      'gradient': [const Color(0xFF11998e), const Color(0xFF38ef7d)]
     },
     {
-      'name': 'Laptops',
-      'icon': Icons.laptop,
-      'gradient': [const Color(0xFF4facfe), const Color(0xFF00f2fe)]
+      'name': 'Footwear',
+      'icon': Icons.directions_run,
+      'gradient': [const Color(0xFF2193b0), const Color(0xFF6dd5ed)]
     },
     {
-      'name': 'Phones',
-      'icon': Icons.smartphone,
-      'gradient': [const Color(0xFF43e97b), const Color(0xFF38f9d7)]
+      'name': 'Clothing',
+      'icon': Icons.accessibility_new,
+      'gradient': [const Color(0xFFF2994A), const Color(0xFFF2C94C)]
     },
     {
-      'name': 'Audio',
-      'icon': Icons.headphones,
-      'gradient': [const Color(0xFFfa709a), const Color(0xFFfee140)]
+      'name': 'Equipment',
+      'icon': Icons.fitness_center,
+      'gradient': [const Color(0xFF4568DC), const Color(0xFFB06AB3)]
     },
     {
-      'name': 'Cameras',
-      'icon': Icons.camera_alt,
-      'gradient': [const Color(0xFFf093fb), const Color(0xFFF5576c)]
-    },
-    {
-      'name': 'Gaming',
-      'icon': Icons.sports_esports,
-      'gradient': [const Color(0xFF30cfd0), const Color(0xFF330867)]
-    },
-    {
-      'name': 'Wearables',
+      'name': 'Accessories',
       'icon': Icons.watch,
-      'gradient': [const Color(0xFFa8edea), const Color(0xFFfed6e3)]
+      'gradient': [const Color(0xFFee9ca7), const Color(0xFFffdde1)]
+    },
+    {
+      'name': 'Team Sports',
+      'icon': Icons.sports_soccer,
+      'gradient': [const Color(0xFF56ab2f), const Color(0xFFa8e063)]
     },
   ];
 
   final List<Map<String, String>> _banners = [
     {
       'image':
-          'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200',
-      'title': 'Next Gen Tech',
-      'subtitle': 'Future is Now',
-      'badge': 'LATEST'
+          'https://images.unsplash.com/photo-1517649763965-4d3770d430f3?w=1200',
+      'title': 'Train Harder',
+      'subtitle': 'New Pro Series Gear',
+      'badge': 'JUST DROPPED'
     },
     {
       'image':
-          'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=1200',
-      'title': 'Smart Home',
-      'subtitle': 'Connected Living',
-      'badge': 'TRENDING'
+          'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=1200',
+      'title': 'Run Further',
+      'subtitle': 'Marathon Ready Shoes',
+      'badge': 'BESTSELLERS'
     },
     {
       'image':
-          'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=1200',
-      'title': 'Gaming Gear',
-      'subtitle': 'Level Up Your Setup',
-      'badge': 'EXCLUSIVE'
+          'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=1200',
+      'title': 'Home Gym',
+      'subtitle': 'Essentials up to 40% Off',
+      'badge': 'SALE'
     },
   ];
 
@@ -95,7 +90,7 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
   @override
   void initState() {
     super.initState();
-    _initializeProducts(); // Generate the 50+ products
+    _initializeProducts();
 
     _shimmerController =
         AnimationController(vsync: this, duration: const Duration(seconds: 2))
@@ -114,119 +109,182 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
   }
 
   void _initializeProducts() {
-    // Base products
+    // 1. Specific Products
     List<Map<String, dynamic>> baseProducts = [
       {
-        'name': 'MacBook Air M2',
-        'brand': 'Apple',
-        'price': 999.0,
-        'oldPrice': 1199.0,
-        'rating': 4.9,
-        'reviews': 854,
-        'image':
-            'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500',
-        'tag': 'Best Seller',
-        'category': 'Laptops'
-      },
-      {
-        'name': 'Galaxy S24 Ultra',
-        'brand': 'Samsung',
-        'price': 1199.0,
-        'oldPrice': 1299.0,
+        'name': 'Nike Air Zoom Pegasus',
+        'category': 'Footwear',
+        'price': 129.99,
+        'originalPrice': 179.99,
         'rating': 4.8,
-        'reviews': 621,
+        'reviews': 2453,
         'image':
-            'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500',
-        'tag': 'New',
-        'category': 'Phones'
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+        'discount': 28,
+        'brand': 'Nike',
+        'tag': 'Bestseller'
       },
       {
-        'name': 'Sony WH-1000XM5',
-        'brand': 'Sony',
-        'price': 348.0,
-        'oldPrice': 399.0,
+        'name': 'Adidas Ultraboost 22',
+        'category': 'Footwear',
+        'price': 189.99,
+        'originalPrice': 220.00,
         'rating': 4.9,
+        'reviews': 3124,
+        'image':
+            'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500',
+        'discount': 14,
+        'brand': 'Adidas',
+        'tag': 'New'
+      },
+      {
+        'name': 'Performance Dri-FIT Tee',
+        'category': 'Clothing',
+        'price': 34.99,
+        'originalPrice': 49.99,
+        'rating': 4.6,
+        'reviews': 1876,
+        'image':
+            'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500',
+        'discount': 30,
+        'brand': 'Nike',
+        'tag': 'Deal'
+      },
+      {
+        'name': 'Pro Compression Shorts',
+        'category': 'Clothing',
+        'price': 44.99,
+        'originalPrice': 64.99,
+        'rating': 4.7,
+        'reviews': 982,
+        'image':
+            'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500',
+        'discount': 31,
+        'brand': 'Under Armour',
+        'tag': 'Hot'
+      },
+      {
+        'name': 'Basketball Pro Series',
+        'category': 'Equipment',
+        'price': 79.99,
+        'originalPrice': 99.99,
+        'rating': 4.8,
+        'reviews': 1543,
+        'image':
+            'https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=500',
+        'discount': 20,
+        'brand': 'Nike',
+        'tag': null
+      },
+      {
+        'name': 'Yoga Mat Premium',
+        'category': 'Equipment',
+        'price': 54.99,
+        'originalPrice': 74.99,
+        'rating': 4.9,
+        'reviews': 2187,
+        'image':
+            'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500',
+        'discount': 27,
+        'brand': 'Puma',
+        'tag': 'Eco'
+      },
+      {
+        'name': 'Sports Duffle Bag',
+        'category': 'Accessories',
+        'price': 64.99,
+        'originalPrice': 89.99,
+        'rating': 4.7,
         'reviews': 1245,
         'image':
-            'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500',
-        'tag': 'Top Rated',
-        'category': 'Audio'
+            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500',
+        'discount': 28,
+        'brand': 'Adidas',
+        'tag': null
       },
       {
-        'name': 'Canon EOS R6',
-        'brand': 'Canon',
-        'price': 2499.0,
-        'oldPrice': null,
-        'rating': 4.9,
-        'reviews': 210,
+        'name': 'Wireless Earbuds Sport',
+        'category': 'Accessories',
+        'price': 89.99,
+        'originalPrice': 129.99,
+        'rating': 4.8,
+        'reviews': 3421,
         'image':
-            'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500',
-        'tag': 'Pro Choice',
-        'category': 'Cameras'
-      },
-      {
-        'name': 'PlayStation 5',
-        'brand': 'Sony',
-        'price': 499.0,
-        'oldPrice': null,
-        'rating': 5.0,
-        'reviews': 3402,
-        'image':
-            'https://images.unsplash.com/photo-1606144042614-b0417c0ed615?w=500',
-        'tag': 'Best Seller',
-        'category': 'Gaming'
+            'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500',
+        'discount': 31,
+        'brand': 'Reebok',
+        'tag': 'Tech'
       },
     ];
 
-    // Generate 50 more products dynamically
+    // 2. Generate 50 more products dynamically
     _allProducts = [...baseProducts, ..._generateMoreProducts()];
   }
 
   List<Map<String, dynamic>> _generateMoreProducts() {
     List<Map<String, dynamic>> generated = [];
     final brands = [
-      'Apple',
-      'Samsung',
-      'Sony',
-      'Dell',
-      'HP',
-      'Asus',
-      'Razer',
-      'Logitech',
-      'Bose'
+      'Nike',
+      'Adidas',
+      'Puma',
+      'Under Armour',
+      'Reebok',
+      'Asics',
+      'New Balance'
     ];
-    final categories = [
-      'Laptops',
-      'Phones',
-      'Audio',
-      'Cameras',
-      'Gaming',
-      'Wearables'
-    ];
-    final images = [
-      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500', // Laptop
-      'https://images.unsplash.com/photo-1598327105666-5b89351aff23?w=500', // Phone
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500', // Audio
-      'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500', // Camera
-      'https://images.unsplash.com/photo-1592840496011-88086d5998d3?w=500', // Gaming
-      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500', // Watch
-    ];
+
+    // Category specific images to prevent mismatched photos
+    final Map<String, List<String>> categoryImages = {
+      'Footwear': [
+        'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500', // Green Nike
+        'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500', // Vans
+        'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500', // Running Shoes
+      ],
+      'Clothing': [
+        'https://images.unsplash.com/photo-1518459031867-a89b944bffe4?w=500', // Workout Top
+        'https://images.unsplash.com/photo-1483721310020-03333e577078?w=500', // Leggings
+        'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500', // White Tee
+      ],
+      'Equipment': [
+        'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?w=500', // Dumbbells
+        'https://images.unsplash.com/photo-1623874514711-0f321325f318?w=500', // Basketball
+        'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=500', // Weights
+      ],
+      'Accessories': [
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500', // Watch
+        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500', // Bag
+      ],
+      'Team Sports': [
+        'https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=500', // Soccer Ball
+        'https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=500', // Basketball
+      ]
+    };
+
+    final categoryKeys = categoryImages.keys.toList();
 
     for (int i = 0; i < 50; i++) {
-      var category = categories[i % categories.length];
+      // Pick a category
+      var category = categoryKeys[i % categoryKeys.length];
       var brand = brands[i % brands.length];
-      var price = (math.Random().nextInt(2000) + 50).toDouble();
+      var price = (math.Random().nextInt(200) + 15).toDouble();
+
+      // Pick a random image from that category
+      var images = categoryImages[category]!;
+      var image = images[i % images.length];
 
       generated.add({
-        'name': '$brand ${category} ${i + 200}',
+        'name':
+            '$brand ${category.substring(0, 3).toUpperCase()} Pro ${i + 100}',
+        'category': category, // Ensure this matches _categories names EXACTLY
         'brand': brand,
         'price': price,
-        'oldPrice': i % 3 == 0 ? price + (price * 0.2) : null,
-        'rating': 3.5 + (math.Random().nextDouble() * 1.5),
-        'reviews': math.Random().nextInt(1000),
-        'image': images[i % images.length],
-        'tag': i % 5 == 0 ? 'New' : (i % 7 == 0 ? 'Sale' : null),
-        'category': category,
+        'originalPrice':
+            i % 3 == 0 ? price + (math.Random().nextInt(50) + 10) : null,
+        'rating': 3.8 + (math.Random().nextDouble() * 1.2),
+        'reviews': math.Random().nextInt(800),
+        'image': image,
+        'tag': i % 6 == 0 ? 'Sale' : (i % 8 == 0 ? 'New' : null),
+        'discount': i % 3 == 0 ? math.Random().nextInt(30) + 10 : null,
       });
     }
     return generated;
@@ -248,15 +306,21 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
   List<Map<String, dynamic>> get _filteredProducts {
     List<Map<String, dynamic>> list = List.from(_allProducts);
 
+    // 1. Filter by Category
     if (_selectedCategoryIndex != 0) {
-      String selectedCategory = _categories[_selectedCategoryIndex]['name'];
-      list = list.where((p) => p['category'] == selectedCategory).toList();
+      // Get the name from the UI list (e.g., "Footwear")
+      String selectedCategoryName = _categories[_selectedCategoryIndex]['name'];
+
+      // Filter list to keep only items where 'category' matches exactly
+      list = list.where((p) => p['category'] == selectedCategoryName).toList();
     }
 
+    // 2. Filter by Brand
     if (_selectedBrands.isNotEmpty) {
       list = list.where((p) => _selectedBrands.contains(p['brand'])).toList();
     }
 
+    // 3. Sort Logic
     if (_sortOption == 'price_asc') {
       list.sort(
           (a, b) => (a['price'] as double).compareTo(b['price'] as double));
@@ -266,6 +330,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
     } else if (_sortOption == 'rating') {
       list.sort(
           (a, b) => (b['rating'] as double).compareTo(a['rating'] as double));
+    } else if (_sortOption == 'reviews') {
+      list.sort((a, b) => (b['reviews'] as int).compareTo(a['reviews'] as int));
     }
 
     return list;
@@ -290,9 +356,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
       builder: (context) => StatefulBuilder(
         builder: (context, setStateModal) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.75, // Taller modal
-            padding: const EdgeInsets.fromLTRB(
-                20, 20, 20, 0), // Remove bottom padding here
+            height: MediaQuery.of(context).size.height * 0.75,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Column(
               children: [
                 Center(
@@ -348,6 +413,26 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
                           ],
                         ),
                         const SizedBox(height: 20),
+                        const Text("Popularity",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 10,
+                          children: [
+                            _buildChoiceChip(
+                                "Top Rated",
+                                _sortOption == 'rating',
+                                (selected) => setStateModal(() => _sortOption =
+                                    selected ? 'rating' : 'default')),
+                            _buildChoiceChip(
+                                "Most Reviewed",
+                                _sortOption == 'reviews',
+                                (selected) => setStateModal(() => _sortOption =
+                                    selected ? 'reviews' : 'default')),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
                         const Text("Brands",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600)),
@@ -365,8 +450,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
                                       ? _selectedBrands.add(brand)
                                       : _selectedBrands.remove(brand)),
                               backgroundColor: Colors.grey.shade100,
-                              selectedColor: Colors.blue.shade100,
-                              checkmarkColor: Colors.blue.shade700,
+                              selectedColor: Colors.teal.shade100,
+                              checkmarkColor: Colors.teal.shade700,
                             );
                           }).toList(),
                         ),
@@ -411,10 +496,10 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
       label: Text(label),
       selected: isSelected,
       onSelected: onSelected,
-      selectedColor: Colors.blue.shade100,
+      selectedColor: Colors.teal.shade100,
       backgroundColor: Colors.grey.shade100,
       labelStyle:
-          TextStyle(color: isSelected ? Colors.blue.shade900 : Colors.black),
+          TextStyle(color: isSelected ? Colors.teal.shade900 : Colors.black),
     );
   }
 
@@ -460,22 +545,23 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.cyan.shade600, Colors.blue.shade800]),
+                gradient: const LinearGradient(
+                    colors: [Color(0xFF11998e), Color(0xFF38ef7d)]),
                 borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.bolt, size: 20, color: Colors.white),
+            child: const Icon(Icons.sports_basketball,
+                color: Colors.white, size: 20),
           ),
           const SizedBox(width: 12),
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Electronics",
+              Text("Sports Store",
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5)),
-              Text("Tech & Gadgets",
+              Text("Premium Gear",
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 10,
@@ -518,17 +604,18 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.cyan.shade400, Colors.blue.shade600]),
-                borderRadius: BorderRadius.circular(10)),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)]),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
             child: const Icon(Icons.search, color: Colors.white, size: 20),
           ),
           const SizedBox(width: 15),
           const Expanded(
               child: TextField(
                   decoration: InputDecoration(
-                      hintText: "Search gadgets, laptops...",
+                      hintText: "Search for gear, brands...",
                       border: InputBorder.none))),
           const Icon(Icons.mic_none, color: Colors.grey),
         ],
@@ -650,8 +737,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 gradient: _currentBannerIndex == entry.key
-                    ? LinearGradient(
-                        colors: [Colors.cyan.shade600, Colors.blue.shade600])
+                    ? const LinearGradient(
+                        colors: [Color(0xFF11998e), Color(0xFF38ef7d)])
                     : null,
                 color: _currentBannerIndex == entry.key
                     ? null
@@ -737,8 +824,9 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
 
   Widget _buildSectionTitle() {
     String title = _selectedCategoryIndex == 0
-        ? "Featured Tech"
-        : "${_categories[_selectedCategoryIndex]['name']} Collection";
+        ? "Trending Gear"
+        : "${_categories[_selectedCategoryIndex]['name']}";
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
       child: Row(
@@ -813,7 +901,8 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
                           child: Image.network(product['image'],
                               width: double.infinity, fit: BoxFit.cover),
                         ),
-                        if (product['tag'] != null)
+                        if (product['tag'] != null ||
+                            product['discount'] != null)
                           Positioned(
                             top: 10,
                             left: 10,
@@ -821,11 +910,15 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                  color: product['tag'].contains('%')
+                                  color: product['tag'] == 'Sale' ||
+                                          product['discount'] != null
                                       ? Colors.red
                                       : Colors.black,
                                   borderRadius: BorderRadius.circular(8)),
-                              child: Text(product['tag'],
+                              child: Text(
+                                  product['discount'] != null
+                                      ? "-${product['discount']}%"
+                                      : product['tag'],
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 10,
@@ -878,10 +971,10 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 16)),
-                                  if (product['oldPrice'] != null) ...[
+                                  if (product['originalPrice'] != null) ...[
                                     const SizedBox(width: 6),
                                     Text(
-                                        "\$${product['oldPrice'].toStringAsFixed(0)}",
+                                        "\$${product['originalPrice'].toStringAsFixed(0)}",
                                         style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
@@ -892,23 +985,22 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
                               ),
                             ],
                           ),
+                          // Highlighted Add to Cart Button
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.cyan.shade600,
-                                  Colors.blue.shade800
-                                ],
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF11998e), Color(0xFF38ef7d)],
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                               ),
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  // Using the Cyan shade for the shadow to maintain a clean glow
-                                  color: Colors.cyan.shade600.withOpacity(0.3),
+                                  // Updated shadow to match the teal/green start color
+                                  color:
+                                      const Color(0xFF11998e).withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 )
