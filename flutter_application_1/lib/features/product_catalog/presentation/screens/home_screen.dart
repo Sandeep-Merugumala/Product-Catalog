@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import 'package:project_map/features/product_catalog/presentation/screens/sports_catalog_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/electronics_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/fashion_catalog_screen.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -1330,6 +1331,13 @@ class EnhancedCategoryGrid extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const ElectronicsScreen()));
+              } else if (cats[i]['n'] == 'Fashion') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FashionCatalogScreen(),
+                  ),
+                );
               }
             },
             child: Container(
@@ -1679,3 +1687,4 @@ class SectionHeader extends StatelessWidget {
     );
   }
 }
+
