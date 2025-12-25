@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import 'package:project_map/features/product_catalog/presentation/screens/sports_catalog_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/electronics_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/widgets/skeleton_product_card.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -28,11 +29,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _snowController;
   late AnimationController _shimmerController;
   late AnimationController _rotationController;
-  late AnimationController _headerController;
-  bool _isSantaFlying = false;
+
   int _currentIndex = 0;
   final ScrollController _scrollController = ScrollController();
   bool _showElevation = false;
+
+  bool _isLoading = true;
+  late AnimationController _skeletonController;
+  late Animation<double> _skeletonAnimation;
 
   @override
   void initState() {
@@ -55,33 +59,33 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _headerController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
+
+    // Skeleton Animation
+    _skeletonController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1500))
+      ..repeat();
+    _skeletonAnimation =
+        Tween<double>(begin: -1.0, end: 2.0).animate(CurvedAnimation(
+      parent: _skeletonController,
+      curve: Curves.easeInOutSine,
+    ));
+
+    // Simulate loading delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _isLoading = false);
+    });
 
     _scrollController.addListener(() {
       if (_scrollController.offset > 10 && !_showElevation) {
         setState(() => _showElevation = true);
-        _headerController.forward();
       } else if (_scrollController.offset <= 10 && _showElevation) {
         setState(() => _showElevation = false);
-        _headerController.reverse();
       }
     });
   }
 
   void _playMagic() {
-    setState(() => _isSantaFlying = true);
-    _confettiController.play();
     _rotationController.forward(from: 0);
-    _santaController.forward(from: 0).then((_) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) {
-          setState(() => _isSantaFlying = false);
-        }
-      });
-    });
   }
 
   @override
@@ -91,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _snowController.dispose();
     _shimmerController.dispose();
     _rotationController.dispose();
-    _headerController.dispose();
+
+    _skeletonController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -99,296 +104,209 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverAppBar(
-                // UPDATED: Reduced Height from 120 to 100
-                expandedHeight: 100,
-                floating: true,
-                pinned: true,
-                elevation: _showElevation ? 8 : 0,
-                backgroundColor: Colors.white,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white,
-                          Colors.blue.shade50.withOpacity(0.3),
+      backgroundColor:
+          const Color(0xFFFFF0F5), // Light pinkish/white background
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              snap: true,
+              elevation: 0,
+              backgroundColor: const Color(0xFFFFF0F5),
+              toolbarHeight: 70,
+              titleSpacing: 16,
+              title: Row(
+                children: [
+                  // SEARCH BAR with Embedded Logo
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(color: Colors.grey.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
                         ],
                       ),
-                    ),
-                    child: SafeArea(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8), // Reduced vertical padding
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.blue.shade600,
-                                        Colors.purple.shade600
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Icon(Icons.shopping_bag,
-                                      color: Colors.white,
-                                      size: 22), // Slightly smaller icon
-                                ),
-                                const SizedBox(width: 10),
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "ShopLuxe",
-                                      style: TextStyle(
-                                        fontSize: 20, // Reduced font size
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Premium Shopping",
-                                      style: TextStyle(
-                                        fontSize: 10, // Reduced font size
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                _buildIconButton(Icons.favorite_border,
-                                    Colors.red.shade400, 2),
-                                const SizedBox(width: 8),
-                                _buildIconButton(Icons.shopping_cart_outlined,
-                                    Colors.blue.shade400, 3),
-                                const SizedBox(width: 8),
-                                _buildIconButton(Icons.notifications_outlined,
-                                    Colors.orange.shade400, 5),
-                              ],
+                          const SizedBox(width: 6),
+                          // LOGO inside search bar
+                          Container(
+                            height: 38,
+                            width: 38,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [Colors.orange, Colors.pinkAccent]),
+                              shape: BoxShape.circle,
                             ),
+                            child: const Center(
+                              child: Text(
+                                "M",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              "Search \"Jeans\"",
+                              style: TextStyle(
+                                  color: Colors.grey.shade500, fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Icon(Icons.search,
+                                color: Colors.grey.shade600, size: 24),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 16),
+
+                  // ICONS ROW
+                  Stack(
+                    children: [
+                      const Icon(Icons.notifications_outlined,
+                          size: 28, color: Colors.black87),
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.pink,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Text('3',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  const Icon(Icons.favorite_border,
+                      size: 28, color: Colors.black87),
+                  const SizedBox(width: 16),
+                  const Icon(Icons.person_outline,
+                      size: 28, color: Colors.black87),
+                ],
               ),
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    const ModernSearchBar(),
+            ),
+          ],
+          body: Container(
+            color: const Color(0xFFFFF0F5),
+            child: Column(
+              children: [
+                // NAV BAR + Grid Icon
+                const CategoryNavBar(),
 
-                    const SizedBox(height: 20),
-                    const QuickCategories(),
-
-                    const SizedBox(height: 16),
-                    const EnhancedFullScreenSlider(),
-
-                    const SizedBox(height: 24),
-                    const FlashDealsSection(),
-
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Winter Specials",
-                        icon: Icons.ac_unit,
-                        gradient: [Color(0xFF1976D2), Color(0xFF42A5F5)]),
-                    AnimatedWinterBanner(snowController: _snowController),
-
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Holiday Magic",
-                        icon: Icons.celebration,
-                        gradient: [Color(0xFFD32F2F), Color(0xFFFF5252)]),
-                    EnhancedChristmasMagicCard(
-                      onTap: _playMagic,
-                      shimmerController: _shimmerController,
-                      rotationController: _rotationController,
+                // Content area
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      // Optional: Rounded top corners for the content sheet
+                      // borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     ),
-
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Shop by Category",
-                        icon: Icons.grid_view,
-                        gradient: [Color(0xFF7B1FA2), Color(0xFFBA68C8)]),
-
-                    // UPDATED: Now includes Sports (5 items total)
-                    const EnhancedCategoryGrid(),
-
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Trending Now",
-                        icon: Icons.local_fire_department,
-                        gradient: [Color(0xFFFF6F00), Color(0xFFFFAB40)]),
-                    const TrendingProductsGrid(),
-
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Brand Spotlight",
-                        icon: Icons.stars,
-                        gradient: [Color(0xFF00897B), Color(0xFF4DB6AC)]),
-                    const BrandShowcase(),
-
-                    const SizedBox(height: 100),
-                  ],
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: _isLoading
+                          ? _buildSkeletonLoader()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: QuickCategories(),
+                                ),
+                                const SizedBox(height: 16),
+                                const EnhancedFullScreenSlider(),
+                                const SizedBox(height: 24),
+                                const FlashDealsSection(),
+                                const SizedBox(height: 24),
+                                const SectionHeader(
+                                    title: "Winter Specials",
+                                    icon: Icons.ac_unit,
+                                    gradient: [
+                                      Color(0xFF1976D2),
+                                      Color(0xFF42A5F5)
+                                    ]),
+                                AnimatedWinterBanner(
+                                    snowController: _snowController),
+                                const SizedBox(height: 24),
+                                const SectionHeader(
+                                    title: "Holiday Magic",
+                                    icon: Icons.celebration,
+                                    gradient: [
+                                      Color(0xFFD32F2F),
+                                      Color(0xFFFF5252)
+                                    ]),
+                                EnhancedChristmasMagicCard(
+                                  onTap: _playMagic,
+                                  shimmerController: _shimmerController,
+                                  rotationController: _rotationController,
+                                ),
+                                const SizedBox(height: 24),
+                                const SectionHeader(
+                                    title: "Shop by Category",
+                                    icon: Icons.grid_view,
+                                    gradient: [
+                                      Color(0xFF7B1FA2),
+                                      Color(0xFFBA68C8)
+                                    ]),
+                                const EnhancedCategoryGrid(),
+                                const SizedBox(height: 24),
+                                const SectionHeader(
+                                    title: "Trending Now",
+                                    icon: Icons.local_fire_department,
+                                    gradient: [
+                                      Color(0xFFFF6F00),
+                                      Color(0xFFFFAB40)
+                                    ]),
+                                const TrendingProductsGrid(),
+                                const SizedBox(height: 24),
+                                const SectionHeader(
+                                    title: "Brand Spotlight",
+                                    icon: Icons.stars,
+                                    gradient: [
+                                      Color(0xFF00897B),
+                                      Color(0xFF4DB6AC)
+                                    ]),
+                                const BrandShowcase(),
+                                const SizedBox(height: 100),
+                              ],
+                            ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          if (_isSantaFlying) _buildSantaAnimation(),
-          if (_isSantaFlying) _buildConfettiEffects(),
-        ],
+        ),
       ),
       bottomNavigationBar: _buildModernBottomNav(),
       floatingActionButton: _buildFloatingCart(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-
-  Widget _buildIconButton(IconData icon, Color color, int badgeCount) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: color, size: 20),
-        ),
-        if (badgeCount > 0)
-          Positioned(
-            right: -4,
-            top: -4,
-            child: Container(
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withOpacity(0.5),
-                    blurRadius: 4,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-              child: Text(
-                badgeCount.toString(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 9,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildSantaAnimation() {
-    return AnimatedBuilder(
-      animation: _santaController,
-      builder: (context, child) {
-        double screenWidth = MediaQuery.of(context).size.width;
-        double screenHeight = MediaQuery.of(context).size.height;
-        final progress = _santaController.value;
-        final curve = Curves.easeInOutCubic.transform(progress);
-        final x = -150 + (screenWidth + 300) * curve;
-        final y = screenHeight * 0.15 + math.sin(curve * math.pi) * 80;
-        return Positioned(
-          left: x,
-          top: y,
-          child: Transform.scale(
-            scale: 1.0 + math.sin(progress * math.pi * 6) * 0.08,
-            child: Transform.rotate(
-              angle: math.sin(progress * math.pi * 4) * 0.15,
-              child: const Row(
-                children: [
-                  Text("🎁", style: TextStyle(fontSize: 35)),
-                  SizedBox(width: 5),
-                  Text("🎅", style: TextStyle(fontSize: 85)),
-                  Text("🛷", style: TextStyle(fontSize: 70)),
-                  Text("💨", style: TextStyle(fontSize: 60)),
-                  SizedBox(width: 5),
-                  Text("🔔", style: TextStyle(fontSize: 35)),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildConfettiEffects() {
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: ConfettiWidget(
-            confettiController: _confettiController,
-            blastDirection: math.pi / 4,
-            blastDirectionality: BlastDirectionality.directional,
-            colors: const [
-              Colors.red,
-              Colors.green,
-              Colors.amber,
-              Colors.white,
-              Colors.blue,
-              Colors.pink
-            ],
-            numberOfParticles: 25,
-            maxBlastForce: 25,
-            minBlastForce: 15,
-            emissionFrequency: 0.03,
-            gravity: 0.3,
-          ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: ConfettiWidget(
-            confettiController: _confettiController,
-            blastDirection: 3 * math.pi / 4,
-            blastDirectionality: BlastDirectionality.directional,
-            colors: const [
-              Colors.red,
-              Colors.green,
-              Colors.amber,
-              Colors.white,
-              Colors.blue,
-              Colors.pink
-            ],
-            numberOfParticles: 25,
-            maxBlastForce: 25,
-            minBlastForce: 15,
-            emissionFrequency: 0.03,
-            gravity: 0.3,
-          ),
-        ),
-      ],
     );
   }
 
@@ -409,7 +327,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
+          onTap: (index) {
+            if (index != 2) {
+              setState(() => _currentIndex = index);
+            }
+          },
           backgroundColor: Colors.white,
           elevation: 0,
           selectedItemColor: Colors.blue.shade600,
@@ -430,6 +352,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               label: "Explore",
             ),
             BottomNavigationBarItem(
+              icon: SizedBox(height: 24), // Invisible placeholder for FAB
+              label: "",
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.favorite_outline),
               activeIcon: Icon(Icons.favorite),
               label: "Wishlist",
@@ -447,82 +373,184 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Widget _buildFloatingCart() {
     return Container(
+      height: 60,
+      width: 60,
       margin: const EdgeInsets.only(top: 30),
       child: FloatingActionButton(
         onPressed: () {},
         backgroundColor: Colors.blue.shade600,
         elevation: 8,
-        child: const Icon(Icons.shopping_bag, size: 28),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: const Icon(Icons.shopping_bag_outlined,
+            color: Colors.white, size: 28),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          // Search Bar Skeleton
+          ShimmerBox(
+              height: 50, borderRadius: 16, animation: _skeletonAnimation),
+          const SizedBox(height: 20),
+          // Categories Skeleton
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+                4,
+                (index) => Column(
+                      children: [
+                        ShimmerBox(
+                            height: 70,
+                            width: 70,
+                            borderRadius: 35,
+                            animation: _skeletonAnimation),
+                        const SizedBox(height: 8),
+                        ShimmerBox(
+                            height: 10,
+                            width: 50,
+                            borderRadius: 4,
+                            animation: _skeletonAnimation),
+                      ],
+                    )),
+          ),
+          const SizedBox(height: 20),
+          // Banner Skeleton
+          ShimmerBox(
+              height: 200, borderRadius: 24, animation: _skeletonAnimation),
+          const SizedBox(height: 24),
+          // Section Title
+          ShimmerBox(
+              height: 20,
+              width: 150,
+              borderRadius: 4,
+              animation: _skeletonAnimation),
+          const SizedBox(height: 16),
+          // Grid Skeleton
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 4,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: 0.7,
+            ),
+            itemBuilder: (context, index) => ShimmerBox(
+                height: 200, borderRadius: 20, animation: _skeletonAnimation),
+          ),
+        ],
       ),
     );
   }
 }
 
-class ModernSearchBar extends StatelessWidget {
-  const ModernSearchBar({super.key});
+class CategoryNavBar extends StatefulWidget {
+  const CategoryNavBar({super.key});
+
+  @override
+  State<CategoryNavBar> createState() => _CategoryNavBarState();
+}
+
+class _CategoryNavBarState extends State<CategoryNavBar> {
+  int _selectedIndex = 0;
+  final List<String> _categories = ["All", "Men", "Women", "Kids"];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-      height: 56,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      height: 60,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue.shade400, Colors.purple.shade400],
-              ),
-              borderRadius: BorderRadius.circular(10),
+          // Nav Items Row - Expanded to take full space
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(_categories.length, (index) {
+                final isSelected = _selectedIndex == index;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => _selectedIndex = index);
+                      if (_categories[index] == "Men") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MenScreen()));
+                      } else if (_categories[index] == "Electronics") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ElectronicsScreen()));
+                      }
+                    },
+                    child: Container(
+                      color: Colors.transparent, // Hit test behavior
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _categories[index],
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: isSelected
+                                  ? FontWeight.w900
+                                  : FontWeight.w600,
+                              color: isSelected
+                                  ? Colors.redAccent
+                                  : Colors.black87,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          if (isSelected)
+                            Container(
+                              margin: const EdgeInsets.only(top: 6),
+                              height: 3,
+                              width: 20,
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
-            child: const Icon(Icons.search, color: Colors.white, size: 20),
           ),
-          const SizedBox(width: 15),
-          const Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search for products, brands...",
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
+
+          const SizedBox(width: 12),
+
+          // Grid Icon Button
           Container(
-            padding: const EdgeInsets.all(6),
+            height: 40,
+            width: 40,
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xFF1E1E2C), // Dark/Black color
+              borderRadius: BorderRadius.circular(12),
             ),
-            child:
-                const Icon(Icons.qr_code_scanner, color: Colors.grey, size: 20),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(Icons.mic_none, color: Colors.grey, size: 20),
+            child: const Icon(Icons.grid_view_rounded,
+                color: Colors.white, size: 20),
           ),
         ],
       ),
     );
   }
 }
+
+// ModernSearchBar is no longer used, so it's removed in this replacement which covers the area where it would be defined if I didn't remove it earlier.
+// If it was present, this replacement will overwrite it cleaner.
 
 class QuickCategories extends StatelessWidget {
   const QuickCategories({super.key});
@@ -531,104 +559,85 @@ class QuickCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     final categories = [
       {
-        'name': 'Men',
+        'name': 'Fashion',
         'img':
-            'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400',
-        'color': Colors.blue,
+            'https://images.unsplash.com/photo-1529139574466-a302c27e3844?w=400', // Models/Couple
+        'color': const Color(0xFFFFE0E0), // Light coral bg
       },
       {
-        'name': 'Electronics',
+        'name': 'Beauty',
         'img':
-            'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400',
-        'color': Colors.cyan,
+            'https://images.unsplash.com/photo-1596462502278-27bfdd403348?w=400', // Cosmetics
+        'color': const Color(0xFFFFF0F5), // Lavender blush
       },
       {
-        'name': 'Women',
+        'name': 'Home',
         'img':
-            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400',
-        'color': Colors.pink,
+            'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=400', // Interior decor
+        'color': const Color(0xFFE0F7FA), // Light cyan
       },
       {
-        'name': 'Kids',
+        'name': 'Footwear',
         'img':
-            'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400',
-        'color': Colors.green,
+            'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400', // Shoes
+        'color': const Color(0xFFFFF8E1), // Light amber
+      },
+      {
+        'name': 'Accessories',
+        'img':
+            'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400', // Handbag
+        'color': const Color(0xFFF3E5F5), // Light purple
       },
     ];
 
-    return Center(
-      child: Container(
-        height: 120,
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: categories.map((cat) {
-              final isMen = cat['name'] == 'Men';
-              final isElectronics = cat['name'] == 'Electronics';
-
-              return GestureDetector(
-                onTap: () {
-                  if (isMen) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenScreen(),
-                      ),
-                    );
-                  } else if (isElectronics) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ElectronicsScreen(),
-                      ),
-                    );
-                  }
-                },
-                child: Container(
-                  width: 90,
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 75,
-                        width: 75,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: (cat['color'] as Color).withOpacity(0.3),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                          border: Border.all(color: Colors.white, width: 3),
-                        ),
-                        child: ClipOval(
-                          child: Image.network(
-                            cat['img'] as String,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        cat['name'] as String,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: Colors.black87,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+    return SizedBox(
+      height: 110,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        itemCount: categories.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 16),
+        itemBuilder: (context, index) {
+          final cat = categories[index];
+          return Column(
+            children: [
+              Container(
+                height: 75,
+                width: 75,
+                decoration: BoxDecoration(
+                  color: (cat['color'] as Color),
+                  borderRadius:
+                      BorderRadius.circular(20), // Rounded Square (Squircle)
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: Image.network(
+                    cat['img'] as String,
+                    fit: BoxFit.cover,
                   ),
                 ),
-              );
-            }).toList(),
-          ),
-        ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                cat['name'] as String,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

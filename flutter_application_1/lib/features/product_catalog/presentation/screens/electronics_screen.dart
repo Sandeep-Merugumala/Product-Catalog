@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:project_map/features/product_catalog/presentation/widgets/skeleton_product_card.dart';
 import 'dart:math' as math;
 
 class ElectronicsScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
   late AnimationController _pulseController;
 
   bool _showElevation = false;
+  bool _isLoading = true;
   int _selectedCategoryIndex = 0;
   int _currentBannerIndex = 0;
 
@@ -96,6 +98,11 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
   void initState() {
     super.initState();
     _initializeProducts(); // Generate the 50+ products
+
+    // Simulate loading delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _isLoading = false);
+    });
 
     _shimmerController =
         AnimationController(vsync: this, duration: const Duration(seconds: 2))
@@ -769,6 +776,25 @@ class _ElectronicsScreenState extends State<ElectronicsScreen>
   }
 
   Widget _buildProductGrid() {
+    // Show Skeleton Grid if loading
+    if (_isLoading) {
+      return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        sliver: SliverGrid(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 0.58,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => const SkeletonProductCard(),
+            childCount: 6, // Show 6 skeleton items
+          ),
+        ),
+      );
+    }
+
     final products = _filteredProducts;
     if (products.isEmpty) {
       return const SliverToBoxAdapter(
