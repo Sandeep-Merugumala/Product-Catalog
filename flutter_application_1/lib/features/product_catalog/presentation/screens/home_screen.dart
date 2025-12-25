@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/men_screen.dart';
-import 'dart:async'; 
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:project_map/features/product_catalog/presentation/screens/sports_catalog_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/electronics_screen.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -36,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 5));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 5));
     _santaController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -105,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             slivers: [
               SliverAppBar(
                 // UPDATED: Reduced Height from 120 to 100
-                expandedHeight: 100, 
+                expandedHeight: 100,
                 floating: true,
                 pinned: true,
                 elevation: _showElevation ? 8 : 0,
@@ -127,18 +129,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Reduced vertical padding
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8), // Reduced vertical padding
                             child: Row(
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                      colors: [Colors.blue.shade600, Colors.purple.shade600],
+                                      colors: [
+                                        Colors.blue.shade600,
+                                        Colors.purple.shade600
+                                      ],
                                     ),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: const Icon(Icons.shopping_bag, color: Colors.white, size: 22), // Slightly smaller icon
+                                  child: const Icon(Icons.shopping_bag,
+                                      color: Colors.white,
+                                      size: 22), // Slightly smaller icon
                                 ),
                                 const SizedBox(width: 10),
                                 const Column(
@@ -164,11 +173,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   ],
                                 ),
                                 const Spacer(),
-                                _buildIconButton(Icons.favorite_border, Colors.red.shade400, 2),
+                                _buildIconButton(Icons.favorite_border,
+                                    Colors.red.shade400, 2),
                                 const SizedBox(width: 8),
-                                _buildIconButton(Icons.shopping_cart_outlined, Colors.blue.shade400, 3),
+                                _buildIconButton(Icons.shopping_cart_outlined,
+                                    Colors.blue.shade400, 3),
                                 const SizedBox(width: 8),
-                                _buildIconButton(Icons.notifications_outlined, Colors.orange.shade400, 5),
+                                _buildIconButton(Icons.notifications_outlined,
+                                    Colors.orange.shade400, 5),
                               ],
                             ),
                           ),
@@ -184,42 +196,57 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     const SizedBox(height: 8),
                     const ModernSearchBar(),
-                    
+
                     const SizedBox(height: 20),
                     const QuickCategories(),
-                    
+
                     const SizedBox(height: 16),
                     const EnhancedFullScreenSlider(),
-                    
+
                     const SizedBox(height: 24),
                     const FlashDealsSection(),
-                    
+
                     const SizedBox(height: 24),
-                    const SectionHeader(title: "Winter Specials", icon: Icons.ac_unit, gradient: [Color(0xFF1976D2), Color(0xFF42A5F5)]),
+                    const SectionHeader(
+                        title: "Winter Specials",
+                        icon: Icons.ac_unit,
+                        gradient: [Color(0xFF1976D2), Color(0xFF42A5F5)]),
                     AnimatedWinterBanner(snowController: _snowController),
-                    
+
                     const SizedBox(height: 24),
-                    const SectionHeader(title: "Holiday Magic", icon: Icons.celebration, gradient: [Color(0xFFD32F2F), Color(0xFFFF5252)]),
+                    const SectionHeader(
+                        title: "Holiday Magic",
+                        icon: Icons.celebration,
+                        gradient: [Color(0xFFD32F2F), Color(0xFFFF5252)]),
                     EnhancedChristmasMagicCard(
                       onTap: _playMagic,
                       shimmerController: _shimmerController,
                       rotationController: _rotationController,
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    const SectionHeader(title: "Shop by Category", icon: Icons.grid_view, gradient: [Color(0xFF7B1FA2), Color(0xFFBA68C8)]),
-                    
+                    const SectionHeader(
+                        title: "Shop by Category",
+                        icon: Icons.grid_view,
+                        gradient: [Color(0xFF7B1FA2), Color(0xFFBA68C8)]),
+
                     // UPDATED: Now includes Sports (5 items total)
                     const EnhancedCategoryGrid(),
-                    
+
                     const SizedBox(height: 24),
-                    const SectionHeader(title: "Trending Now", icon: Icons.local_fire_department, gradient: [Color(0xFFFF6F00), Color(0xFFFFAB40)]),
+                    const SectionHeader(
+                        title: "Trending Now",
+                        icon: Icons.local_fire_department,
+                        gradient: [Color(0xFFFF6F00), Color(0xFFFFAB40)]),
                     const TrendingProductsGrid(),
-                    
+
                     const SizedBox(height: 24),
-                    const SectionHeader(title: "Brand Spotlight", icon: Icons.stars, gradient: [Color(0xFF00897B), Color(0xFF4DB6AC)]),
+                    const SectionHeader(
+                        title: "Brand Spotlight",
+                        icon: Icons.stars,
+                        gradient: [Color(0xFF00897B), Color(0xFF4DB6AC)]),
                     const BrandShowcase(),
-                    
+
                     const SizedBox(height: 100),
                   ],
                 ),
@@ -325,7 +352,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             confettiController: _confettiController,
             blastDirection: math.pi / 4,
             blastDirectionality: BlastDirectionality.directional,
-            colors: const [Colors.red, Colors.green, Colors.amber, Colors.white, Colors.blue, Colors.pink],
+            colors: const [
+              Colors.red,
+              Colors.green,
+              Colors.amber,
+              Colors.white,
+              Colors.blue,
+              Colors.pink
+            ],
             numberOfParticles: 25,
             maxBlastForce: 25,
             minBlastForce: 15,
@@ -339,7 +373,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             confettiController: _confettiController,
             blastDirection: 3 * math.pi / 4,
             blastDirectionality: BlastDirectionality.directional,
-            colors: const [Colors.red, Colors.green, Colors.amber, Colors.white, Colors.blue, Colors.pink],
+            colors: const [
+              Colors.red,
+              Colors.green,
+              Colors.amber,
+              Colors.white,
+              Colors.blue,
+              Colors.pink
+            ],
             numberOfParticles: 25,
             maxBlastForce: 25,
             minBlastForce: 15,
@@ -465,7 +506,8 @@ class ModernSearchBar extends StatelessWidget {
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.qr_code_scanner, color: Colors.grey, size: 20),
+            child:
+                const Icon(Icons.qr_code_scanner, color: Colors.grey, size: 20),
           ),
           const SizedBox(width: 8),
           Container(
@@ -490,17 +532,26 @@ class QuickCategories extends StatelessWidget {
     final categories = [
       {
         'name': 'Men',
-        'img': 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400',
+        'img':
+            'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400',
         'color': Colors.blue,
       },
       {
+        'name': 'Electronics',
+        'img':
+            'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400',
+        'color': Colors.cyan,
+      },
+      {
         'name': 'Women',
-        'img': 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400',
+        'img':
+            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400',
         'color': Colors.pink,
       },
       {
         'name': 'Kids',
-        'img': 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400',
+        'img':
+            'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400',
         'color': Colors.green,
       },
     ];
@@ -515,18 +566,26 @@ class QuickCategories extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: categories.map((cat) {
               final isMen = cat['name'] == 'Men';
+              final isElectronics = cat['name'] == 'Electronics';
 
               return GestureDetector(
-                onTap: isMen
-                    ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MenScreen(),
-                          ),
-                        );
-                      }
-                    : null,
+                onTap: () {
+                  if (isMen) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MenScreen(),
+                      ),
+                    );
+                  } else if (isElectronics) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ElectronicsScreen(),
+                      ),
+                    );
+                  }
+                },
                 child: Container(
                   width: 90,
                   margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -579,7 +638,8 @@ class EnhancedFullScreenSlider extends StatefulWidget {
   const EnhancedFullScreenSlider({super.key});
 
   @override
-  State<EnhancedFullScreenSlider> createState() => _EnhancedFullScreenSliderState();
+  State<EnhancedFullScreenSlider> createState() =>
+      _EnhancedFullScreenSliderState();
 }
 
 class _EnhancedFullScreenSliderState extends State<EnhancedFullScreenSlider> {
@@ -590,19 +650,22 @@ class _EnhancedFullScreenSliderState extends State<EnhancedFullScreenSlider> {
   Widget build(BuildContext context) {
     final banners = [
       {
-        'img': "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070",
+        'img':
+            "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070",
         'title': 'New Season',
         'subtitle': 'Up to 50% Off',
         'color': Colors.blue,
       },
       {
-        'img': "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999",
+        'img':
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999",
         'title': 'Tech Deals',
         'subtitle': 'Latest Gadgets',
         'color': Colors.purple,
       },
       {
-        'img': "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1780",
+        'img':
+            "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1780",
         'title': 'Fashion Week',
         'subtitle': 'Exclusive Collection',
         'color': Colors.orange,
@@ -765,7 +828,8 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
@@ -789,7 +853,8 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
               ),
               const SizedBox(width: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(8),
@@ -839,7 +904,8 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                     Stack(
                       children: [
                         ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(16)),
                           child: Image.network(
                             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
                             height: 100,
@@ -851,7 +917,8 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                           top: 8,
                           right: 8,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(12),
@@ -919,8 +986,11 @@ class SnowPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     for (var flake in snowflakes) {
-      final x = (flake.x * size.width + animationValue * flake.speed * 30) % size.width;
-      final y = (flake.y * size.height + animationValue * flake.fallSpeed * 600) % size.height;
+      final x = (flake.x * size.width + animationValue * flake.speed * 30) %
+          size.width;
+      final y =
+          (flake.y * size.height + animationValue * flake.fallSpeed * 600) %
+              size.height;
       canvas.drawCircle(Offset(x, y), flake.size, paint);
     }
   }
@@ -1005,7 +1075,8 @@ class AnimatedWinterBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade400,
                       borderRadius: BorderRadius.circular(20),
@@ -1040,14 +1111,18 @@ class AnimatedWinterBanner extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
                       elevation: 0,
                     ),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Shop Now", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                        Text("Shop Now",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15)),
                         SizedBox(width: 8),
                         Icon(Icons.arrow_forward, size: 18),
                       ],
@@ -1106,7 +1181,8 @@ class EnhancedChristmasMagicCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
                       gradient: LinearGradient(
-                        begin: Alignment(-1.5 + shimmerController.value * 3, -0.5),
+                        begin:
+                            Alignment(-1.5 + shimmerController.value * 3, -0.5),
                         end: Alignment(-0.5 + shimmerController.value * 3, 0.5),
                         colors: [
                           Colors.transparent,
@@ -1156,7 +1232,8 @@ class EnhancedChristmasMagicCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
@@ -1195,11 +1272,36 @@ class EnhancedCategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cats = [
-      {'n': 'Electronics', 'img': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600', 'gradient': [const Color(0xFF667eea), const Color(0xFF764ba2)]},
-      {'n': 'Fashion', 'img': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=600', 'gradient': [const Color(0xFFf093fb), const Color(0xFff5576c)]},
-      {'n': 'Beauty', 'img': 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600', 'gradient': [const Color(0xFFFF9A9E), const Color(0xFFFECFEF)]},
-      {'n': 'Home Decor', 'img': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600', 'gradient': [const Color(0xFF4facfe), const Color(0xFF00f2fe)]},
-      {'n': 'Sports', 'img': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600', 'gradient': [const Color(0xFF43e97b), const Color(0xFF38f9d7)]},
+      {
+        'n': 'Electronics',
+        'img':
+            'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600',
+        'gradient': [const Color(0xFF667eea), const Color(0xFF764ba2)]
+      },
+      {
+        'n': 'Fashion',
+        'img':
+            'https://images.unsplash.com/photo-1445205170230-053b83016050?w=600',
+        'gradient': [const Color(0xFFf093fb), const Color(0xFff5576c)]
+      },
+      {
+        'n': 'Beauty',
+        'img':
+            'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600',
+        'gradient': [const Color(0xFFFF9A9E), const Color(0xFFFECFEF)]
+      },
+      {
+        'n': 'Home Decor',
+        'img':
+            'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600',
+        'gradient': [const Color(0xFF4facfe), const Color(0xFF00f2fe)]
+      },
+      {
+        'n': 'Sports',
+        'img':
+            'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600',
+        'gradient': [const Color(0xFF43e97b), const Color(0xFF38f9d7)]
+      },
     ];
 
     return Padding(
@@ -1216,84 +1318,92 @@ class EnhancedCategoryGrid extends StatelessWidget {
         ),
         itemBuilder: (context, i) {
           return GestureDetector(
-            onTap: (){
-              if(cats[i]['n']=='Sports'){
-                Navigator.push(context,MaterialPageRoute(builder: (context) => const SportsCatalogScreen()),);
+            onTap: () {
+              if (cats[i]['n'] == 'Sports') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SportsCatalogScreen()),
+                );
+              } else if (cats[i]['n'] == 'Electronics') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ElectronicsScreen()));
               }
             },
-            child : Container(
+            child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
                   colors: cats[i]['gradient'] as List<Color>,
-                  begin : Alignment.topLeft,
-                  end : Alignment.topRight,
+                  begin: Alignment.topLeft,
+                  end: Alignment.topRight,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: (cats[i]['gradient'] as List<Color>)[0].withOpacity(0.4),
+                    color: (cats[i]['gradient'] as List<Color>)[0]
+                        .withOpacity(0.4),
                     blurRadius: 16,
                     offset: const Offset(0, 8),
                   ),
-
                 ],
               ),
-              child : ClipRRect(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child : Stack(
+                child: Stack(
                   children: [
                     Positioned.fill(
                       child: Opacity(
                         opacity: 0.3,
-                        child : Image.network(cats[i]['img']! as String, fit : BoxFit.cover),
-
+                        child: Image.network(cats[i]['img']! as String,
+                            fit: BoxFit.cover),
                       ),
                     ),
-                  Positioned(
-                    bottom : 20,
-                    left : 16,
-                    right : 16,
-                    child : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cats[i]['n']! as String,
-                          style : const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 22
+                    Positioned(
+                      bottom: 20,
+                      left: 16,
+                      right: 16,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            cats[i]['n']! as String,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 22),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12,vertical :6),
-                          decoration: BoxDecoration(
-                            color : Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child : const Text(
-                            "Explore ->",
-                            style : TextStyle(
-                              color : Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              "Explore ->",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               ),
             ),
-
           );
         },
       ),
     );
   }
-}    
+}
 
 class TrendingProductsGrid extends StatelessWidget {
   const TrendingProductsGrid({super.key});
@@ -1301,10 +1411,32 @@ class TrendingProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = [
-      {'name': 'Smart Watch Pro', 'price': '\$299', 'rating': '4.8', 'img': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'},
-      {'name': 'Wireless Earbuds', 'price': '\$149', 'rating': '4.6', 'img': 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400'},
-      {'name': 'Designer Handbag', 'price': '\$199', 'rating': '4.9', 'img': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'},
-      {'name': 'Running Sneakers', 'price': '\$129', 'rating': '4.7', 'img': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'},
+      {
+        'name': 'Smart Watch Pro',
+        'price': '\$299',
+        'rating': '4.8',
+        'img':
+            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+      },
+      {
+        'name': 'Wireless Earbuds',
+        'price': '\$149',
+        'rating': '4.6',
+        'img':
+            'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400'
+      },
+      {
+        'name': 'Designer Handbag',
+        'price': '\$199',
+        'rating': '4.9',
+        'img': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'
+      },
+      {
+        'name': 'Running Sneakers',
+        'price': '\$129',
+        'rating': '4.7',
+        'img': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'
+      },
     ];
 
     return Padding(
@@ -1338,7 +1470,8 @@ class TrendingProductsGrid extends StatelessWidget {
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(20)),
                       child: Image.network(
                         products[i]['img']!,
                         height: 140,
@@ -1350,18 +1483,23 @@ class TrendingProductsGrid extends StatelessWidget {
                       top: 10,
                       right: 10,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.75),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 14),
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 14),
                             const SizedBox(width: 4),
                             Text(
                               products[i]['rating']!,
-                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -1376,7 +1514,8 @@ class TrendingProductsGrid extends StatelessWidget {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.favorite_border, size: 18, color: Colors.red),
+                        child: const Icon(Icons.favorite_border,
+                            size: 18, color: Colors.red),
                       ),
                     ),
                   ],
@@ -1388,7 +1527,8 @@ class TrendingProductsGrid extends StatelessWidget {
                     children: [
                       Text(
                         products[i]['name']!,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -1408,11 +1548,15 @@ class TrendingProductsGrid extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Colors.blue.shade600, Colors.purple.shade600],
+                                colors: [
+                                  Colors.blue.shade600,
+                                  Colors.purple.shade600
+                                ],
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.add_shopping_cart, size: 18, color: Colors.white),
+                            child: const Icon(Icons.add_shopping_cart,
+                                size: 18, color: Colors.white),
                           ),
                         ],
                       ),
@@ -1491,7 +1635,11 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
   final List<Color> gradient;
-  const SectionHeader({super.key, required this.title, required this.icon, required this.gradient});
+  const SectionHeader(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.gradient});
 
   @override
   Widget build(BuildContext context) {
