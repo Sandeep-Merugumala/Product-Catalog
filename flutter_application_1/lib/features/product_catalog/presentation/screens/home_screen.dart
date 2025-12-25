@@ -48,8 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 5));
+    _confettiController = ConfettiController(duration: const Duration(seconds: 5));
     _santaController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -617,6 +616,94 @@ class QuickCategories extends StatelessWidget {
                     cat['img'] as String,
                     fit: BoxFit.cover,
                   ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 300),
+                            opacity: _isHovered ? 0.4 : 0.3,
+                            child: Image.network(
+                              widget.imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 20,
+                          left: 16,
+                          right: 16,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 300),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: _isHovered ? 24 : 22,
+                                ),
+                                child: Text(widget.name),
+                              ),
+                              const SizedBox(height: 8),
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: _isHovered ? 16 : 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(_isHovered ? 0.4 : 0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Explore",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    AnimatedContainer(
+                                      duration: const Duration(milliseconds: 300),
+                                      margin: EdgeInsets.only(left: _isHovered ? 8 : 4),
+                                      child: const Text(
+                                        "→",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (_isHovered)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.transparent,
+                                    widget.gradient[0].withOpacity(0.3),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -641,8 +728,7 @@ class EnhancedFullScreenSlider extends StatefulWidget {
   const EnhancedFullScreenSlider({super.key});
 
   @override
-  State<EnhancedFullScreenSlider> createState() =>
-      _EnhancedFullScreenSliderState();
+  State<EnhancedFullScreenSlider> createState() => _EnhancedFullScreenSliderState();
 }
 
 class _EnhancedFullScreenSliderState extends State<EnhancedFullScreenSlider> {
@@ -653,22 +739,19 @@ class _EnhancedFullScreenSliderState extends State<EnhancedFullScreenSlider> {
   Widget build(BuildContext context) {
     final banners = [
       {
-        'img':
-            "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070",
+        'img': "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070",
         'title': 'New Season',
         'subtitle': 'Up to 50% Off',
         'color': Colors.blue,
       },
       {
-        'img':
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999",
+        'img': "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999",
         'title': 'Tech Deals',
         'subtitle': 'Latest Gadgets',
         'color': Colors.purple,
       },
       {
-        'img':
-            "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1780",
+        'img': "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1780",
         'title': 'Fashion Week',
         'subtitle': 'Exclusive Collection',
         'color': Colors.orange,
@@ -833,8 +916,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
           child: Row(
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
@@ -858,8 +940,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
               ),
               const SizedBox(width: 12),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(8),
@@ -874,10 +955,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                 ),
               ),
               const Spacer(),
-              TextButton(
-                onPressed: () {},
-                child: const Text("View All →"),
-              ),
+
             ],
           ),
         ),
@@ -909,8 +987,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                     Stack(
                       children: [
                         ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(16)),
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                           child: Image.network(
                             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
                             height: 100,
@@ -922,8 +999,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                           top: 8,
                           right: 8,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(12),
@@ -991,11 +1067,8 @@ class SnowPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     for (var flake in snowflakes) {
-      final x = (flake.x * size.width + animationValue * flake.speed * 30) %
-          size.width;
-      final y =
-          (flake.y * size.height + animationValue * flake.fallSpeed * 600) %
-              size.height;
+      final x = (flake.x * size.width + animationValue * flake.speed * 30) % size.width;
+      final y = (flake.y * size.height + animationValue * flake.fallSpeed * 600) % size.height;
       canvas.drawCircle(Offset(x, y), flake.size, paint);
     }
   }
@@ -1080,8 +1153,7 @@ class AnimatedWinterBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade400,
                       borderRadius: BorderRadius.circular(20),
@@ -1124,8 +1196,7 @@ class AnimatedWinterBanner extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 14),
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -1162,32 +1233,10 @@ class TrendingProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = [
-      {
-        'name': 'Smart Watch Pro',
-        'price': '\$299',
-        'rating': '4.8',
-        'img':
-            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
-      },
-      {
-        'name': 'Wireless Earbuds',
-        'price': '\$149',
-        'rating': '4.6',
-        'img':
-            'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400'
-      },
-      {
-        'name': 'Designer Handbag',
-        'price': '\$199',
-        'rating': '4.9',
-        'img': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'
-      },
-      {
-        'name': 'Running Sneakers',
-        'price': '\$129',
-        'rating': '4.7',
-        'img': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'
-      },
+      {'name': 'Smart Watch Pro', 'price': '\$299', 'rating': '4.8', 'img': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'},
+      {'name': 'Wireless Earbuds', 'price': '\$149', 'rating': '4.6', 'img': 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400'},
+      {'name': 'Designer Handbag', 'price': '\$199', 'rating': '4.9', 'img': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'},
+      {'name': 'Running Sneakers', 'price': '\$129', 'rating': '4.7', 'img': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'},
     ];
 
     return Padding(
@@ -1221,8 +1270,7 @@ class TrendingProductsGrid extends StatelessWidget {
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                       child: Image.network(
                         products[i]['img']!,
                         height: 140,
@@ -1234,39 +1282,21 @@ class TrendingProductsGrid extends StatelessWidget {
                       top: 10,
                       right: 10,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.75),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.star,
-                                color: Colors.amber, size: 14),
+                            const Icon(Icons.star, color: Colors.amber, size: 14),
                             const SizedBox(width: 4),
                             Text(
                               products[i]['rating']!,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 10,
-                      left: 10,
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.favorite_border,
-                            size: 18, color: Colors.red),
                       ),
                     ),
                   ],
@@ -1278,8 +1308,7 @@ class TrendingProductsGrid extends StatelessWidget {
                     children: [
                       Text(
                         products[i]['name']!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -1299,15 +1328,11 @@ class TrendingProductsGrid extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue.shade600,
-                                  Colors.purple.shade600
-                                ],
+                                colors: [Colors.blue.shade600, Colors.purple.shade600],
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.add_shopping_cart,
-                                size: 18, color: Colors.white),
+                            child: const Icon(Icons.add_shopping_cart, size: 18, color: Colors.white),
                           ),
                         ],
                       ),
@@ -1426,11 +1451,7 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
   final List<Color> gradient;
-  const SectionHeader(
-      {super.key,
-      required this.title,
-      required this.icon,
-      required this.gradient});
+  const SectionHeader({super.key, required this.title, required this.icon, required this.gradient});
 
   @override
   Widget build(BuildContext context) {
