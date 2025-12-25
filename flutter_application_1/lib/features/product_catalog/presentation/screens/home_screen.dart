@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
-import 'package:project_map/features/product_catalog/presentation/screens/men_screen.dart';
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:project_map/core/widgets/chatbot.dart';
 
+// --- SCREEN IMPORTS ---
+// Make sure these paths match your project structure shown in the screenshots
+import 'package:project_map/features/product_catalog/presentation/screens/men_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/winter_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/women_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/kids_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/sports_catalog_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/electronics_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/widgets/skeleton_product_card.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/fashion_catalog_screen.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -451,6 +458,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 }
 
+// --- WIDGETS ---
+
 class CategoryNavBar extends StatefulWidget {
   const CategoryNavBar({super.key});
 
@@ -465,12 +474,11 @@ class _CategoryNavBarState extends State<CategoryNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      height: 50,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Nav Items Row - Expanded to take full space
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -478,21 +486,7 @@ class _CategoryNavBarState extends State<CategoryNavBar> {
                 final isSelected = _selectedIndex == index;
                 return Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      setState(() => _selectedIndex = index);
-                      if (_categories[index] == "Men") {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MenScreen()));
-                      } else if (_categories[index] == "Electronics") {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const ElectronicsScreen()));
-                      }
-                    },
+                    onTap: () => setState(() => _selectedIndex = index),
                     child: Container(
                       color: Colors.transparent, // Hit test behavior
                       child: Column(
@@ -501,26 +495,25 @@ class _CategoryNavBarState extends State<CategoryNavBar> {
                           Text(
                             _categories[index],
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 16,
                               fontWeight: isSelected
-                                  ? FontWeight.w900
-                                  : FontWeight.w600,
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
                               color: isSelected
-                                  ? Colors.redAccent
-                                  : Colors.black87,
+                                  ? Colors.black
+                                  : Colors.grey.shade400,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                           if (isSelected)
                             Container(
-                              margin: const EdgeInsets.only(top: 6),
+                              margin: const EdgeInsets.only(top: 4),
                               height: 3,
                               width: 20,
                               decoration: BoxDecoration(
-                                color: Colors.redAccent,
+                                color: Colors.pink,
                                 borderRadius: BorderRadius.circular(2),
                               ),
-                            ),
+                            )
                         ],
                       ),
                     ),
@@ -529,10 +522,7 @@ class _CategoryNavBarState extends State<CategoryNavBar> {
               }),
             ),
           ),
-
-          const SizedBox(width: 12),
-
-          // Grid Icon Button
+          const SizedBox(width: 16),
           Container(
             height: 40,
             width: 40,
@@ -552,6 +542,10 @@ class _CategoryNavBarState extends State<CategoryNavBar> {
 // ModernSearchBar is no longer used, so it's removed in this replacement which covers the area where it would be defined if I didn't remove it earlier.
 // If it was present, this replacement will overwrite it cleaner.
 
+// ModernSearchBar is no longer used, so it's removed in this replacement which covers the area where it would be defined if I didn't remove it earlier.
+// If it was present, this replacement will overwrite it cleaner.
+
+// --- QUICK CATEGORIES (Removes Electronics, Keeps Men/Women/Kids) ---
 class QuickCategories extends StatelessWidget {
   const QuickCategories({super.key});
 
@@ -806,9 +800,11 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_duration.inSeconds > 0) {
-        setState(() {
-          _duration = _duration - const Duration(seconds: 1);
-        });
+        if (mounted) {
+          setState(() {
+            _duration = _duration - const Duration(seconds: 1);
+          });
+        }
       } else {
         _timer.cancel();
       }
@@ -1116,22 +1112,35 @@ class AnimatedWinterBanner extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {},
+                    // UPDATED: Navigation logic added here
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WinterEssentialsScreen(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 32, vertical: 14),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       elevation: 0,
                     ),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Shop Now",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15)),
+                        Text(
+                          "Shop Now",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                         SizedBox(width: 8),
                         Icon(Icons.arrow_forward, size: 18),
                       ],
@@ -1142,273 +1151,6 @@ class AnimatedWinterBanner extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class EnhancedChristmasMagicCard extends StatelessWidget {
-  final VoidCallback onTap;
-  final AnimationController shimmerController;
-  final AnimationController rotationController;
-  const EnhancedChristmasMagicCard({
-    super.key,
-    required this.onTap,
-    required this.shimmerController,
-    required this.rotationController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFD32F2F), Color(0xFFC62828), Color(0xFFB71C1C)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.red.withOpacity(0.4),
-              blurRadius: 24,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            AnimatedBuilder(
-              animation: shimmerController,
-              builder: (context, child) {
-                return Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: LinearGradient(
-                        begin:
-                            Alignment(-1.5 + shimmerController.value * 3, -0.5),
-                        end: Alignment(-0.5 + shimmerController.value * 3, 0.5),
-                        colors: [
-                          Colors.transparent,
-                          Colors.white.withOpacity(0.3),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Column(
-              children: [
-                AnimatedBuilder(
-                  animation: rotationController,
-                  builder: (context, child) {
-                    return Transform.rotate(
-                      angle: rotationController.value * math.pi * 2,
-                      child: child,
-                    );
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("🎄", style: TextStyle(fontSize: 40)),
-                      SizedBox(width: 12),
-                      Text("🎁", style: TextStyle(fontSize: 45)),
-                      SizedBox(width: 12),
-                      Text("🎄", style: TextStyle(fontSize: 40)),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "Holiday Magic! 🎅",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Tap to spread festive joy!",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Unwrap Magic",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Text("✨", style: TextStyle(fontSize: 18)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// --------------------------------------------------------------------------------
-// UPDATED: Enhanced Category Grid Including Sports and Beauty (5 items)
-// --------------------------------------------------------------------------------
-class EnhancedCategoryGrid extends StatelessWidget {
-  const EnhancedCategoryGrid({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final cats = [
-      {
-        'n': 'Electronics',
-        'img':
-            'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600',
-        'gradient': [const Color(0xFF667eea), const Color(0xFF764ba2)]
-      },
-      {
-        'n': 'Fashion',
-        'img':
-            'https://images.unsplash.com/photo-1445205170230-053b83016050?w=600',
-        'gradient': [const Color(0xFFf093fb), const Color(0xFff5576c)]
-      },
-      {
-        'n': 'Beauty',
-        'img':
-            'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600',
-        'gradient': [const Color(0xFFFF9A9E), const Color(0xFFFECFEF)]
-      },
-      {
-        'n': 'Home Decor',
-        'img':
-            'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600',
-        'gradient': [const Color(0xFF4facfe), const Color(0xFF00f2fe)]
-      },
-      {
-        'n': 'Sports',
-        'img':
-            'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600',
-        'gradient': [const Color(0xFF43e97b), const Color(0xFF38f9d7)]
-      },
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: cats.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 0.85,
-        ),
-        itemBuilder: (context, i) {
-          return GestureDetector(
-            onTap: () {
-              if (cats[i]['n'] == 'Sports') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SportsCatalogScreen()),
-                );
-              } else if (cats[i]['n'] == 'Electronics') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ElectronicsScreen()));
-              }
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                  colors: cats[i]['gradient'] as List<Color>,
-                  begin: Alignment.topLeft,
-                  end: Alignment.topRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: (cats[i]['gradient'] as List<Color>)[0]
-                        .withOpacity(0.4),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Opacity(
-                        opacity: 0.3,
-                        child: Image.network(cats[i]['img']! as String,
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      left: 16,
-                      right: 16,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            cats[i]['n']! as String,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 22),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              "Explore ->",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }
@@ -1587,12 +1329,36 @@ class BrandShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brands = [
-      {'name': 'Nike', 'logo': '👟'},
-      {'name': 'Apple', 'logo': '🍎'},
-      {'name': 'Adidas', 'logo': '⚽'},
-      {'name': 'Samsung', 'logo': '📱'},
-      {'name': 'Sony', 'logo': '🎮'},
-      {'name': 'Gucci', 'logo': '👜'},
+      {
+        'name': 'Nike',
+        'logo':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png'
+      },
+      {
+        'name': 'Apple',
+        'logo':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/800px-Apple_logo_black.svg.png'
+      },
+      {
+        'name': 'Adidas',
+        'logo':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'
+      },
+      {
+        'name': 'Samsung',
+        'logo':
+            'https://images.samsung.com/is/image/samsung/assets/global/about-us/brand/logo/samsung_logo_lettermark_en_blue.png'
+      },
+      {
+        'name': 'Sony',
+        'logo':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/1200px-Sony_logo.svg.png'
+      },
+      {
+        'name': 'Gucci',
+        'logo':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/1960s_Gucci_Logo.svg/2560px-1960s_Gucci_Logo.svg.png'
+      },
     ];
 
     return SizedBox(
@@ -1603,8 +1369,8 @@ class BrandShowcase extends StatelessWidget {
         itemCount: brands.length,
         itemBuilder: (context, index) {
           return Container(
-            width: 100,
-            margin: const EdgeInsets.symmetric(horizontal: 6),
+            width: 110, // Increased slightly for better logo fit
+            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -1616,22 +1382,38 @@ class BrandShowcase extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  brands[index]['logo']!,
-                  style: const TextStyle(fontSize: 36),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  brands[index]['name']!,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Image.network(
+                      brands[index]['logo']!,
+                      fit: BoxFit.contain,
+                      // Optional: Placeholder while loading
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2, color: Colors.grey.shade300));
+                      },
+                      // Optional: Error icon if link fails
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image, color: Colors.grey),
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    brands[index]['name']!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -1670,20 +1452,249 @@ class SectionHeader extends StatelessWidget {
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
           ),
           const Spacer(),
-          TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-              foregroundColor: gradient[0],
+        ],
+      ),
+    );
+  }
+}
+
+class EnhancedChristmasMagicCard extends StatelessWidget {
+  final VoidCallback onTap;
+  final AnimationController shimmerController;
+  final AnimationController rotationController;
+  const EnhancedChristmasMagicCard({
+    super.key,
+    required this.onTap,
+    required this.shimmerController,
+    required this.rotationController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFD32F2F), Color(0xFFC62828), Color(0xFFB71C1C)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.red.withOpacity(0.4),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
             ),
-            child: const Row(
+          ],
+        ),
+        child: Stack(
+          children: [
+            AnimatedBuilder(
+              animation: shimmerController,
+              builder: (context, child) {
+                return Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      gradient: LinearGradient(
+                        begin: Alignment(
+                          -1.5 + shimmerController.value * 3,
+                          -0.5,
+                        ),
+                        end: Alignment(-0.5 + shimmerController.value * 3, 0.5),
+                        colors: [
+                          Colors.transparent,
+                          Colors.white.withOpacity(0.3),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Column(
               children: [
-                Text("View All", style: TextStyle(fontWeight: FontWeight.w600)),
-                SizedBox(width: 4),
-                Icon(Icons.arrow_forward, size: 16),
+                AnimatedBuilder(
+                  animation: rotationController,
+                  builder: (context, child) {
+                    return Transform.rotate(
+                      angle: rotationController.value * math.pi * 2,
+                      child: child,
+                    );
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("🎄", style: TextStyle(fontSize: 40)),
+                      SizedBox(width: 12),
+                      Text("🎁", style: TextStyle(fontSize: 45)),
+                      SizedBox(width: 12),
+                      Text("🎄", style: TextStyle(fontSize: 40)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "Holiday Magic! 🎅",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Tap to spread festive joy!",
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 28,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Unwrap Magic",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text("✨", style: TextStyle(fontSize: 18)),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EnhancedCategoryGrid extends StatelessWidget {
+  const EnhancedCategoryGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final categories = [
+      {
+        'name': 'Men',
+        'icon': Icons.male,
+        'color': Colors.blue,
+        'screen': const MenScreen(),
+      },
+      {
+        'name': 'Women',
+        'icon': Icons.female,
+        'color': Colors.pink,
+        'screen': const WomenScreen(),
+      },
+      {
+        'name': 'Kids',
+        'icon': Icons.child_care,
+        'color': Colors.orange,
+        'screen': const KidsScreen(),
+      },
+      {
+        'name': 'Sports',
+        'icon': Icons.sports_soccer,
+        'color': Colors.green,
+        'screen': const SportsCatalogScreen(),
+      },
+      {
+        'name': 'Electronics',
+        'icon': Icons.electrical_services,
+        'color': Colors.purple,
+        'screen': const ElectronicsScreen(),
+      },
+      {
+        'name': 'Fashion',
+        'icon': Icons.checkroom,
+        'color': Colors.teal,
+        'screen': const FashionCatalogScreen(),
+      },
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: categories.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 0.85,
+        ),
+        itemBuilder: (context, index) {
+          final cat = categories[index];
+          return GestureDetector(
+            onTap: () {
+              if (cat['screen'] != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => cat['screen'] as Widget),
+                );
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: (cat['color'] as Color).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      cat['icon'] as IconData,
+                      color: cat['color'] as Color,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    cat['name'] as String,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

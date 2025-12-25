@@ -27,7 +27,7 @@ class _SportsCatalogScreenState extends State<SportsCatalogScreen>
 
   // Filter State
   String _sortOption = 'default';
-  List<String> _selectedBrands = [];
+  final List<String> _selectedBrands = [];
 
   // Categories - These names MUST match the product 'category' field exactly
   final List<Map<String, dynamic>> _categories = [
