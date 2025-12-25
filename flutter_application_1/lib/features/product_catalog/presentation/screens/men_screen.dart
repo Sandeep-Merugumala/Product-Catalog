@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'dart:math' as math;
 
 class MenScreen extends StatefulWidget {
   const MenScreen({super.key});
@@ -23,7 +22,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
 
   // Filter State
   String _sortOption = 'default';
-  List<String> _selectedBrands = [];
+  final List<String> _selectedBrands = [];
   
   // Data
   final List<Map<String, dynamic>> _categories = [
@@ -62,7 +61,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _initializeProducts(); // Generate the 50+ products
+    _initializeProducts(); 
     
     _shimmerController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
     _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat(reverse: true);
@@ -77,50 +76,60 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
   }
 
   void _initializeProducts() {
-    // Base products
-    List<Map<String, dynamic>> baseProducts = [
+    _allProducts = [
+      // --- T-SHIRTS ---
       {'name': 'Classic V-Neck Tee', 'brand': 'Nike', 'price': 45.0, 'oldPrice': 65.0, 'rating': 4.8, 'reviews': 234, 'image': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500', 'tag': 'Best Seller', 'category': 'T-Shirts'},
       {'name': 'Performance Polo', 'brand': 'Adidas', 'price': 55.0, 'oldPrice': 75.0, 'rating': 4.7, 'reviews': 189, 'image': 'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500', 'tag': '-27%', 'category': 'T-Shirts'},
+      {'name': 'Graphic Print Tee', 'brand': 'Puma', 'price': 35.0, 'rating': 4.6, 'reviews': 156, 'image': 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500', 'tag': 'New', 'category': 'T-Shirts'},
+      {'name': 'Cotton Crew Neck', 'brand': 'H&M', 'price': 25.0, 'oldPrice': 40.0, 'rating': 4.5, 'reviews': 287, 'image': 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=500', 'tag': '-37%', 'category': 'T-Shirts'},
+      {'name': 'Striped Summer Tee', 'brand': 'Zara', 'price': 29.0, 'rating': 4.4, 'reviews': 120, 'image': 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500', 'tag': null, 'category': 'T-Shirts'},
+      {'name': 'Oversized Street Tee', 'brand': 'Urban', 'price': 40.0, 'rating': 4.8, 'reviews': 310, 'image': 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=500', 'tag': 'Trending', 'category': 'T-Shirts'},
+      {'name': 'Vintage Logo Tee', 'brand': 'Levis', 'price': 35.0, 'oldPrice': 50.0, 'rating': 4.6, 'reviews': 200, 'image': 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500', 'tag': 'Sale', 'category': 'T-Shirts'},
+      {'name': 'Henley Long Sleeve', 'brand': 'Gap', 'price': 45.0, 'rating': 4.5, 'reviews': 150, 'image': 'https://images.unsplash.com/photo-1618354691229-88d47f285158?w=500', 'tag': null, 'category': 'T-Shirts'},
+
+      // --- SHIRTS ---
       {'name': 'Oxford Button Down', 'brand': 'Ralph Lauren', 'price': 89.0, 'oldPrice': 120.0, 'rating': 4.9, 'reviews': 345, 'image': 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500', 'tag': 'Premium', 'category': 'Shirts'},
+      {'name': 'Linen Summer Shirt', 'brand': 'Tommy Hilfiger', 'price': 79.0, 'rating': 4.8, 'reviews': 234, 'image': 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500', 'tag': 'New', 'category': 'Shirts'},
+      {'name': 'Checkered Flannel', 'brand': 'H&M', 'price': 49.0, 'oldPrice': 60.0, 'rating': 4.6, 'reviews': 180, 'image': 'https://images.unsplash.com/photo-1589642380614-4a8c2147b857?w=500', 'tag': 'Winter', 'category': 'Shirts'},
+      {'name': 'Denim Shirt', 'brand': 'Levis', 'price': 65.0, 'rating': 4.7, 'reviews': 220, 'image': 'https://images.unsplash.com/photo-1574634534894-89d7576c8259?w=500', 'tag': 'Classic', 'category': 'Shirts'},
+      {'name': 'Formal White Shirt', 'brand': 'Calvin Klein', 'price': 85.0, 'oldPrice': 110.0, 'rating': 4.8, 'reviews': 400, 'image': 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=500', 'tag': 'Office', 'category': 'Shirts'},
+      {'name': 'Slim Fit Print', 'brand': 'Zara', 'price': 55.0, 'rating': 4.5, 'reviews': 150, 'image': 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=500', 'tag': null, 'category': 'Shirts'},
+      {'name': 'Casual Chambray', 'brand': 'Gap', 'price': 50.0, 'rating': 4.6, 'reviews': 190, 'image': 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=500', 'tag': null, 'category': 'Shirts'},
+
+      // --- JEANS ---
       {'name': 'Slim Fit Jeans', 'brand': "Levi's", 'price': 89.0, 'oldPrice': 120.0, 'rating': 4.9, 'reviews': 456, 'image': 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500', 'tag': 'Best Seller', 'category': 'Jeans'},
+      {'name': 'Straight Leg Denim', 'brand': 'Wrangler', 'price': 79.0, 'rating': 4.7, 'reviews': 289, 'image': 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500', 'tag': 'Classic', 'category': 'Jeans'},
+      {'name': 'Ripped Skinny Jeans', 'brand': 'Diesel', 'price': 110.0, 'oldPrice': 150.0, 'rating': 4.6, 'reviews': 210, 'image': 'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?w=500', 'tag': 'Trending', 'category': 'Jeans'},
+      {'name': 'Black Tapered', 'brand': 'H&M', 'price': 40.0, 'rating': 4.5, 'reviews': 300, 'image': 'https://images.unsplash.com/photo-1555689502-c4b22d76c56f?w=500', 'tag': null, 'category': 'Jeans'},
+      {'name': 'Vintage Wash', 'brand': 'Lee', 'price': 75.0, 'rating': 4.7, 'reviews': 180, 'image': 'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=500', 'tag': 'New', 'category': 'Jeans'},
+      {'name': 'Relaxed Fit', 'brand': 'Gap', 'price': 60.0, 'oldPrice': 80.0, 'rating': 4.6, 'reviews': 150, 'image': 'https://images.unsplash.com/photo-1602293589946-8b245fa3a888?w=500', 'tag': 'Comfort', 'category': 'Jeans'},
+      {'name': 'White Denim', 'brand': 'Zara', 'price': 50.0, 'rating': 4.4, 'reviews': 110, 'image': 'https://images.unsplash.com/photo-1584370848010-d7ccb2211603?w=500', 'tag': 'Summer', 'category': 'Jeans'},
+
+      // --- SHOES ---
       {'name': 'Air Max Sneakers', 'brand': 'Nike', 'price': 149.0, 'oldPrice': 200.0, 'rating': 4.9, 'reviews': 567, 'image': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500', 'tag': 'Best Seller', 'category': 'Shoes'},
+      {'name': 'Stan Smith', 'brand': 'Adidas', 'price': 129.0, 'rating': 4.8, 'reviews': 423, 'image': 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500', 'tag': 'Classic', 'category': 'Shoes'},
+      {'name': 'Desert Boots', 'brand': 'Clarks', 'price': 119.0, 'oldPrice': 160.0, 'rating': 4.6, 'reviews': 189, 'image': 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=500', 'tag': '-25%', 'category': 'Shoes'},
+      {'name': 'Old Skool', 'brand': 'Vans', 'price': 70.0, 'rating': 4.8, 'reviews': 600, 'image': 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500', 'tag': 'Hot', 'category': 'Shoes'},
+      {'name': 'Chelsea Boots', 'brand': 'Timberland', 'price': 160.0, 'rating': 4.9, 'reviews': 300, 'image': 'https://images.unsplash.com/photo-1638361073801-443b749553b4?w=500', 'tag': 'Winter', 'category': 'Shoes'},
+      {'name': 'Leather Loafers', 'brand': 'Gucci', 'price': 450.0, 'rating': 4.9, 'reviews': 50, 'image': 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=500', 'tag': 'Luxury', 'category': 'Shoes'},
+      {'name': 'Running Shoes', 'brand': 'New Balance', 'price': 110.0, 'rating': 4.7, 'reviews': 250, 'image': 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=500', 'tag': 'Sport', 'category': 'Shoes'},
+      {'name': 'High Tops', 'brand': 'Converse', 'price': 65.0, 'rating': 4.7, 'reviews': 500, 'image': 'https://images.unsplash.com/photo-1607522370275-f14bc3a5d288?w=500', 'tag': null, 'category': 'Shoes'},
+
+      // --- WATCHES ---
+      {'name': 'Chronograph Watch', 'brand': 'Fossil', 'price': 159.0, 'oldPrice': 220.0, 'rating': 4.8, 'reviews': 289, 'image': 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500', 'tag': 'Best Seller', 'category': 'Watches'},
+      {'name': 'Smart Watch', 'brand': 'Casio', 'price': 199.0, 'rating': 4.9, 'reviews': 423, 'image': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500', 'tag': 'Premium', 'category': 'Watches'},
+      {'name': 'Leather Strap', 'brand': 'Daniel Wellington', 'price': 130.0, 'rating': 4.6, 'reviews': 180, 'image': 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=500', 'tag': 'Classic', 'category': 'Watches'},
+      {'name': 'Digital Sport', 'brand': 'G-Shock', 'price': 110.0, 'rating': 4.8, 'reviews': 400, 'image': 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500', 'tag': 'Rugged', 'category': 'Watches'},
+      {'name': 'Automatic Diver', 'brand': 'Seiko', 'price': 350.0, 'oldPrice': 450.0, 'rating': 4.9, 'reviews': 120, 'image': 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=500', 'tag': 'Luxury', 'category': 'Watches'},
+      {'name': 'Minimalist Gold', 'brand': 'MVMT', 'price': 140.0, 'rating': 4.5, 'reviews': 150, 'image': 'https://images.unsplash.com/photo-1539874753764-539943364451?w=500', 'tag': null, 'category': 'Watches'},
+
+      // --- ACTIVE ---
+      {'name': 'Compression Top', 'brand': 'Under Armour', 'price': 35.0, 'rating': 4.7, 'reviews': 300, 'image': 'https://images.unsplash.com/photo-1518459031867-a89b944bffe4?w=500', 'tag': 'Gym', 'category': 'Active'},
+      {'name': 'Training Shorts', 'brand': 'Nike', 'price': 30.0, 'oldPrice': 45.0, 'rating': 4.6, 'reviews': 250, 'image': 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=500', 'tag': 'Sale', 'category': 'Active'},
+      {'name': 'Track Jacket', 'brand': 'Adidas', 'price': 70.0, 'rating': 4.8, 'reviews': 180, 'image': 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500', 'tag': 'New', 'category': 'Active'},
+      {'name': 'Gym Tank', 'brand': 'Gymshark', 'price': 25.0, 'rating': 4.5, 'reviews': 150, 'image': 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500', 'tag': null, 'category': 'Active'},
+      {'name': 'Running Tights', 'brand': 'Asics', 'price': 45.0, 'rating': 4.7, 'reviews': 130, 'image': 'https://images.unsplash.com/photo-1483721310020-03333e577078?w=500', 'tag': 'Pro', 'category': 'Active'},
     ];
-
-    // Generate 50 more products dynamically
-    _allProducts = [...baseProducts, ..._generateMoreProducts()];
-  }
-
-  List<Map<String, dynamic>> _generateMoreProducts() {
-    List<Map<String, dynamic>> generated = [];
-    final brands = ['Nike', 'Adidas', 'Puma', 'Zara', 'H&M', 'Levis', 'Gucci', 'Fossil', 'Tommy'];
-    final categories = ['T-Shirts', 'Shirts', 'Jeans', 'Shoes', 'Watches', 'Active'];
-    final images = [
-      'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500', // Tee
-      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500', // Shirt
-      'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=500', // Jeans
-      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500', // Shoes
-      'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=500', // Watch
-      'https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=500', // Active
-    ];
-
-    for (int i = 0; i < 50; i++) {
-      var category = categories[i % categories.length];
-      var brand = brands[i % brands.length];
-      var price = (math.Random().nextInt(150) + 20).toDouble();
-      
-      generated.add({
-        'name': '$brand ${category.substring(0, category.length - 1)} ${i + 100}',
-        'brand': brand,
-        'price': price,
-        'oldPrice': i % 3 == 0 ? price + 30 : null,
-        'rating': 3.5 + (math.Random().nextDouble() * 1.5),
-        'reviews': math.Random().nextInt(500),
-        'image': images[i % images.length],
-        'tag': i % 5 == 0 ? 'New' : (i % 7 == 0 ? 'Sale' : null),
-        'category': category,
-      });
-    }
-    return generated;
   }
 
   @override
@@ -274,7 +283,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: const Color(0xFFEBF5FF), // Subtle Premium Blue Tint
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -295,12 +304,12 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
       expandedHeight: 70,
       floating: true,
       pinned: true,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFEBF5FF), // Matches Scaffold for seamless look
       elevation: _showElevation ? 8 : 0,
       leading: IconButton(
         icon: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)), // White button for contrast
           child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 18)
         ),
         onPressed: () => Navigator.pop(context),
@@ -326,7 +335,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
         IconButton(
           icon: Container(
              padding: const EdgeInsets.all(8),
-             decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
+             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)), // White button for contrast
              child: const Icon(Icons.filter_list, color: Colors.black, size: 20)
           ), 
           onPressed: _showFilterModal
@@ -382,7 +391,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
                     Image.network(banner['image']!, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
                     Container(decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.black.withOpacity(0.8), Colors.transparent]))),
                     Positioned(
-                      left: 24, top: 20, bottom: 20, right: 24, // Added right padding to constrain text
+                      left: 24, top: 20, bottom: 20, right: 24, 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -499,7 +508,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
             onTap: _showFilterModal,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.grey.shade200)), // White for contrast
               child: const Row(children: [Text("Sort/Filter", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)), SizedBox(width: 4), Icon(Icons.tune, size: 16)]),
             ),
           ),
@@ -521,7 +530,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
-          childAspectRatio: 0.58, // Taller ratio to prevent bottom overflow
+          childAspectRatio: 0.58, 
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
@@ -535,7 +544,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 5, // Image takes more space
+                    flex: 5, 
                     child: Stack(
                       children: [
                         ClipRRect(
@@ -563,7 +572,7 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
                     ),
                   ),
                   Expanded(
-                    flex: 4, // Details section
+                    flex: 4, 
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
@@ -589,7 +598,6 @@ class _MenScreenState extends State<MenScreen> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-                          // Highlighted Add to Cart Button
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 8),
