@@ -14,6 +14,7 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
   late AnimationController _snowController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _slideAnimation;
+  final GlobalKey _productSectionKey = GlobalKey();
   String _selectedCategory = 'All';
   final Set<int> _favorites = {};
 
@@ -34,7 +35,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 349.99,
       'rating': 4.9,
       'reviews': 3842,
-      'image': 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800',
       'discount': 29,
       'tags': ['Waterproof', 'Bestseller'],
       'temperature': '-20°C',
@@ -47,7 +49,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 259.99,
       'rating': 4.8,
       'reviews': 2156,
-      'image': 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800',
       'discount': 27,
       'tags': ['Windproof', 'Lightweight'],
       'temperature': '-15°C',
@@ -60,7 +63,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 179.99,
       'rating': 4.7,
       'reviews': 1876,
-      'image': 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800',
       'discount': 28,
       'tags': ['Premium', 'Soft'],
       'temperature': '-5°C',
@@ -73,7 +77,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 129.99,
       'rating': 4.8,
       'reviews': 2341,
-      'image': 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800',
       'discount': 31,
       'tags': ['Breathable', 'Natural'],
       'temperature': '-10°C',
@@ -86,7 +91,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 219.99,
       'rating': 4.9,
       'reviews': 4521,
-      'image': 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=800',
       'discount': 27,
       'tags': ['Waterproof', 'Non-slip'],
       'temperature': '-30°C',
@@ -99,7 +105,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 279.99,
       'rating': 4.8,
       'reviews': 3187,
-      'image': 'https://images.unsplash.com/photo-1605812860427-4024433a70fd?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1605812860427-4024433a70fd?w=800',
       'discount': 29,
       'tags': ['Premium', 'Durable'],
       'temperature': '-20°C',
@@ -112,7 +119,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 74.99,
       'rating': 4.7,
       'reviews': 1654,
-      'image': 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=800',
       'discount': 33,
       'tags': ['Gift Set', 'Soft'],
       'temperature': '-10°C',
@@ -125,7 +133,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 59.99,
       'rating': 4.6,
       'reviews': 2891,
-      'image': 'https://images.unsplash.com/photo-1592058712975-ead9c0e42c5c?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1592058712975-ead9c0e42c5c?w=800',
       'discount': 33,
       'tags': ['Tech-friendly', 'Warm'],
       'temperature': '-15°C',
@@ -138,7 +147,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 119.99,
       'rating': 4.8,
       'reviews': 3456,
-      'image': 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800',
       'discount': 33,
       'tags': ['Moisture-wicking', 'Comfortable'],
       'temperature': '-20°C',
@@ -151,7 +161,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 64.99,
       'rating': 4.7,
       'reviews': 2187,
-      'image': 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800',
       'discount': 31,
       'tags': ['Comfortable', 'Stretchy'],
       'temperature': '-10°C',
@@ -164,7 +175,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 89.99,
       'rating': 4.9,
       'reviews': 1987,
-      'image': 'https://images.unsplash.com/photo-1517583010307-3f789911b89c?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1517583010307-3f789911b89c?w=800',
       'discount': 33,
       'tags': ['Gift Set', 'Stylish'],
       'temperature': '-15°C',
@@ -177,7 +189,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       'originalPrice': 199.99,
       'rating': 4.8,
       'reviews': 1432,
-      'image': 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800',
+      'image':
+          'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800',
       'discount': 25,
       'tags': ['Tech', 'Innovative'],
       'temperature': '-25°C',
@@ -196,7 +209,7 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
       vsync: this,
       duration: const Duration(seconds: 3),
     )..repeat();
-    
+
     _fadeAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeOut,
@@ -245,6 +258,10 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
             _buildSliverAppBar(),
             SliverToBoxAdapter(child: _buildWinterBanner()),
             SliverToBoxAdapter(child: _buildCategoryChips()),
+            SliverToBoxAdapter(
+              key: _productSectionKey, // ← ADD THIS KEY
+              child: const SizedBox.shrink(),
+            ),
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
               sliver: _buildProductGrid(),
@@ -283,8 +300,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                 children: [
                   Row(
                     children: [
-                      _buildBackButton(),
-                      const SizedBox(width: 12),
+                      // _buildBackButton(),
+                      // const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +320,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.blue.shade300.withOpacity(0.4),
+                                        color: Colors.blue.shade300
+                                            .withOpacity(0.4),
                                         blurRadius: 8,
                                         offset: const Offset(0, 3),
                                       ),
@@ -366,7 +384,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                       ),
                       _buildHeaderIcon(Icons.search, Colors.blue.shade600),
                       const SizedBox(width: 10),
-                      _buildHeaderIcon(Icons.favorite_border, Colors.red.shade600),
+                      _buildHeaderIcon(
+                          Icons.favorite_border, Colors.red.shade600),
                       const SizedBox(width: 10),
                       _buildHeaderIconWithBadge(
                         Icons.shopping_bag_outlined,
@@ -377,37 +396,6 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBackButton() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => Navigator.pop(context),
-          borderRadius: BorderRadius.circular(14),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Icon(
-              Icons.arrow_back_ios_new,
-              size: 20,
-              color: Colors.grey.shade800,
             ),
           ),
         ),
@@ -530,7 +518,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                 return AnimatedBuilder(
                   animation: _snowController,
                   builder: (context, child) {
-                    final progress = (_snowController.value + index * 0.125) % 1.0;
+                    final progress =
+                        (_snowController.value + index * 0.125) % 1.0;
                     return Positioned(
                       left: 30.0 + index * 40,
                       top: -20 + (progress * 220),
@@ -647,6 +636,42 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Scrollable.ensureVisible(
+                          _productSectionKey.currentContext!,
+                          duration: const Duration(milliseconds: 800),
+                          curve: Curves.easeInOut,
+                          alignment: 0.0,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF1565C0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        elevation: 8,
+                        shadowColor: Colors.black.withOpacity(0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Shop Now',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_forward_rounded, size: 18),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -657,66 +682,66 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
     );
   }
 
-  Widget _buildStatCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Gradient gradient,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade100, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              gradient: gradient,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: gradient.colors.first.withOpacity(0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Icon(icon, color: Colors.white, size: 22),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 12,
-              color: Colors.grey.shade800,
-              letterSpacing: 0.2,
-            ),
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildStatCard({
+  //   required IconData icon,
+  //   required String title,
+  //   required String subtitle,
+  //   required Gradient gradient,
+  // }) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(18),
+  //       border: Border.all(color: Colors.grey.shade100, width: 1.5),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.black.withOpacity(0.04),
+  //           blurRadius: 16,
+  //           offset: const Offset(0, 4),
+  //           spreadRadius: 0,
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.all(10),
+  //           decoration: BoxDecoration(
+  //             gradient: gradient,
+  //             borderRadius: BorderRadius.circular(12),
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: gradient.colors.first.withOpacity(0.3),
+  //                 blurRadius: 12,
+  //                 offset: const Offset(0, 4),
+  //               ),
+  //             ],
+  //           ),
+  //           child: Icon(icon, color: Colors.white, size: 22),
+  //         ),
+  //         const SizedBox(height: 8),
+  //         Text(
+  //           title,
+  //           style: TextStyle(
+  //             fontWeight: FontWeight.w800,
+  //             fontSize: 12,
+  //             color: Colors.grey.shade800,
+  //             letterSpacing: 0.2,
+  //           ),
+  //         ),
+  //         Text(
+  //           subtitle,
+  //           style: TextStyle(
+  //             fontSize: 10,
+  //             color: Colors.grey.shade600,
+  //             fontWeight: FontWeight.w500,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildCategoryChips() {
     return Container(
@@ -740,7 +765,8 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeOutCubic,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                   decoration: BoxDecoration(
                     gradient: isSelected
                         ? LinearGradient(
@@ -803,7 +829,7 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 0.68,
+        childAspectRatio: 0.62, // ← Changed from 0.68 to 0.62
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) => _buildProductCard(products[index], index),
@@ -1043,7 +1069,7 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1059,63 +1085,7 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: product['stock'] == 'Limited Stock'
-                                ? LinearGradient(
-                                    colors: [
-                                      Colors.orange.shade50,
-                                      Colors.orange.shade100,
-                                    ],
-                                  )
-                                : LinearGradient(
-                                    colors: [
-                                      Colors.green.shade50,
-                                      Colors.green.shade100,
-                                    ],
-                                  ),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: product['stock'] == 'Limited Stock'
-                                  ? Colors.orange.shade300
-                                  : Colors.green.shade300,
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: product['stock'] == 'Limited Stock'
-                                      ? Colors.orange.shade600
-                                      : Colors.green.shade600,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                product['stock'],
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: product['stock'] == 'Limited Stock'
-                                      ? Colors.orange.shade900
-                                      : Colors.green.shade900,
-                                  letterSpacing: 0.2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
+                        const SizedBox(height: 10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -1145,7 +1115,7 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                               ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 10),
                         if (product['tags'] != null)
                           Wrap(
                             spacing: 6,
@@ -1182,6 +1152,46 @@ class _WinterEssentialsScreenState extends State<WinterEssentialsScreen>
                                     ))
                                 .toList(),
                           ),
+                        const SizedBox(
+                            height:
+                                12), // ← Changed from 10 to 12 for more space
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10), // ← Changed from 8 to 10
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                // ← ADD gradient instead of solid color
+                                colors: [
+                                  Colors.blue.shade700,
+                                  Colors.cyan.shade600,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.shade400
+                                      .withOpacity(0.3), // ← Changed to blue
+                                  blurRadius: 8, // ← Changed from 4 to 8
+                                  offset: const Offset(
+                                      0, 3), // ← Changed from 2 to 3
+                                )
+                              ],
+                            ),
+                            child: const Center(
+                              child: Text(
+                                "Add to Cart",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
