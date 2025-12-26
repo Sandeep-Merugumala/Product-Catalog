@@ -113,203 +113,264 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       backgroundColor:
           const Color(0xFFFFF0F5), // Light pinkish/white background
       body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              floating: true,
-              pinned: true,
-              snap: true,
-              elevation: 0,
-              backgroundColor: const Color(0xFFFFF0F5),
-              toolbarHeight: 70,
-              titleSpacing: 16,
-              title: Row(
-                children: [
-                  // SEARCH BAR with Embedded Logo
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        border: Border.all(color: Colors.grey.shade200),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+        child: Stack(
+          children: [
+            NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  floating: true,
+                  pinned: true,
+                  snap: true,
+                  elevation: 0,
+                  backgroundColor: const Color(0xFFFFF0F5),
+                  toolbarHeight: 70,
+                  titleSpacing: 16,
+                  title: Row(
+                    children: [
+                      // SEARCH BAR with Embedded Logo
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(color: Colors.grey.shade200),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 6),
-                          // LOGO inside search bar
-                          Container(
-                            height: 38,
-                            width: 38,
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [Colors.orange, Colors.pinkAccent]),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "M",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 6),
+                              // LOGO inside search bar
+                              Container(
+                                height: 38,
+                                width: 38,
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Colors.orange,
+                                    Colors.pinkAccent
+                                  ]),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "M",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  "Search \"Jeans\"",
+                                  style: TextStyle(
+                                      color: Colors.grey.shade500,
+                                      fontSize: 16),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: Icon(Icons.search,
+                                    color: Colors.grey.shade600, size: 24),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              "Search \"Jeans\"",
-                              style: TextStyle(
-                                  color: Colors.grey.shade500, fontSize: 16),
-                              overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+
+                      // ICONS ROW
+                      Stack(
+                        children: [
+                          const Icon(Icons.notifications_outlined,
+                              size: 28, color: Colors.black87),
+                          Positioned(
+                            right: 2,
+                            top: 2,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.pink,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Text('3',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.bold)),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Icon(Icons.search,
-                                color: Colors.grey.shade600, size: 24),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-
-                  // ICONS ROW
-                  Stack(
-                    children: [
-                      const Icon(Icons.notifications_outlined,
+                      const SizedBox(width: 16),
+                      const Icon(Icons.favorite_border,
                           size: 28, color: Colors.black87),
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.pink,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Text('3',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
+                      const SizedBox(width: 16),
+                      const Icon(Icons.person_outline,
+                          size: 28, color: Colors.black87),
                     ],
-                  ),
-                  const SizedBox(width: 16),
-                  const Icon(Icons.favorite_border,
-                      size: 28, color: Colors.black87),
-                  const SizedBox(width: 16),
-                  const Icon(Icons.person_outline,
-                      size: 28, color: Colors.black87),
-                ],
-              ),
-            ),
-          ],
-          body: Container(
-            color: const Color(0xFFFFF0F5),
-            child: Column(
-              children: [
-                // NAV BAR + Grid Icon
-                const CategoryNavBar(),
-
-                // Content area
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      // Optional: Rounded top corners for the content sheet
-                      // borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                    ),
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: _isLoading
-                          ? _buildSkeletonLoader()
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 10),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: QuickCategories(),
-                                ),
-                                const SizedBox(height: 16),
-                                const EnhancedFullScreenSlider(),
-                                const SizedBox(height: 24),
-                                const FlashDealsSection(),
-                                const SizedBox(height: 24),
-                                const SectionHeader(
-                                    title: "Winter Specials",
-                                    icon: Icons.ac_unit,
-                                    gradient: [
-                                      Color(0xFF1976D2),
-                                      Color(0xFF42A5F5)
-                                    ]),
-                                AnimatedWinterBanner(
-                                    snowController: _snowController),
-                                const SizedBox(height: 24),
-                                const SectionHeader(
-                                    title: "Holiday Magic",
-                                    icon: Icons.celebration,
-                                    gradient: [
-                                      Color(0xFFD32F2F),
-                                      Color(0xFFFF5252)
-                                    ]),
-                                EnhancedChristmasMagicCard(
-                                  onTap: _playMagic,
-                                  shimmerController: _shimmerController,
-                                  rotationController: _rotationController,
-                                ),
-                                const SizedBox(height: 24),
-                                const SectionHeader(
-                                    title: "Shop by Category",
-                                    icon: Icons.grid_view,
-                                    gradient: [
-                                      Color(0xFF7B1FA2),
-                                      Color(0xFFBA68C8)
-                                    ]),
-                                const EnhancedCategoryGrid(),
-                                const SizedBox(height: 24),
-                                const SectionHeader(
-                                    title: "Trending Now",
-                                    icon: Icons.local_fire_department,
-                                    gradient: [
-                                      Color(0xFFFF6F00),
-                                      Color(0xFFFFAB40)
-                                    ]),
-                                const TrendingProductsGrid(),
-                                const SizedBox(height: 24),
-                                const SectionHeader(
-                                    title: "Brand Spotlight",
-                                    icon: Icons.stars,
-                                    gradient: [
-                                      Color(0xFF00897B),
-                                      Color(0xFF4DB6AC)
-                                    ]),
-                                const BrandShowcase(),
-                                const SizedBox(height: 100),
-                              ],
-                            ),
-                    ),
                   ),
                 ),
               ],
+              body: Container(
+                color: const Color(0xFFFFF0F5),
+                child: Column(
+                  children: [
+                    // NAV BAR + Grid Icon
+                    const CategoryNavBar(),
+
+                    // Content area
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          // Optional: Rounded top corners for the content sheet
+                          // borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: _isLoading
+                              ? _buildSkeletonLoader()
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      child: QuickCategories(),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const EnhancedFullScreenSlider(),
+                                    const SizedBox(height: 24),
+                                    const FlashDealsSection(),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Winter Specials",
+                                        icon: Icons.ac_unit,
+                                        gradient: [
+                                          Color(0xFF1976D2),
+                                          Color(0xFF42A5F5)
+                                        ]),
+                                    AnimatedWinterBanner(
+                                        snowController: _snowController),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Holiday Magic",
+                                        icon: Icons.celebration,
+                                        gradient: [
+                                          Color(0xFFD32F2F),
+                                          Color(0xFFFF5252)
+                                        ]),
+                                    EnhancedChristmasMagicCard(
+                                      onTap: _playMagic,
+                                      shimmerController: _shimmerController,
+                                      rotationController: _rotationController,
+                                    ),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Shop by Category",
+                                        icon: Icons.grid_view,
+                                        gradient: [
+                                          Color(0xFF7B1FA2),
+                                          Color(0xFFBA68C8)
+                                        ]),
+                                    const EnhancedCategoryGrid(),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Trending Now",
+                                        icon: Icons.local_fire_department,
+                                        gradient: [
+                                          Color(0xFFFF6F00),
+                                          Color(0xFFFFAB40)
+                                        ]),
+                                    const TrendingProductsGrid(),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Brand Spotlight",
+                                        icon: Icons.stars,
+                                        gradient: [
+                                          Color(0xFF00897B),
+                                          Color(0xFF4DB6AC)
+                                        ]),
+                                    const BrandShowcase(),
+                                    const SizedBox(height: 100),
+                                  ],
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
+            // CONFETTI OVERLAY
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirection: math.pi / 2,
+                maxBlastForce: 5,
+                minBlastForce: 2,
+                emissionFrequency: 0.05,
+                numberOfParticles: 50,
+                gravity: 0.1,
+                colors: const [
+                  Colors.green,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.orange,
+                  Colors.purple
+                ],
+              ),
+            ),
+            // FLYING SANTA OVERLAY
+            AnimatedBuilder(
+              animation: _santaController,
+              builder: (context, child) {
+                // Animate from right to left (screen width to -200)
+                final screenWidth = MediaQuery.of(context).size.width;
+                final position =
+                    (screenWidth + 200) * (1 - _santaController.value) - 200;
+
+                // Only show if animation is running
+                if (_santaController.isDismissed ||
+                    _santaController.isCompleted) {
+                  return const SizedBox.shrink();
+                }
+
+                return Positioned(
+                  top: 100 +
+                      50 *
+                          math.sin(_santaController.value *
+                              math.pi *
+                              2), // Sine wave motion
+                  left: position,
+                  child: Transform(
+                    transform: Matrix4.rotationY(math.pi), // Face left
+                    alignment: Alignment.center,
+                    child: const Text(
+                      "🎅🛷🦌",
+                      style: TextStyle(fontSize: 60),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
+
       bottomNavigationBar: _buildModernBottomNav(),
       floatingActionButton: _buildFloatingCart(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
