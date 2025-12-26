@@ -105,186 +105,227 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 100,
-                floating: true,
-                pinned: true,
-                elevation: _showElevation ? 8 : 0,
-                backgroundColor: Colors.white,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white,
-                          Colors.blue.shade50.withOpacity(0.3),
-                        ],
-                      ),
-                    ),
-                    child: SafeArea(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.blue.shade600,
-                                        Colors.purple.shade600
-                                      ],
+      backgroundColor:
+          const Color(0xFFFFF0F5), // Light pinkish/white background
+      body: SafeArea(
+        child: Stack(
+          children: [
+            NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  floating: true,
+                  pinned: true,
+                  snap: true,
+                  elevation: 0,
+                  backgroundColor: const Color(0xFFFFF0F5),
+                  toolbarHeight: 70,
+                  titleSpacing: 16,
+                  title: Row(
+                    children: [
+                      // SEARCH BAR with Embedded Logo
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(color: Colors.grey.shade200),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 6),
+                              // LOGO inside search bar
+                              Container(
+                                height: 38,
+                                width: 38,
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Colors.orange,
+                                    Colors.pinkAccent
+                                  ]),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "M",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
                                     ),
-                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: const Icon(Icons.shopping_bag,
-                                      color: Colors.white, size: 22),
                                 ),
-                                const SizedBox(width: 10),
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "ShopLuxe",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Premium Shopping",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  "Search \"Jeans\"",
+                                  style: TextStyle(
+                                      color: Colors.grey.shade500,
+                                      fontSize: 16),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                const Spacer(),
-                                _buildIconButton(Icons.favorite_border,
-                                    Colors.red.shade400, 2),
-                                const SizedBox(width: 8),
-                                _buildIconButton(Icons.shopping_cart_outlined,
-                                    Colors.blue.shade400, 3),
-                                const SizedBox(width: 8),
-                                _buildIconButton(Icons.notifications_outlined,
-                                    Colors.orange.shade400, 5),
-                              ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: Icon(Icons.search,
+                                    color: Colors.grey.shade600, size: 24),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+
+                      // ICONS ROW
+                      Stack(
+                        children: [
+                          const Icon(Icons.notifications_outlined,
+                              size: 28, color: Colors.black87),
+                          Positioned(
+                            right: 2,
+                            top: 2,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.pink,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Text('3',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                         ],
                       ),
-                    ),
+                      const SizedBox(width: 16),
+                      const Icon(Icons.favorite_border,
+                          size: 28, color: Colors.black87),
+                      const SizedBox(width: 16),
+                      const Icon(Icons.person_outline,
+                          size: 28, color: Colors.black87),
+                    ],
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
+              ],
+              body: Container(
+                color: const Color(0xFFFFF0F5),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
-                    const ModernSearchBar(),
-                    const SizedBox(height: 20),
-                    // UPDATED: Quick Categories (Removed Electronics)
-                    const QuickCategories(),
-                    const SizedBox(height: 16),
-                    const EnhancedFullScreenSlider(),
-                    const SizedBox(height: 24),
-                    const FlashDealsSection(),
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Winter Specials",
-                        icon: Icons.ac_unit,
-                        gradient: [Color(0xFF1976D2), Color(0xFF42A5F5)]),
-                    AnimatedWinterBanner(snowController: _snowController),
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Holiday Magic",
-                        icon: Icons.celebration,
-                        gradient: [Color(0xFFD32F2F), Color(0xFFFF5252)]),
-                    EnhancedChristmasMagicCard(
-                      onTap: _playMagic,
-                      shimmerController: _shimmerController,
-                      rotationController: _rotationController,
+                    // NAV BAR + Grid Icon
+                    const CategoryNavBar(),
+
+                    // Content area
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          // Optional: Rounded top corners for the content sheet
+                          // borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: _isLoading
+                              ? _buildSkeletonLoader()
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      child: QuickCategories(),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const EnhancedFullScreenSlider(),
+                                    const SizedBox(height: 24),
+                                    const FlashDealsSection(),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Winter Specials",
+                                        icon: Icons.ac_unit,
+                                        gradient: [
+                                          Color(0xFF1976D2),
+                                          Color(0xFF42A5F5)
+                                        ]),
+                                    AnimatedWinterBanner(
+                                        snowController: _snowController),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Holiday Magic",
+                                        icon: Icons.celebration,
+                                        gradient: [
+                                          Color(0xFFD32F2F),
+                                          Color(0xFFFF5252)
+                                        ]),
+                                    EnhancedChristmasMagicCard(
+                                      onTap: _playMagic,
+                                      shimmerController: _shimmerController,
+                                      rotationController: _rotationController,
+                                    ),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Shop by Category",
+                                        icon: Icons.grid_view,
+                                        gradient: [
+                                          Color(0xFF7B1FA2),
+                                          Color(0xFFBA68C8)
+                                        ]),
+                                    const EnhancedCategoryGrid(),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Trending Now",
+                                        icon: Icons.local_fire_department,
+                                        gradient: [
+                                          Color(0xFFFF6F00),
+                                          Color(0xFFFFAB40)
+                                        ]),
+                                    const TrendingProductsGrid(),
+                                    const SizedBox(height: 24),
+                                    const SectionHeader(
+                                        title: "Brand Spotlight",
+                                        icon: Icons.stars,
+                                        gradient: [
+                                          Color(0xFF00897B),
+                                          Color(0xFF4DB6AC)
+                                        ]),
+                                    const BrandShowcase(),
+                                    const SizedBox(height: 100),
+                                  ],
+                                ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Shop by Category",
-                        icon: Icons.grid_view,
-                        gradient: [Color(0xFF7B1FA2), Color(0xFFBA68C8)]),
-                    // UPDATED: Category Grid (Linked Electronics & Fashion)
-                    const EnhancedCategoryGrid(),
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Trending Now",
-                        icon: Icons.local_fire_department,
-                        gradient: [Color(0xFFFF6F00), Color(0xFFFFAB40)]),
-                    const TrendingProductsGrid(),
-                    const SizedBox(height: 24),
-                    const SectionHeader(
-                        title: "Brand Spotlight",
-                        icon: Icons.stars,
-                        gradient: [Color(0xFF00897B), Color(0xFF4DB6AC)]),
-                    const BrandShowcase(),
-                    const SizedBox(height: 100),
                   ],
                 ),
               ),
-            ],
-          ),
-          if (_isSantaFlying) _buildSantaAnimation(),
-          if (_isSantaFlying) _buildConfettiEffects(),
-          const Chatbot(),
-        ],
-      ),
-      bottomNavigationBar: _buildModernBottomNav(),
-      floatingActionButton: _buildFloatingCart(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-
-  Widget _buildIconButton(IconData icon, Color color, int badgeCount) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: color, size: 20),
-        ),
-        if (badgeCount > 0)
-          Positioned(
-            right: -4,
-            top: -4,
-            child: Container(
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withOpacity(0.5),
-                    blurRadius: 4,
-                    spreadRadius: 1,
-                  ),
+            ),
+            // CONFETTI OVERLAY
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirection: math.pi / 2,
+                maxBlastForce: 5,
+                minBlastForce: 2,
+                emissionFrequency: 0.05,
+                numberOfParticles: 50,
+                gravity: 0.1,
+                colors: const [
+                  Colors.green,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.orange,
+                  Colors.purple
                 ],
               ),
               constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
