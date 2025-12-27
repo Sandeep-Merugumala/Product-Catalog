@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:project_map/core/widgets/chatbot.dart';
 
 // --- SCREEN IMPORTS ---
+// Make sure these paths match your project structure shown in the screenshots
 import 'package:project_map/features/product_catalog/presentation/screens/men_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/winter_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/women_screen.dart';
@@ -43,8 +44,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 5));
+    _confettiController = ConfettiController(duration: const Duration(seconds: 5));
     _santaController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -105,227 +105,178 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          const Color(0xFFFFF0F5), // Light pinkish/white background
-      body: SafeArea(
-        child: Stack(
-          children: [
-            NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverAppBar(
-                  floating: true,
-                  pinned: true,
-                  snap: true,
-                  elevation: 0,
-                  backgroundColor: const Color(0xFFFFF0F5),
-                  toolbarHeight: 70,
-                  titleSpacing: 16,
-                  title: Row(
-                    children: [
-                      // SEARCH BAR with Embedded Logo
-                      Expanded(
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
-                            border: Border.all(color: Colors.grey.shade200),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 6),
-                              // LOGO inside search bar
-                              Container(
-                                height: 38,
-                                width: 38,
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    Colors.orange,
-                                    Colors.pinkAccent
-                                  ]),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "M",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  "Search \"Jeans\"",
-                                  style: TextStyle(
-                                      color: Colors.grey.shade500,
-                                      fontSize: 16),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 16.0),
-                                child: Icon(Icons.search,
-                                    color: Colors.grey.shade600, size: 24),
-                              ),
-                            ],
-                          ),
-                        ),
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 100,
+                floating: true,
+                pinned: true,
+                elevation: _showElevation ? 8 : 0,
+                backgroundColor: Colors.white,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white,
+                          Colors.blue.shade50.withOpacity(0.3),
+                        ],
                       ),
-                      const SizedBox(width: 16),
-
-                      // ICONS ROW
-                      Stack(
+                    ),
+                    child: SafeArea(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const Icon(Icons.notifications_outlined,
-                              size: 28, color: Colors.black87),
-                          Positioned(
-                            right: 2,
-                            top: 2,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.pink,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Text('3',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.bold)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Colors.blue.shade600, Colors.purple.shade600],
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(Icons.shopping_bag, color: Colors.white, size: 22),
+                                ),
+                                const SizedBox(width: 10),
+                                const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "ShopLuxe",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: -0.5,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Premium Shopping",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                _buildIconButton(Icons.favorite_border, Colors.red.shade400, 2),
+                                const SizedBox(width: 8),
+                                _buildIconButton(Icons.shopping_cart_outlined, Colors.blue.shade400, 3),
+                                const SizedBox(width: 8),
+                                _buildIconButton(Icons.notifications_outlined, Colors.orange.shade400, 5),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(width: 16),
-                      const Icon(Icons.favorite_border,
-                          size: 28, color: Colors.black87),
-                      const SizedBox(width: 16),
-                      const Icon(Icons.person_outline,
-                          size: 28, color: Colors.black87),
-                    ],
+                    ),
                   ),
                 ),
-              ],
-              body: Container(
-                color: const Color(0xFFFFF0F5),
+              ),
+              SliverToBoxAdapter(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // NAV BAR + Grid Icon
-                    const CategoryNavBar(),
-
-                    // Content area
-                    Expanded(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          // Optional: Rounded top corners for the content sheet
-                          // borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                        ),
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          child: _isLoading
-                              ? _buildSkeletonLoader()
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 10),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      child: QuickCategories(),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    const EnhancedFullScreenSlider(),
-                                    const SizedBox(height: 24),
-                                    const FlashDealsSection(),
-                                    const SizedBox(height: 24),
-                                    const SectionHeader(
-                                        title: "Winter Specials",
-                                        icon: Icons.ac_unit,
-                                        gradient: [
-                                          Color(0xFF1976D2),
-                                          Color(0xFF42A5F5)
-                                        ]),
-                                    AnimatedWinterBanner(
-                                        snowController: _snowController),
-                                    const SizedBox(height: 24),
-                                    const SectionHeader(
-                                        title: "Holiday Magic",
-                                        icon: Icons.celebration,
-                                        gradient: [
-                                          Color(0xFFD32F2F),
-                                          Color(0xFFFF5252)
-                                        ]),
-                                    EnhancedChristmasMagicCard(
-                                      onTap: _playMagic,
-                                      shimmerController: _shimmerController,
-                                      rotationController: _rotationController,
-                                    ),
-                                    const SizedBox(height: 24),
-                                    const SectionHeader(
-                                        title: "Shop by Category",
-                                        icon: Icons.grid_view,
-                                        gradient: [
-                                          Color(0xFF7B1FA2),
-                                          Color(0xFFBA68C8)
-                                        ]),
-                                    const EnhancedCategoryGrid(),
-                                    const SizedBox(height: 24),
-                                    const SectionHeader(
-                                        title: "Trending Now",
-                                        icon: Icons.local_fire_department,
-                                        gradient: [
-                                          Color(0xFFFF6F00),
-                                          Color(0xFFFFAB40)
-                                        ]),
-                                    const TrendingProductsGrid(),
-                                    const SizedBox(height: 24),
-                                    const SectionHeader(
-                                        title: "Brand Spotlight",
-                                        icon: Icons.stars,
-                                        gradient: [
-                                          Color(0xFF00897B),
-                                          Color(0xFF4DB6AC)
-                                        ]),
-                                    const BrandShowcase(),
-                                    const SizedBox(height: 100),
-                                  ],
-                                ),
-                        ),
-                      ),
+                    const SizedBox(height: 8),
+                    const ModernSearchBar(),
+                    const SizedBox(height: 20),
+                    // UPDATED: Quick Categories (Removed Electronics)
+                    const QuickCategories(),
+                    const SizedBox(height: 16),
+                    const EnhancedFullScreenSlider(),
+                    const SizedBox(height: 24),
+                    const FlashDealsSection(),
+                    const SizedBox(height: 24),
+                    const SectionHeader(
+                        title: "Winter Specials",
+                        icon: Icons.ac_unit,
+                        gradient: [Color(0xFF1976D2), Color(0xFF42A5F5)]),
+                    AnimatedWinterBanner(snowController: _snowController),
+                    const SizedBox(height: 24),
+                    const SectionHeader(
+                        title: "Holiday Magic",
+                        icon: Icons.celebration,
+                        gradient: [Color(0xFFD32F2F), Color(0xFFFF5252)]),
+                    EnhancedChristmasMagicCard(
+                      onTap: _playMagic,
+                      shimmerController: _shimmerController,
+                      rotationController: _rotationController,
                     ),
+                    const SizedBox(height: 24),
+                    const SectionHeader(
+                        title: "Shop by Category",
+                        icon: Icons.grid_view,
+                        gradient: [Color(0xFF7B1FA2), Color(0xFFBA68C8)]),
+                    // UPDATED: Category Grid (Linked Electronics & Fashion)
+                    const EnhancedCategoryGrid(),
+                    const SizedBox(height: 24),
+                    const SectionHeader(
+                        title: "Trending Now",
+                        icon: Icons.local_fire_department,
+                        gradient: [Color(0xFFFF6F00), Color(0xFFFFAB40)]),
+                    const TrendingProductsGrid(),
+                    const SizedBox(height: 24),
+                    const SectionHeader(
+                        title: "Brand Spotlight",
+                        icon: Icons.stars,
+                        gradient: [Color(0xFF00897B), Color(0xFF4DB6AC)]),
+                    const BrandShowcase(),
+                    const SizedBox(height: 100),
                   ],
                 ),
               ),
-            ),
-            // CONFETTI OVERLAY
-            Align(
-              alignment: Alignment.topCenter,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirection: math.pi / 2,
-                maxBlastForce: 5,
-                minBlastForce: 2,
-                emissionFrequency: 0.05,
-                numberOfParticles: 50,
-                gravity: 0.1,
-                colors: const [
-                  Colors.green,
-                  Colors.blue,
-                  Colors.pink,
-                  Colors.orange,
-                  Colors.purple
+            ],
+          ),
+          if (_isSantaFlying) _buildSantaAnimation(),
+          if (_isSantaFlying) _buildConfettiEffects(),
+          const Chatbot(),
+        ],
+      ),
+      bottomNavigationBar: _buildModernBottomNav(),
+      floatingActionButton: _buildFloatingCart(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildIconButton(IconData icon, Color color, int badgeCount) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: color, size: 20),
+        ),
+        if (badgeCount > 0)
+          Positioned(
+            right: -4,
+            top: -4,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.red.withOpacity(0.5),
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                  ),
                 ],
               ),
               constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
@@ -388,14 +339,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             confettiController: _confettiController,
             blastDirection: math.pi / 4,
             blastDirectionality: BlastDirectionality.directional,
-            colors: const [
-              Colors.red,
-              Colors.green,
-              Colors.amber,
-              Colors.white,
-              Colors.blue,
-              Colors.pink
-            ],
+            colors: const [Colors.red, Colors.green, Colors.amber, Colors.white, Colors.blue, Colors.pink],
             numberOfParticles: 25,
             maxBlastForce: 25,
             minBlastForce: 15,
@@ -409,14 +353,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             confettiController: _confettiController,
             blastDirection: 3 * math.pi / 4,
             blastDirectionality: BlastDirectionality.directional,
-            colors: const [
-              Colors.red,
-              Colors.green,
-              Colors.amber,
-              Colors.white,
-              Colors.blue,
-              Colors.pink
-            ],
+            colors: const [Colors.red, Colors.green, Colors.amber, Colors.white, Colors.blue, Colors.pink],
             numberOfParticles: 25,
             maxBlastForce: 25,
             minBlastForce: 15,
@@ -544,8 +481,7 @@ class ModernSearchBar extends StatelessWidget {
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(8),
             ),
-            child:
-                const Icon(Icons.qr_code_scanner, color: Colors.grey, size: 20),
+            child: const Icon(Icons.qr_code_scanner, color: Colors.grey, size: 20),
           ),
           const SizedBox(width: 8),
           Container(
@@ -571,23 +507,20 @@ class QuickCategories extends StatelessWidget {
     final categories = [
       {
         'name': 'Men',
-        'img':
-            'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400',
+        'img': 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400',
         'color': Colors.blue,
         'screen': const MenScreen(),
       },
       {
         'name': 'Women',
-        'img':
-            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400',
+        'img': 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400',
         'color': Colors.pink,
         'screen': const WomenScreen(),
       },
       {
         'name': 'Kids',
-        'img':
-            'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400',
-        'color': Colors.green,
+        'img': 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=400',
+        'color': const Color.fromARGB(255, 252, 231, 39),
         'screen': const KidsScreen(),
       },
     ];
@@ -678,15 +611,12 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
           Navigator.push(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  widget.screen,
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              pageBuilder: (context, animation, secondaryAnimation) => widget.screen,
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 const curve = Curves.easeInOutCubic;
-                var tween = Tween(begin: begin, end: end)
-                    .chain(CurveTween(curve: curve));
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
                 var offsetAnimation = animation.drive(tween);
                 return SlideTransition(position: offsetAnimation, child: child);
               },
@@ -711,8 +641,7 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: widget.color
-                                .withOpacity(_isHovered ? 0.5 : 0.3),
+                            color: widget.color.withOpacity(_isHovered ? 0.5 : 0.3),
                             blurRadius: _elevationAnimation.value,
                             offset: const Offset(0, 4),
                           ),
@@ -754,8 +683,7 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                     AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 200),
                       style: TextStyle(
-                        fontWeight:
-                            _isHovered ? FontWeight.w700 : FontWeight.w600,
+                        fontWeight: _isHovered ? FontWeight.w700 : FontWeight.w600,
                         fontSize: _isHovered ? 15 : 14,
                         color: _isHovered ? widget.color : Colors.black87,
                       ),
@@ -784,29 +712,25 @@ class EnhancedCategoryGrid extends StatelessWidget {
     final cats = [
       {
         'n': 'Electronics',
-        'img':
-            'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600',
+        'img': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600',
         'gradient': [const Color(0xFF667eea), const Color(0xFF764ba2)],
         'screen': const ElectronicsScreen(),
       },
       {
         'n': 'Fashion',
-        'img':
-            'https://images.unsplash.com/photo-1445205170230-053b83016050?w=600',
+        'img': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=600',
         'gradient': [const Color(0xFFf093fb), const Color(0xFff5576c)],
         'screen': const FashionCatalogScreen(),
       },
       {
         'n': 'Beauty',
-        'img':
-            'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600',
+        'img': 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600',
         'gradient': [const Color(0xFFFF9A9E), const Color(0xFFFECFEF)],
-        'screen': null,
+        'screen': null, 
       },
       {
         'n': 'Sports',
-        'img':
-            'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600',
+        'img': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600',
         'gradient': [const Color(0xFF43e97b), const Color(0xFF38f9d7)],
         'screen': const SportsCatalogScreen(),
       },
@@ -886,9 +810,7 @@ class _AnimatedCategoryCardState extends State<AnimatedCategoryCard>
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: widget.screen != null
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
+      cursor: widget.screen != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
       onEnter: (_) {
         if (widget.screen != null) {
           setState(() => _isHovered = true);
@@ -905,22 +827,17 @@ class _AnimatedCategoryCardState extends State<AnimatedCategoryCard>
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        widget.screen!,
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
+                    pageBuilder: (context, animation, secondaryAnimation) => widget.screen!,
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       const begin = Offset(0.0, 1.0);
                       const end = Offset.zero;
                       const curve = Curves.easeInOutCubic;
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
+                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
                       var offsetAnimation = animation.drive(tween);
-                      var fadeAnimation = Tween<double>(begin: 0.0, end: 1.0)
-                          .animate(animation);
+                      var fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(animation);
                       return FadeTransition(
                         opacity: fadeAnimation,
-                        child: SlideTransition(
-                            position: offsetAnimation, child: child),
+                        child: SlideTransition(position: offsetAnimation, child: child),
                       );
                     },
                     transitionDuration: const Duration(milliseconds: 500),
@@ -945,8 +862,7 @@ class _AnimatedCategoryCardState extends State<AnimatedCategoryCard>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: widget.gradient[0]
-                            .withOpacity(_isHovered ? 0.6 : 0.4),
+                        color: widget.gradient[0].withOpacity(_isHovered ? 0.6 : 0.4),
                         blurRadius: _isHovered ? 24 : 16,
                         offset: const Offset(0, 8),
                       ),
@@ -990,8 +906,7 @@ class _AnimatedCategoryCardState extends State<AnimatedCategoryCard>
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white
-                                      .withOpacity(_isHovered ? 0.4 : 0.3),
+                                  color: Colors.white.withOpacity(_isHovered ? 0.4 : 0.3),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Row(
@@ -1006,10 +921,8 @@ class _AnimatedCategoryCardState extends State<AnimatedCategoryCard>
                                       ),
                                     ),
                                     AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      margin: EdgeInsets.only(
-                                          left: _isHovered ? 8 : 4),
+                                      duration: const Duration(milliseconds: 300),
+                                      margin: EdgeInsets.only(left: _isHovered ? 8 : 4),
                                       child: const Text(
                                         "→",
                                         style: TextStyle(
@@ -1057,8 +970,7 @@ class EnhancedFullScreenSlider extends StatefulWidget {
   const EnhancedFullScreenSlider({super.key});
 
   @override
-  State<EnhancedFullScreenSlider> createState() =>
-      _EnhancedFullScreenSliderState();
+  State<EnhancedFullScreenSlider> createState() => _EnhancedFullScreenSliderState();
 }
 
 class _EnhancedFullScreenSliderState extends State<EnhancedFullScreenSlider> {
@@ -1069,22 +981,19 @@ class _EnhancedFullScreenSliderState extends State<EnhancedFullScreenSlider> {
   Widget build(BuildContext context) {
     final banners = [
       {
-        'img':
-            "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070",
+        'img': "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070",
         'title': 'New Season',
         'subtitle': 'Up to 50% Off',
         'color': Colors.blue,
       },
       {
-        'img':
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999",
+        'img': "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999",
         'title': 'Tech Deals',
         'subtitle': 'Latest Gadgets',
         'color': Colors.purple,
       },
       {
-        'img':
-            "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1780",
+        'img': "https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1780",
         'title': 'Fashion Week',
         'subtitle': 'Exclusive Collection',
         'color': Colors.orange,
@@ -1249,8 +1158,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
           child: Row(
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
@@ -1274,8 +1182,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
               ),
               const SizedBox(width: 12),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(8),
@@ -1290,6 +1197,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                 ),
               ),
               const Spacer(),
+
             ],
           ),
         ),
@@ -1321,8 +1229,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                     Stack(
                       children: [
                         ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(16)),
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                           child: Image.network(
                             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
                             height: 100,
@@ -1334,8 +1241,7 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
                           top: 8,
                           right: 8,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(12),
@@ -1403,11 +1309,8 @@ class SnowPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     for (var flake in snowflakes) {
-      final x = (flake.x * size.width + animationValue * flake.speed * 30) %
-          size.width;
-      final y =
-          (flake.y * size.height + animationValue * flake.fallSpeed * 600) %
-              size.height;
+      final x = (flake.x * size.width + animationValue * flake.speed * 30) % size.width;
+      final y = (flake.y * size.height + animationValue * flake.fallSpeed * 600) % size.height;
       canvas.drawCircle(Offset(x, y), flake.size, paint);
     }
   }
@@ -1492,8 +1395,7 @@ class AnimatedWinterBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade400,
                       borderRadius: BorderRadius.circular(20),
@@ -1536,8 +1438,7 @@ class AnimatedWinterBanner extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 14),
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -1549,7 +1450,7 @@ class AnimatedWinterBanner extends StatelessWidget {
                         Text(
                           "Shop Now",
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.bold, 
                             fontSize: 15,
                           ),
                         ),
@@ -1574,32 +1475,10 @@ class TrendingProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = [
-      {
-        'name': 'Smart Watch Pro',
-        'price': '\$299',
-        'rating': '4.8',
-        'img':
-            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
-      },
-      {
-        'name': 'Wireless Earbuds',
-        'price': '\$149',
-        'rating': '4.6',
-        'img':
-            'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400'
-      },
-      {
-        'name': 'Designer Handbag',
-        'price': '\$199',
-        'rating': '4.9',
-        'img': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'
-      },
-      {
-        'name': 'Running Sneakers',
-        'price': '\$129',
-        'rating': '4.7',
-        'img': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'
-      },
+      {'name': 'Smart Watch Pro', 'price': '\$299', 'rating': '4.8', 'img': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'},
+      {'name': 'Wireless Earbuds', 'price': '\$149', 'rating': '4.6', 'img': 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400'},
+      {'name': 'Designer Handbag', 'price': '\$199', 'rating': '4.9', 'img': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'},
+      {'name': 'Running Sneakers', 'price': '\$129', 'rating': '4.7', 'img': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'},
     ];
 
     return Padding(
@@ -1633,8 +1512,7 @@ class TrendingProductsGrid extends StatelessWidget {
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                       child: Image.network(
                         products[i]['img']!,
                         height: 140,
@@ -1646,23 +1524,18 @@ class TrendingProductsGrid extends StatelessWidget {
                       top: 10,
                       right: 10,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.75),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.star,
-                                color: Colors.amber, size: 14),
+                            const Icon(Icons.star, color: Colors.amber, size: 14),
                             const SizedBox(width: 4),
                             Text(
                               products[i]['rating']!,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -1677,8 +1550,7 @@ class TrendingProductsGrid extends StatelessWidget {
                     children: [
                       Text(
                         products[i]['name']!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -1698,15 +1570,11 @@ class TrendingProductsGrid extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue.shade600,
-                                  Colors.purple.shade600
-                                ],
+                                colors: [Colors.blue.shade600, Colors.purple.shade600],
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.add_shopping_cart,
-                                size: 18, color: Colors.white),
+                            child: const Icon(Icons.add_shopping_cart, size: 18, color: Colors.white),
                           ),
                         ],
                       ),
@@ -1730,33 +1598,27 @@ class BrandShowcase extends StatelessWidget {
     final brands = [
       {
         'name': 'Nike',
-        'logo':
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png'
+        'logo': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png'
       },
       {
         'name': 'Apple',
-        'logo':
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/800px-Apple_logo_black.svg.png'
+        'logo': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/800px-Apple_logo_black.svg.png'
       },
       {
         'name': 'Adidas',
-        'logo':
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'
+        'logo': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png'
       },
       {
         'name': 'Samsung',
-        'logo':
-            'https://images.samsung.com/is/image/samsung/assets/global/about-us/brand/logo/samsung_logo_lettermark_en_blue.png'
+        'logo': 'https://images.samsung.com/is/image/samsung/assets/global/about-us/brand/logo/samsung_logo_lettermark_en_blue.png'
       },
       {
         'name': 'Sony',
-        'logo':
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/1200px-Sony_logo.svg.png'
+        'logo': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/1200px-Sony_logo.svg.png'
       },
       {
         'name': 'Gucci',
-        'logo':
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/1960s_Gucci_Logo.svg/2560px-1960s_Gucci_Logo.svg.png'
+        'logo': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/1960s_Gucci_Logo.svg/2560px-1960s_Gucci_Logo.svg.png'
       },
     ];
 
@@ -1793,13 +1655,10 @@ class BrandShowcase extends StatelessWidget {
                       // Optional: Placeholder while loading
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.grey.shade300));
+                        return Center(child: CircularProgressIndicator(strokeWidth: 2, color: Colors.grey.shade300));
                       },
                       // Optional: Error icon if link fails
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.broken_image, color: Colors.grey),
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, color: Colors.grey),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1825,11 +1684,7 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
   final List<Color> gradient;
-  const SectionHeader(
-      {super.key,
-      required this.title,
-      required this.icon,
-      required this.gradient});
+  const SectionHeader({super.key, required this.title, required this.icon, required this.gradient});
 
   @override
   Widget build(BuildContext context) {
