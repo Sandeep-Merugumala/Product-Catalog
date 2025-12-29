@@ -1135,7 +1135,7 @@ class _BeautyCatalogScreenState extends State<BeautyCatalogScreen>
                               children: [
                                 Flexible(
                                   child: Text(
-                                    "\${product['price'].toStringAsFixed(0)}",
+                                    "\$${product['originalPrice'].toStringAsFixed(0)}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w900,
                                       fontSize: 16,
@@ -1202,3 +1202,4 @@ class _BeautyCatalogScreenState extends State<BeautyCatalogScreen>
     );
   }
 }
+
