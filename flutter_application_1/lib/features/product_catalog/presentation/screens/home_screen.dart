@@ -14,6 +14,7 @@ import 'package:project_map/features/product_catalog/presentation/screens/kids_s
 import 'package:project_map/features/product_catalog/presentation/screens/sports_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/electronics_screen.dart';
 import 'package:project_map/features/product_catalog/presentation/screens/fashion_screen.dart';
+import 'package:project_map/features/product_catalog/presentation/screens/beauty_screen.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -726,7 +727,7 @@ class EnhancedCategoryGrid extends StatelessWidget {
         'n': 'Beauty',
         'img': 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600',
         'gradient': [const Color(0xFFFF9A9E), const Color(0xFFFECFEF)],
-        'screen': null, 
+        'screen': const BeautyCatalogScreen(), 
       },
       {
         'n': 'Sports',
@@ -1840,3 +1841,4 @@ class EnhancedChristmasMagicCard extends StatelessWidget {
     );
   }
 }
+
