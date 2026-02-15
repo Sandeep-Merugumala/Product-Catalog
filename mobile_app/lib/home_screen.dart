@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'men_fashion_screen.dart';
 import 'women_fashion_screen.dart';
 import 'kid_fashion_screen.dart';
+import 'package:mobile_app/firestore_service.dart';
+import 'bag_page.dart';
+import 'fwd_page.dart';
+import 'profile_page.dart';
+import 'luxe_page.dart';
+import 'wishlist_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,20 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  static final List<Widget> _widgetOptions = <Widget>[
-    const MyntraHomeContent(),
-    const Center(child: Text('Fwd Content', style: TextStyle(fontSize: 24))),
-    const Center(child: Text('Luxe Content', style: TextStyle(fontSize: 24))),
-    const Center(child: Text('Bag Content', style: TextStyle(fontSize: 24))),
-    const Center(
-      child: Text('Profile Content', style: TextStyle(fontSize: 24)),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgetOptions = <Widget>[
+      MyntraHomeContent(onProfileTap: () => _onItemTapped(4)),
+      const FwdPage(),
+      const LuxePage(),
+      const BagPage(),
+      const ProfilePage(),
+    ];
+
     return Scaffold(
-      body: SafeArea(child: _widgetOptions.elementAt(_selectedIndex)),
+      body: SafeArea(child: widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -95,13 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class MyntraHomeContent extends StatelessWidget {
-  const MyntraHomeContent({super.key});
+  final VoidCallback onProfileTap;
+
+  const MyntraHomeContent({super.key, required this.onProfileTap});
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const MyntraAppBar(),
+        MyntraAppBar(onProfileTap: onProfileTap),
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +153,9 @@ class MyntraHomeContent extends StatelessWidget {
 }
 
 class MyntraAppBar extends StatelessWidget {
-  const MyntraAppBar({super.key});
+  final VoidCallback onProfileTap;
+
+  const MyntraAppBar({super.key, required this.onProfileTap});
 
   @override
   Widget build(BuildContext context) {
@@ -186,14 +196,33 @@ class MyntraAppBar extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'M',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  child: Center(
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseAuth.instance.currentUser != null
+                          ? FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .snapshots()
+                          : null,
+                      builder: (context, snapshot) {
+                        String initial = 'M';
+                        if (snapshot.hasData && snapshot.data!.data() != null) {
+                          final data =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          if (data.containsKey('name') &&
+                              data['name'].toString().isNotEmpty) {
+                            initial = data['name'].toString()[0].toUpperCase();
+                          }
+                        }
+                        return Text(
+                          initial,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -251,16 +280,29 @@ class MyntraAppBar extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: 12),
-                const Icon(
-                  Icons.favorite_border,
-                  color: Colors.black87,
-                  size: 26,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WishlistPage(),
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.black87,
+                    size: 26,
+                  ),
                 ),
                 const SizedBox(width: 12),
-                const Icon(
-                  Icons.person_outline,
-                  color: Colors.black87,
-                  size: 26,
+                InkWell(
+                  onTap: onProfileTap,
+                  child: const Icon(
+                    Icons.person_outline,
+                    color: Colors.black87,
+                    size: 26,
+                  ),
                 ),
               ],
             ),
@@ -1275,16 +1317,94 @@ class FeaturedProductCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirestoreService firestoreService = FirestoreService();
+
+    final List<Map<String, dynamic>> featuredProducts = [
+      {
+        'id': 'Nike_Shoe_001',
+        'image':
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmlrZSUyMHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Nike Air Max',
+        'subtitle': 'Running Shoes',
+        'price': 4995,
+        'originalPrice': 8995,
+        'rating': 4.5,
+        'ratingCount': '2.4k',
+        'offer': '45% OFF',
+      },
+      {
+        'id': 'Adidas_Shoe_002',
+        'image':
+            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
+        'title': 'Adidas Ultraboost',
+        'subtitle': 'Performance Wear',
+        'price': 6500,
+        'originalPrice': 12000,
+        'rating': 4.7,
+        'ratingCount': '1.8k',
+        'offer': '46% OFF',
+      },
+      {
+        'id': 'Puma_Shoe_003',
+        'image':
+            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
+        'title': 'Puma RS-X',
+        'subtitle': 'Casual Sneakers',
+        'price': 3999,
+        'originalPrice': 7999,
+        'rating': 4.3,
+        'ratingCount': '950',
+        'offer': '50% OFF',
+      },
+      {
+        'id': 'Reebok_Shoe_004',
+        'image':
+            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Reebok Classic',
+        'subtitle': 'Everyday Comfort',
+        'price': 2499,
+        'originalPrice': 4999,
+        'rating': 4.2,
+        'ratingCount': '1.2k',
+        'offer': '50% OFF',
+      },
+      {
+        'id': 'UnderArmour_Shoe_005',
+        'image':
+            'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Under Armour',
+        'subtitle': 'Sport Style',
+        'price': 5500,
+        'originalPrice': 8000,
+        'rating': 4.6,
+        'ratingCount': '500',
+        'offer': '30% OFF',
+      },
+      {
+        'id': 'Skechers_Shoe_006',
+        'image':
+            'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Skechers GoWalk',
+        'subtitle': 'Walking Shoes',
+        'price': 2999,
+        'originalPrice': 4500,
+        'rating': 4.4,
+        'ratingCount': '3.1k',
+        'offer': '33% OFF',
+      },
+    ];
+
     return SizedBox(
-      height: 270,
+      height: 280, // Increased height to accommodate add to cart button
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 6,
+        itemCount: featuredProducts.length,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemBuilder: (context, index) {
+          final product = featuredProducts[index];
           return Container(
-            width: 160,
-            margin: const EdgeInsets.symmetric(horizontal: 6),
+            width: 170, // Slightly wider
+            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
@@ -1308,26 +1428,19 @@ class FeaturedProductCarousel extends StatelessWidget {
                           top: Radius.circular(8),
                         ),
                         child: Image.network(
-                          [
-                            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmlrZSUyMHNob2VzfGVufDB8fDB8fHww',
-                            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-                            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-                            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww',
-                            'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww',
-                            'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNob2VzfGVufDB8fDB8fHww',
-                          ][index],
+                          product['image'],
                           fit: BoxFit.cover,
                           width: double.infinity,
+                          height: double.infinity,
                         ),
                       ),
                       Positioned(
                         top: 8,
                         right: 8,
                         child: Container(
-                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Colors.white,
                             shape: BoxShape.circle,
+                            color: Colors.white,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.1),
@@ -1335,10 +1448,83 @@ class FeaturedProductCarousel extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: const Icon(
-                            Icons.favorite_border,
-                            size: 16,
-                            color: Colors.black87,
+                          child: StreamBuilder<DocumentSnapshot>(
+                            stream: FirebaseAuth.instance.currentUser != null
+                                ? FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                      )
+                                      .collection('wishlist')
+                                      .doc(product['id'].toString())
+                                      .snapshots()
+                                : null,
+                            builder: (context, snapshot) {
+                              bool isWishlisted = false;
+                              if (snapshot.hasData && snapshot.data!.exists) {
+                                isWishlisted = true;
+                              }
+                              return InkWell(
+                                onTap: () async {
+                                  try {
+                                    if (isWishlisted) {
+                                      await firestoreService.removeFromWishlist(
+                                        product['id'].toString(),
+                                      );
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Removed from Wishlist',
+                                            ),
+                                            duration: Duration(seconds: 1),
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      await firestoreService.addToWishlist(
+                                        product,
+                                      );
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Added to Wishlist'),
+                                            duration: Duration(seconds: 1),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  } catch (e) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Error: $e'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Icon(
+                                    isWishlisted
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    size: 18,
+                                    color: isWishlisted
+                                        ? const Color(0xFFFF3F6C)
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -1362,15 +1548,15 @@ class FeaturedProductCarousel extends StatelessWidget {
                                 size: 12,
                               ),
                               const SizedBox(width: 2),
-                              const Text(
-                                '4.2',
-                                style: TextStyle(
+                              Text(
+                                '${product['rating']}',
+                                style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                ' | 1.2k',
+                                ' | ${product['ratingCount']}',
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.grey[600],
@@ -1388,35 +1574,79 @@ class FeaturedProductCarousel extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Premium Brand',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'Trendy Outfit',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 11),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product['title'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  product['subtitle'],
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 11,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              try {
+                                await firestoreService.addToCart(product);
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Error: $e'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              child: const Icon(
+                                Icons.shopping_bag_outlined,
+                                size: 18,
+                                color: Color(0xFFFF3F6C),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          const Text(
-                            '₹999',
-                            style: TextStyle(
+                          Text(
+                            '₹${product['price']}',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '₹2499',
+                            '₹${product['originalPrice']}',
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               color: Colors.grey[500],
@@ -1426,9 +1656,9 @@ class FeaturedProductCarousel extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      const Text(
-                        '60% OFF',
-                        style: TextStyle(
+                      Text(
+                        product['offer'],
+                        style: const TextStyle(
                           color: Color(0xFFFF3F6C),
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -1698,16 +1928,73 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirestoreService firestoreService = FirestoreService();
+
+    final List<Map<String, dynamic>> products = [
+      {
+        'id': '1',
+        'image':
+            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
+        'title': 'Premium Brand',
+        'subtitle': 'Stylish Fashion Wear',
+        'rating': 4.3,
+        'ratingCount': '2.5k',
+        'price': 1299,
+        'originalPrice': 3999,
+        'discount': '67% OFF',
+      },
+      {
+        'id': '2',
+        'image':
+            'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
+        'title': 'Urban Chic',
+        'subtitle': 'Trendy Streetwear',
+        'rating': 4.5,
+        'ratingCount': '1.2k',
+        'price': 999,
+        'originalPrice': 2499,
+        'discount': '60% OFF',
+      },
+      // Add more dummy products with IDs as needed for the demo
+      {
+        'id': '3',
+        'image':
+            'https://images.unsplash.com/photo-1604436607823-d721dfe2df46?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODN8fHdvbWVuJTIwZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
+        'title': 'Elegant Wear',
+        'subtitle': 'Office & Casual',
+        'rating': 4.2,
+        'ratingCount': '850',
+        'price': 1599,
+        'originalPrice': 3599,
+        'discount': '55% OFF',
+      },
+      {
+        'id': '4',
+        'image':
+            'https://images.unsplash.com/photo-1618886614638-80e3c103d31a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVuJTIwZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
+        'title': 'Men\'s Classic',
+        'subtitle': 'Timeless Style',
+        'rating': 4.6,
+        'ratingCount': '3.1k',
+        'price': 1899,
+        'originalPrice': 4999,
+        'discount': '62% OFF',
+      },
+    ];
+
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.58,
+          childAspectRatio: 0.48, // Make card taller to avoid overflow
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
         ),
         delegate: SliverChildBuilderDelegate((context, index) {
+          // Use data from the list, cycling through if index > length
+          final product = products[index % products.length];
+
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -1732,20 +2019,7 @@ class ProductGrid extends StatelessWidget {
                           top: Radius.circular(10),
                         ),
                         child: Image.network(
-                          [
-                            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-                            'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-                            'https://images.unsplash.com/photo-1604436607823-d721dfe2df46?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODN8fHdvbWVuJTIwZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-                            'https://images.unsplash.com/photo-1618886614638-80e3c103d31a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVuJTIwZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-                            'https://images.unsplash.com/photo-1519831296458-9341fc9d2b18?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fG1lbiUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D',
-                            'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fGZhc2hpb258ZW58MHx8MHx8fDA%3D',
-                            'https://images.unsplash.com/photo-1629581678313-36cf745a9af9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8d2F0Y2hlc3xlbnwwfHwwfHx8MA%3D%3D',
-                            'https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTV8fGZhc2hpb258ZW58MHx8MHx8fDA%3D',
-                            'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjZ8fGZhc2hpb258ZW58MHx8MHx8fDA%3D',
-                            'https://images.unsplash.com/photo-1617922001439-4a2e6562f328?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZmFzaGlvbiUyMHdvbWVufGVufDB8fDB8fHww',
-                            'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGNsb3RoaW5nfGVufDB8fDB8fHww',
-                            'https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGNsb3RoaW5nfGVufDB8fDB8fHww',
-                          ][index],
+                          product['image'],
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
@@ -1764,11 +2038,83 @@ class ProductGrid extends StatelessWidget {
                               ),
                             ],
                           ),
-                          padding: const EdgeInsets.all(6),
-                          child: const Icon(
-                            Icons.favorite_border,
-                            size: 18,
-                            color: Colors.black87,
+                          child: StreamBuilder<DocumentSnapshot>(
+                            stream: FirebaseAuth.instance.currentUser != null
+                                ? FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                      )
+                                      .collection('wishlist')
+                                      .doc(product['id'].toString())
+                                      .snapshots()
+                                : null,
+                            builder: (context, snapshot) {
+                              bool isWishlisted = false;
+                              if (snapshot.hasData && snapshot.data!.exists) {
+                                isWishlisted = true;
+                              }
+                              return IconButton(
+                                icon: Icon(
+                                  isWishlisted
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  size: 18,
+                                  color: isWishlisted
+                                      ? const Color(0xFFFF3F6C)
+                                      : Colors.black87,
+                                ),
+                                constraints: const BoxConstraints(),
+                                padding: const EdgeInsets.all(6),
+                                onPressed: () async {
+                                  try {
+                                    if (isWishlisted) {
+                                      await firestoreService.removeFromWishlist(
+                                        product['id'].toString(),
+                                      );
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Removed from Wishlist',
+                                            ),
+                                            duration: Duration(seconds: 1),
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      await firestoreService.addToWishlist(
+                                        product,
+                                      );
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Added to Wishlist'),
+                                            duration: Duration(seconds: 1),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  } catch (e) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Error: $e'),
+                                          backgroundColor: Colors.red,
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -1806,7 +2152,7 @@ class ProductGrid extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Premium Brand',
+                        product['title'],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -1816,7 +2162,7 @@ class ProductGrid extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        'Stylish Fashion Wear',
+                        product['subtitle'],
                         style: TextStyle(color: Colors.grey[600], fontSize: 11),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1824,52 +2170,100 @@ class ProductGrid extends StatelessWidget {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 14),
-                          const SizedBox(width: 3),
-                          const Text(
-                            '4.3',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
                           Text(
-                            ' | 2.5k',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          const Text(
-                            '₹1,299',
-                            style: TextStyle(
+                            '₹${product['price']}',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            '₹3,999',
+                            '₹${product['originalPrice']}',
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               color: Colors.grey[500],
                               fontSize: 11,
                             ),
                           ),
+                          const Spacer(),
+                          Text(
+                            product['discount'],
+                            style: const TextStyle(
+                              color: Color(0xFFFF3F6C),
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 2),
-                      const Text(
-                        '67% OFF',
-                        style: TextStyle(
-                          color: Color(0xFFFF3F6C),
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            print('🔘 ADD TO BAG BUTTON TAPPED!');
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Processing...'),
+                                content: const Text(
+                                  'Adding item to your cart.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+
+                            firestoreService
+                                .addToCart(product)
+                                .then((_) {
+                                  Navigator.pop(
+                                    context,
+                                  ); // Close processing dialog
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        '✅ Added to Bag Successfully!',
+                                      ),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                })
+                                .catchError((e) {
+                                  Navigator.pop(
+                                    context,
+                                  ); // Close processing dialog
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('❌ Error: $e'),
+                                      backgroundColor: Colors.red,
+                                      duration: const Duration(seconds: 3),
+                                    ),
+                                  );
+                                });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF3F6C),
+                            foregroundColor: Colors.white,
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'ADD TO BAG',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ),
                     ],

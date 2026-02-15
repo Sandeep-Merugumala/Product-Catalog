@@ -1,7 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/firestore_service.dart';
 import 'men_fashion_screen.dart';
 import 'women_fashion_screen.dart';
+import 'wishlist_page.dart';
+import 'bag_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KidsSection extends StatefulWidget {
   const KidsSection({super.key});
@@ -117,14 +122,33 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'M',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  child: Center(
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseAuth.instance.currentUser != null
+                          ? FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .snapshots()
+                          : null,
+                      builder: (context, snapshot) {
+                        String initial = 'M';
+                        if (snapshot.hasData && snapshot.data!.data() != null) {
+                          final data =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          if (data.containsKey('name') &&
+                              data['name'].toString().isNotEmpty) {
+                            initial = data['name'].toString()[0].toUpperCase();
+                          }
+                        }
+                        return Text(
+                          initial,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -153,8 +177,20 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
                 ),
                 const SizedBox(width: 12),
                 _buildIconButton(Icons.notifications_outlined, () {}, 1),
-                _buildIconButton(Icons.favorite_border, () {}, 0),
-                _buildIconButton(Icons.shopping_bag_outlined, () {}, 0),
+                _buildIconButton(Icons.favorite_border, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WishlistPage(),
+                    ),
+                  );
+                }, 0),
+                _buildIconButton(Icons.shopping_bag_outlined, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BagPage()),
+                  );
+                }, 0),
               ],
             ),
           ),
@@ -1047,6 +1083,7 @@ class KidsProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirestoreService firestoreService = FirestoreService();
     final List<Map<String, dynamic>> allProducts = [
       // TOPWEAR
       {
@@ -1328,13 +1365,25 @@ class KidsProductGrid extends StatelessWidget {
         ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final product = products[index % products.length];
-          return _buildProductCard(product);
+          return _buildProductCard(context, product, firestoreService);
         }, childCount: products.length),
       ),
     );
   }
 
-  Widget _buildProductCard(Map<String, dynamic> product) {
+  Widget _buildProductCard(
+    BuildContext context,
+    Map<String, dynamic> product,
+    FirestoreService firestoreService,
+  ) {
+    // Determine the product title to use (some have 'name', some have 'title')
+    final title = product['name'] ?? product['title'] ?? 'Product';
+    final subtitle = product['brand'] ?? product['subtitle'] ?? '';
+    // Ensure ID exists for Firestore operations
+    if (!product.containsKey('id')) {
+      product['id'] = '${subtitle}_$title'.hashCode.toString();
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1367,10 +1416,69 @@ class KidsProductGrid extends StatelessWidget {
                       color: Colors.white,
                     ),
                     padding: const EdgeInsets.all(6),
-                    child: const Icon(
-                      Icons.favorite_border,
-                      size: 16,
-                      color: Colors.black54,
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseAuth.instance.currentUser != null
+                          ? FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .collection('wishlist')
+                                .doc(product['id'].toString())
+                                .snapshots()
+                          : null,
+                      builder: (context, snapshot) {
+                        bool isWishlisted = false;
+                        if (snapshot.hasData && snapshot.data!.exists) {
+                          isWishlisted = true;
+                        }
+                        return InkWell(
+                          onTap: () async {
+                            try {
+                              if (isWishlisted) {
+                                await firestoreService.removeFromWishlist(
+                                  product['id'].toString(),
+                                );
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Removed from Wishlist'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                await firestoreService.addToWishlist(product);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Added to Wishlist'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                }
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error: $e'),
+                                    backgroundColor: Colors.red,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: Icon(
+                            isWishlisted
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            size: 16,
+                            color: isWishlisted
+                                ? const Color(0xFFFF3F6C)
+                                : Colors.black54,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -1440,87 +1548,49 @@ class KidsProductGrid extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.green.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(3),
-                              border: Border.all(
-                                color: Colors.green.withValues(alpha: 0.3),
-                                width: 0.5,
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${product['rating']}',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.green,
-                                  size: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '(${(product['reviews'] / 1000).toStringAsFixed(1)}k)',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 8),
+                      // NEW ELEVATED BUTTON
                       SizedBox(
                         width: double.infinity,
                         height: 36,
-                        child: OutlinedButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            side: WidgetStateProperty.resolveWith((states) {
-                              if (states.contains(WidgetState.hovered)) {
-                                return const BorderSide(
-                                  color: Color(0xFFFFB300),
-                                );
-                              }
-                              return const BorderSide(color: Color(0xFFFFB300));
-                            }),
-                            backgroundColor: WidgetStateProperty.resolveWith((
-                              states,
-                            ) {
-                              if (states.contains(WidgetState.hovered)) {
-                                return const Color(0xFFFFB300);
-                              }
-                              return Colors.transparent;
-                            }),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            firestoreService
+                                .addToCart(product)
+                                .then((_) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          '✅ Added to Bag Successfully!',
+                                        ),
+                                        backgroundColor: Colors.green,
+                                        duration: Duration(seconds: 1),
+                                      ),
+                                    );
+                                  }
+                                })
+                                .catchError((e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('❌ Error: $e'),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(
+                              0xFFFFB300,
+                            ), // Amber for Kids
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
                             ),
-                            padding: WidgetStateProperty.all(EdgeInsets.zero),
-                            foregroundColor: WidgetStateProperty.resolveWith((
-                              states,
-                            ) {
-                              if (states.contains(WidgetState.hovered)) {
-                                return Colors.white;
-                              }
-                              return const Color(0xFFFFB300);
-                            }),
                           ),
                           child: const Text(
                             'ADD TO CART',

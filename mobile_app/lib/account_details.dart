@@ -129,18 +129,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                               color: Color(0xFFFF3F6C),
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFF3F6C),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                          ),
                         ],
                       ),
                     ),
