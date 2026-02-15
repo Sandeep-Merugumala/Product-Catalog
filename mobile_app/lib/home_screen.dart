@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/profile_page.dart';
+import 'men_fashion_screen.dart';
+import 'women_fashion_screen.dart';
+import 'kid_fashion_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,24 +20,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  static List<Widget> _widgetOptions(Function() onProfileTap) => [
-    MyntraHomeContent(onProfileTap: onProfileTap),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const MyntraHomeContent(),
     const Center(child: Text('Fwd Content', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Luxe Content', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Bag Content', style: TextStyle(fontSize: 24))),
-    const ProfilePage(),
+    const Center(
+      child: Text('Profile Content', style: TextStyle(fontSize: 24)),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _widgetOptions(() {
-          setState(() {
-            _selectedIndex = 4;
-          });
-        }).elementAt(_selectedIndex),
-      ),
+      body: SafeArea(child: _widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -97,14 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class MyntraHomeContent extends StatelessWidget {
-  final VoidCallback? onProfileTap;
-  const MyntraHomeContent({super.key, this.onProfileTap});
+  const MyntraHomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        MyntraAppBar(onProfileTap: onProfileTap),
+        const MyntraAppBar(),
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,8 +145,7 @@ class MyntraHomeContent extends StatelessWidget {
 }
 
 class MyntraAppBar extends StatelessWidget {
-  final VoidCallback? onProfileTap;
-  const MyntraAppBar({super.key, this.onProfileTap});
+  const MyntraAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -261,13 +257,10 @@ class MyntraAppBar extends StatelessWidget {
                   size: 26,
                 ),
                 const SizedBox(width: 12),
-                GestureDetector(
-                  onTap: onProfileTap,
-                  child: const Icon(
-                    Icons.person_outline,
-                    color: Colors.black87,
-                    size: 26,
-                  ),
+                const Icon(
+                  Icons.person_outline,
+                  color: Colors.black87,
+                  size: 26,
                 ),
               ],
             ),
@@ -285,12 +278,46 @@ class MyntraAppBar extends StatelessWidget {
                       _buildTabItem("All", isSelected: true),
                       InkWell(
                         onTap: () {
-                          // TODO: Navigate to Men's Section
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const MensSection(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
                         },
                         child: _buildTabItem("Men"),
                       ),
-                      _buildTabItem("Women"),
-                      _buildTabItem("Kids"),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const WomensSection(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        },
+                        child: _buildTabItem("Women"),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const KidsSection(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        },
+                        child: _buildTabItem("Kids"),
+                      ),
                     ],
                   ),
                 ),
