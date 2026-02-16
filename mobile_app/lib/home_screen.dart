@@ -11,6 +11,7 @@ import 'luxe_page.dart';
 import 'wishlist_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/widgets/product_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +22,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  // final FirestoreService _firestoreService = FirestoreService();
+
+  @override
+  void initState() {
+    super.initState();
+    // Seed data if needed
+    // _firestoreService.addSampleProducts();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -228,30 +237,7 @@ class MyntraAppBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 // Search Bar
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey[300]!),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(Icons.search, color: Colors.grey[500], size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Search \"Midi Skirt\"",
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
                 // Icons
                 Stack(
@@ -1665,6 +1651,17 @@ class FeaturedProductCarousel extends StatelessWidget {
                             onTap: () async {
                               try {
                                 await firestoreService.addToCart(product);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Added to Bag Successfully!',
+                                      ),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                }
                               } catch (e) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -2262,49 +2259,35 @@ class ProductGrid extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             print('🔘 ADD TO BAG BUTTON TAPPED!');
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Processing...'),
-                                content: const Text(
-                                  'Adding item to your cart.',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
+                            // REMOVED: showDialog "Processing..." as per user request
 
                             firestoreService
                                 .addToCart(product)
                                 .then((_) {
-                                  Navigator.pop(
-                                    context,
-                                  ); // Close processing dialog
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        '✅ Added to Bag Successfully!',
+                                  // REMOVED: Navigator.pop (dialog no longer exists)
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          '✅ Added to Bag Successfully!',
+                                        ),
+                                        backgroundColor: Colors.green,
+                                        duration: Duration(seconds: 2),
                                       ),
-                                      backgroundColor: Colors.green,
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 })
                                 .catchError((e) {
-                                  Navigator.pop(
-                                    context,
-                                  ); // Close processing dialog
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('❌ Error: $e'),
-                                      backgroundColor: Colors.red,
-                                      duration: const Duration(seconds: 3),
-                                    ),
-                                  );
+                                  // REMOVED: Navigator.pop
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('❌ Error: $e'),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
                                 });
                           },
                           style: ElevatedButton.styleFrom(
