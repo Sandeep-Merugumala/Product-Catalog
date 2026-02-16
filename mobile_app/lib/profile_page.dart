@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'login.dart';
+import 'main.dart';
 import 'package:mobile_app/address_management.dart';
 import 'package:mobile_app/account_details.dart';
 
@@ -141,17 +143,51 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        userName,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        userEmail,
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userName,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  userEmail,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          CircleAvatar(
+                            radius: 35,
+                            backgroundColor: const Color(
+                              0xFFFF3F6C,
+                            ).withValues(alpha: 0.1),
+                            backgroundImage:
+                                snapshot.data?['profileImageUrl'] != null
+                                ? NetworkImage(
+                                    snapshot.data!['profileImageUrl'],
+                                  )
+                                : null,
+                            child: snapshot.data?['profileImageUrl'] == null
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 40,
+                                    color: Color(0xFFFF3F6C),
+                                  )
+                                : null,
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       Container(
@@ -433,13 +469,25 @@ class ProfilePage extends StatelessWidget {
                     width: double.infinity,
                     child: OutlinedButton(
                       onPressed: () async {
+                        try {
+                          // 1. Sign out from Google if possible
+                          await GoogleSignIn().signOut();
+                        } catch (_) {}
+
+                        // 2. Sign out from Firebase
                         await FirebaseAuth.instance.signOut();
+
+                        // 3. Fallback: Force navigation reset to the AuthWrapper
+                        // This ensures that even if state updates are slow, the UI resets.
                         if (context.mounted) {
-                          Navigator.pushReplacement(
+                          Navigator.of(
                             context,
+                            rootNavigator: true,
+                          ).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
+                              builder: (context) => const AuthWrapper(),
                             ),
+                            (route) => false,
                           );
                         }
                       },
