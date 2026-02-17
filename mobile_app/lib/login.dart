@@ -121,7 +121,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             email: _emailController.text.trim(),
             password: _passwordController.text.trim(),
           );
-          // AuthWrapper handles navigation
+          // AuthWrapper handles navigation, but we force it here for immediate feedback
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
         } else {
           UserCredential userCredential = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
@@ -152,7 +157,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 'profileImageUrl': profileImageUrl,
                 'createdAt': FieldValue.serverTimestamp(),
               });
-          if (mounted) _showSnackBar('Account created!', Colors.green);
+          if (mounted) {
+            _showSnackBar('Account created!', Colors.green);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
         }
       } catch (e) {
         if (mounted) _showSnackBar(e.toString(), Colors.redAccent);
@@ -194,7 +204,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       }
 
       if (mounted) {
-        // AuthWrapper will handle the redirect
+        // AuthWrapper will handle the redirect, but explicit push ensures it
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
       }
     } catch (e) {
       if (mounted) _showSnackBar(e.toString(), Colors.redAccent);

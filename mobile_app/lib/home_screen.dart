@@ -11,6 +11,7 @@ import 'luxe_page.dart';
 import 'wishlist_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/widgets/product_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +22,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  // final FirestoreService _firestoreService = FirestoreService();
+
+  @override
+  void initState() {
+    super.initState();
+    // Seed data if needed
+    // _firestoreService.addSampleProducts();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -228,30 +237,7 @@ class MyntraAppBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 // Search Bar
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey[300]!),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(Icons.search, color: Colors.grey[500], size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Search \"Midi Skirt\"",
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
                 // Icons
                 Stack(
@@ -968,28 +954,36 @@ class CategoryMegaDeals extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             children: [
               _buildMegaDealCard(
+                context, // Pass context for navigation
                 'Men\'s Fashion',
                 '50-80% OFF',
                 'https://plus.unsplash.com/premium_photo-1706806943465-68c2a32bd888?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWVucyUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D',
                 const Color(0xFF1976D2),
+                const MensSection(), // Target screen
               ),
               _buildMegaDealCard(
+                context,
                 'Women\'s Wear',
                 '40-70% OFF',
                 'https://media.istockphoto.com/id/694044976/photo/i-know-ill-find-something-i-like-here.webp?a=1&b=1&s=612x612&w=0&k=20&c=vZ5rDmWlfTIlbh1Fx1kpw19ggGzQ5zaeZ4EoPOYo4R8=',
                 const Color(0xFFE91E63),
+                const WomensSection(), // Target screen
               ),
               _buildMegaDealCard(
+                context,
                 'Kids Collection',
                 '30-60% OFF',
                 'https://images.unsplash.com/photo-1627859774205-83c1279a6382?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fGtpZHMlMjBmYXNoaW9ufGVufDB8fDB8fHww',
                 const Color(0xFFFF9800),
+                const KidsSection(), // Target screen
               ),
               _buildMegaDealCard(
+                context,
                 'Beauty & More',
                 'Up to 50% OFF',
                 'https://images.unsplash.com/photo-1608979048467-6194dabc6a3d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGJlYXV0eSUyMGFuZCUyMGNvc21ldGljc3xlbnwwfHwwfHx8MA%3D%3D',
                 const Color(0xFF9C27B0),
+                const WomensSection(), // Redirecting beauty to women for now
               ),
             ],
           ),
@@ -999,90 +993,99 @@ class CategoryMegaDeals extends StatelessWidget {
   }
 
   Widget _buildMegaDealCard(
+    BuildContext context,
     String title,
     String offer,
     String imageUrl,
     Color accentColor,
+    Widget targetScreen,
   ) {
-    return Container(
-      width: 280,
-      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.network(imageUrl, fit: BoxFit.cover),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.2),
-                    Colors.black.withValues(alpha: 0.7),
+    return GestureDetector(
+      onTapUp: (details) {
+        final RenderBox box = context.findRenderObject() as RenderBox;
+        final Offset pos = box.localToGlobal(details.localPosition);
+        Navigator.of(context).push(_createProCircularRoute(targetScreen, pos));
+      },
+      child: Container(
+        width: 280,
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.network(imageUrl, fit: BoxFit.cover),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.2),
+                      Colors.black.withValues(alpha: 0.7),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: accentColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            offer,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: accentColor,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          offer,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      const Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1206,107 +1209,148 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
-class DealOfTheDay extends StatelessWidget {
+class DealOfTheDay extends StatefulWidget {
   const DealOfTheDay({super.key});
 
   @override
+  State<DealOfTheDay> createState() => _DealOfTheDayState();
+}
+
+class _DealOfTheDayState extends State<DealOfTheDay>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true); // This creates the continuous pulse/float
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  void _handleNavigation(BuildContext context, TapUpDetails details) {
+    // Finds where the user tapped to start the circle reveal from that spot
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final Offset globalOffset = box.localToGlobal(details.localPosition);
+
+    Navigator.of(
+      context,
+    ).push(_createProCircularRoute(const WomensSection(), globalOffset));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [const Color(0xFFFFF3E0), const Color(0xFFFFE0B2)],
+    return GestureDetector(
+      onTapUp: (details) => _handleNavigation(context, details),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFFF3E0), Color(0xFFFFE0B2)],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.orange.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.orange.withValues(alpha: 0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF6F00),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    'DEAL OF THE DAY',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Flat 50-70% Off',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFE65100),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'On trending styles',
-                  style: TextStyle(fontSize: 13, color: Colors.grey[700]),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF6F00),
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFFF6F00).withValues(alpha: 0.3),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // PULSING BADGE
+                  ScaleTransition(
+                    scale: Tween(
+                      begin: 1.0,
+                      end: 1.1,
+                    ).animate(_pulseController),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
                       ),
-                    ],
-                  ),
-                  child: const Text(
-                    'SHOP NOW',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.8,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF6F00),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'DEAL OF THE DAY',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Flat 50-70% Off',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFE65100),
+                    ),
+                  ),
+                  const Text(
+                    'On trending styles',
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 12),
+                  // SHOP NOW BUTTON
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF6F00),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Text(
+                      'SHOP NOW',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // FLOATING IMAGE
+            AnimatedBuilder(
+              animation: _pulseController,
+              builder: (context, child) => Transform.translate(
+                offset: Offset(0, 10 * _pulseController.value),
+                child: child,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  'https://plus.unsplash.com/premium_photo-1740354613210-c474b08f022c?w=400',
+                  height: 140,
+                  width: 110,
+                  fit: BoxFit.cover,
                 ),
-              ],
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              'https://plus.unsplash.com/premium_photo-1740354613210-c474b08f022c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Y2xvdGhpbmclMjBmYXNoaW9ufGVufDB8fDB8fHww',
-              height: 140,
-              width: 110,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1607,6 +1651,17 @@ class FeaturedProductCarousel extends StatelessWidget {
                             onTap: () async {
                               try {
                                 await firestoreService.addToCart(product);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Added to Bag Successfully!',
+                                      ),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                }
                               } catch (e) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -2204,49 +2259,35 @@ class ProductGrid extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             print('🔘 ADD TO BAG BUTTON TAPPED!');
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Processing...'),
-                                content: const Text(
-                                  'Adding item to your cart.',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
+                            // REMOVED: showDialog "Processing..." as per user request
 
                             firestoreService
                                 .addToCart(product)
                                 .then((_) {
-                                  Navigator.pop(
-                                    context,
-                                  ); // Close processing dialog
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        '✅ Added to Bag Successfully!',
+                                  // REMOVED: Navigator.pop (dialog no longer exists)
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          '✅ Added to Bag Successfully!',
+                                        ),
+                                        backgroundColor: Colors.green,
+                                        duration: Duration(seconds: 2),
                                       ),
-                                      backgroundColor: Colors.green,
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 })
                                 .catchError((e) {
-                                  Navigator.pop(
-                                    context,
-                                  ); // Close processing dialog
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('❌ Error: $e'),
-                                      backgroundColor: Colors.red,
-                                      duration: const Duration(seconds: 3),
-                                    ),
-                                  );
+                                  // REMOVED: Navigator.pop
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('❌ Error: $e'),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
                                 });
                           },
                           style: ElevatedButton.styleFrom(
@@ -2273,6 +2314,149 @@ class ProductGrid extends StatelessWidget {
             ),
           );
         }, childCount: 12),
+      ),
+    );
+  }
+}
+
+// 1. The custom clipper for the circular growth effect
+class CircleClipper extends CustomClipper<Path> {
+  final double fraction;
+  final Offset center;
+
+  CircleClipper({required this.fraction, required this.center});
+
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.addOval(
+      Rect.fromCircle(
+        center: center,
+        radius: size.longestSide * 1.5 * fraction,
+      ),
+    );
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+}
+
+// 2. The Route builder that uses the clipper
+Route _createProCircularRoute(Widget page, Offset tapPosition) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionDuration: const Duration(milliseconds: 800),
+    reverseTransitionDuration: const Duration(milliseconds: 600),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return ClipPath(
+        clipper: CircleClipper(
+          fraction: Curves.easeInOutQuart.transform(animation.value),
+          center: tapPosition,
+        ),
+        child: child,
+      );
+    },
+  );
+}
+
+class MyntraLoader extends StatefulWidget {
+  final Widget targetPage;
+  const MyntraLoader({super.key, required this.targetPage});
+
+  @override
+  State<MyntraLoader> createState() => _MyntraLoaderState();
+}
+
+class _MyntraLoaderState extends State<MyntraLoader>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..repeat(reverse: true);
+
+    _pulse = Tween<double>(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    // Stay on loader for 1.5 seconds then push the target page
+    Timer(const Duration(milliseconds: 1500), () {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, anim1, anim2) => widget.targetPage,
+          transitionsBuilder: (context, anim1, anim2, child) =>
+              FadeTransition(opacity: anim1, child: child),
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Pulsing Logo
+            ScaleTransition(
+              scale: _pulse,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFF3F6C), Color(0xFFFF5E7E)],
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Center(
+                  child: Text(
+                    'M',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            // Shimmering Loading Bar
+            Container(
+              width: 150,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: const LinearProgressIndicator(
+                  backgroundColor: Colors.transparent,
+                  color: Color(0xFFFF3F6C),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

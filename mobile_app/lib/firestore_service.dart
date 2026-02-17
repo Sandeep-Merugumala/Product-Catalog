@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'product_data.dart';
 
 class FirestoreService {
   final CollectionReference notes = FirebaseFirestore.instance.collection(
@@ -18,7 +19,75 @@ class FirestoreService {
     return notes.doc(id).delete();
   }
 
-  // --- CART ---
+  // --- PRODUCTS ---
+  final CollectionReference _products = FirebaseFirestore.instance.collection(
+    'products',
+  );
+
+  // Cache for client-side search (since dataset is small ~64 items)
+  List<Map<String, dynamic>>? _allProductsCache;
+
+  // Search Products (Client-Side for better UX)
+  Future<List<Map<String, dynamic>>> searchProducts(String query) async {
+    if (query.isEmpty) return [];
+
+    try {
+      // 1. Fetch all products if not cached
+      if (_allProductsCache == null) {
+        final snapshot = await _products.get();
+        _allProductsCache = snapshot.docs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          data['id'] = doc.id;
+          return data;
+        }).toList();
+      }
+
+      // 2. Filter locally (Case-insensitive, Substring match)
+      final lowerQuery = query.toLowerCase().trim();
+
+      return _allProductsCache!.where((product) {
+        final name = (product['name'] ?? '').toString().toLowerCase();
+        final brand = (product['brand'] ?? '').toString().toLowerCase();
+        final category = (product['category'] ?? '').toString().toLowerCase();
+        final gender = (product['gender'] ?? '').toString().toLowerCase();
+
+        return name.contains(lowerQuery) ||
+            brand.contains(lowerQuery) ||
+            category.contains(lowerQuery) ||
+            gender.contains(lowerQuery);
+      }).toList();
+    } catch (e) {
+      print('Error searching products: $e');
+      return [];
+    }
+  }
+
+  // Get All Products (for migration/testing)
+  Stream<QuerySnapshot> getAllProducts() {
+    return _products.snapshots();
+  }
+
+  // Add All App Products (Migration)
+  Future<void> seedAllProducts() async {
+    print('🌱 Seeding all products...');
+    for (var product in allAppProducts) {
+      // Check if product with same ID exists to avoid duplicates
+      // We use the 'id' field from our data as the document ID for consistency
+      final docRef = _products.doc(product['id']);
+      final doc = await docRef.get();
+
+      if (!doc.exists) {
+        await docRef.set(product);
+        print('✅ Added ${product['name']}');
+      } else {
+        // Optional: Update existing product if data changed
+        // await docRef.update(product);
+        print('⚠️ Skipped ${product['name']} (Exists)');
+      }
+    }
+    print('🎉 Seeding complete!');
+  }
+
   CollectionReference get _cart => FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -47,9 +116,20 @@ class FirestoreService {
       if (doc.exists) {
         // Increment quantity if exists
         final currentQty = doc.data()?['quantity'] ?? 1;
+        final stock = product['quantity'] ?? 9999;
+
+        if (currentQty + 1 > stock) {
+          throw Exception('Stock limit reached! Only $stock available.');
+        }
+
         await cartRef.update({'quantity': currentQty + 1});
       } else {
         // Add new item with quantity 1
+        final stock = product['quantity'] ?? 9999;
+        if (1 > stock) {
+          throw Exception('Product is out of stock!');
+        }
+
         await cartRef.set({
           ...product,
           'addedAt': Timestamp.now(),
