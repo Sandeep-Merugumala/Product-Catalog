@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mobile_app/widgets/map_location_picker.dart';
 
 // Address Model
 class Address {
@@ -358,6 +361,7 @@ class _AddEditAddressPageState extends State<AddEditAddressPage> {
   late TextEditingController _mobileController;
   String _type = 'HOME'; // Default
   bool _isDefault = false;
+  bool _isFetchingLocation = false;
   final AddressService _addressService = AddressService();
 
   @override
@@ -414,6 +418,93 @@ class _AddEditAddressPageState extends State<AddEditAddressPage> {
     }
   }
 
+  Future<void> _fetchCurrentLocation() async {
+    setState(() {
+      _isFetchingLocation = true;
+    });
+
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Location services are disabled.'),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'ENABLE',
+                textColor: Colors.white,
+                onPressed: () => Geolocator.openLocationSettings(),
+              ),
+            ),
+          );
+        }
+        setState(() => _isFetchingLocation = false);
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied');
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark result = placemarks.first;
+        setState(() {
+          _cityController.text =
+              result.locality ?? result.subAdministrativeArea ?? '';
+          _stateController.text = result.administrativeArea ?? '';
+          _zipController.text = result.postalCode ?? '';
+
+          List<String> streetParts = [];
+          if (result.name != null &&
+              result.name!.isNotEmpty &&
+              !result.name!.contains(result.postalCode ?? '')) {
+            streetParts.add(result.name!);
+          }
+          if (result.subLocality != null && result.subLocality!.isNotEmpty) {
+            streetParts.add(result.subLocality!);
+          }
+          if (result.thoroughfare != null && result.thoroughfare!.isNotEmpty) {
+            streetParts.add(result.thoroughfare!);
+          }
+
+          _streetController.text = streetParts.join(', ');
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isFetchingLocation = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -434,6 +525,111 @@ class _AddEditAddressPageState extends State<AddEditAddressPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Use Current Location Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _isFetchingLocation ? null : _fetchCurrentLocation,
+                  icon: _isFetchingLocation
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(Icons.gps_fixed),
+                  label: Text(
+                    _isFetchingLocation
+                        ? 'FETCHING...'
+                        : 'USE CURRENT LOCATION',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF3F6C),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Locate on Map Button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final Placemark? result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MapLocationPicker(),
+                      ),
+                    );
+
+                    if (result != null) {
+                      setState(() {
+                        _cityController.text =
+                            result.locality ??
+                            result.subAdministrativeArea ??
+                            '';
+                        _stateController.text = result.administrativeArea ?? '';
+                        _zipController.text = result.postalCode ?? '';
+
+                        List<String> streetParts = [];
+                        if (result.name != null &&
+                            result.name!.isNotEmpty &&
+                            !result.name!.contains(result.postalCode ?? '')) {
+                          streetParts.add(result.name!);
+                        }
+                        if (result.subLocality != null &&
+                            result.subLocality!.isNotEmpty) {
+                          streetParts.add(result.subLocality!);
+                        }
+                        if (result.thoroughfare != null &&
+                            result.thoroughfare!.isNotEmpty) {
+                          streetParts.add(result.thoroughfare!);
+                        }
+
+                        _streetController.text = streetParts.join(', ');
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.my_location, color: Color(0xFFFF3F6C)),
+                  label: const Text(
+                    'LOCATE ON MAP',
+                    style: TextStyle(
+                      color: Color(0xFFFF3F6C),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    side: BorderSide(color: Colors.grey[300]!),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Row(
+                children: [
+                  Expanded(child: Divider()),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'OR ENTER MANUALLY',
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ),
+                  Expanded(child: Divider()),
+                ],
+              ),
+              const SizedBox(height: 16),
               _buildTextField(_nameController, "Name"),
               const SizedBox(height: 16),
               _buildTextField(

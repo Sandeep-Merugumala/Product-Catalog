@@ -105,7 +105,7 @@ class _WardrobeSelectorState extends State<WardrobeSelector>
                   : Border.all(color: Colors.transparent, width: 3),
               boxShadow: [
                 BoxShadow(
-                  color: item.primaryColor.withOpacity(isSelected ? 0.6 : 0.3),
+                  color: item.primaryColor.withValues(alpha: isSelected ? 0.6 : 0.3),
                   blurRadius: isSelected ? 12 : 6,
                   offset: const Offset(0, 3),
                 ),
