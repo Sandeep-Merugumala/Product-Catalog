@@ -18,6 +18,12 @@ service cloud.firestore {
       }
     }
     
+    // Products collection - publicly readable
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false; 
+    }
+
     // Notes collection (from existing code)
     match /notes/{noteId} {
       allow read, write: if request.auth != null;
