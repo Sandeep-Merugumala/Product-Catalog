@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/firestore_service.dart';
+import 'package:aura/firestore_service.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Map<String, dynamic> product;

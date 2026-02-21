@@ -81,7 +81,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:393025467926:android:5a2bf808ba0dc8a232e737",
         "android_client_info": {
-          "package_name": "com.example.mobile_app"
+          "package_name": "com.example.aura"
         }
       },
       "oauth_client": [
@@ -89,7 +89,7 @@
           "client_id": "393025467926-6ba8mch94gl8ru6fqu3m3o9pturukeqv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.mobile_app",
+            "package_name": "com.example.aura",
             "certificate_hash": "e4f44a58580a9cbe49b842e2db8d85c04c09d746"
           }
         },

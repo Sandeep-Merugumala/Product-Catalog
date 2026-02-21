@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/firestore_service.dart';
+import 'package:aura/firestore_service.dart';
 import 'package:lottie/lottie.dart';
 
 class WishlistPage extends StatelessWidget {

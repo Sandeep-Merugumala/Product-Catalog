@@ -140,7 +140,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.mobile_app',
+                userAgentPackageName: 'com.example.aura',
               ),
             ],
           ),

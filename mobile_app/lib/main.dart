@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'splash_screen.dart';
 import 'firebase_options.dart';
-import 'package:mobile_app/login.dart';
+import 'package:aura/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
 import 'theme_animator.dart';
@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
       builder: (context, currentMode, child) {
         return ThemeAnimator(
           child: MaterialApp(
-            title: 'Myntra Clone',
+            title: 'Aura',
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,

@@ -1,4 +1,4 @@
-# mobile_app
+# Aura
 
 A new Flutter project.
 

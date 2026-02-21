@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/firestore_service.dart';
+import 'package:aura/firestore_service.dart';
 import 'women_fashion_screen.dart';
 import 'kid_fashion_screen.dart';
 import 'wishlist_page.dart';
 import 'bag_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
+import 'package:aura/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MensSection extends StatefulWidget {

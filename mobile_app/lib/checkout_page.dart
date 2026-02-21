@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/firestore_service.dart';
-import 'package:mobile_app/address_management.dart';
+import 'package:aura/firestore_service.dart';
+import 'package:aura/address_management.dart';
 import 'home_screen.dart';
 import 'package:lottie/lottie.dart';
 

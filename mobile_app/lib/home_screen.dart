@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'men_fashion_screen.dart';
 import 'women_fashion_screen.dart';
 import 'kid_fashion_screen.dart';
-import 'package:mobile_app/firestore_service.dart';
+import 'package:aura/firestore_service.dart';
 import 'bag_page.dart';
 import 'fwd_page.dart';
 import 'profile_page.dart';
@@ -11,6 +11,7 @@ import 'luxe_page.dart';
 import 'wishlist_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'notifications_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -265,30 +266,40 @@ class MyntraAppBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 // Icons
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Icon(
-                      Icons.notifications_none_outlined,
-                      color: Theme.of(context).iconTheme.color,
-                      size: 26,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFF3F6C),
-                        shape: BoxShape.circle,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationsPage(),
                       ),
-                      child: const Text(
-                        '1',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
+                    );
+                  },
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Icon(
+                        Icons.notifications_none_outlined,
+                        color: Theme.of(context).iconTheme.color,
+                        size: 26,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFF3F6C),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Text(
+                          '1',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 12),
                 InkWell(

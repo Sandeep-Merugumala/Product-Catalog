@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mobile_app/widgets/map_location_picker.dart';
+import 'package:aura/widgets/map_location_picker.dart';
 
 // Address Model
 class Address {

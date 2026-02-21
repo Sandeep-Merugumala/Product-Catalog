@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/theme_animator.dart';
+import 'package:aura/theme_animator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'login.dart';
 import 'main.dart';
-import 'package:mobile_app/address_management.dart';
-import 'package:mobile_app/account_details.dart';
-import 'package:mobile_app/orders_screen.dart';
+import 'package:aura/address_management.dart';
+import 'package:aura/account_details.dart';
+import 'package:aura/orders_screen.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

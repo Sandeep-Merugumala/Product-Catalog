@@ -1,0 +1,3 @@
+Resolving dependencies...
+Failed to update packages.
+Terminate batch job (Y/N)? 
