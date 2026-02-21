@@ -34,7 +34,7 @@ class _KidsSectionState extends State<KidsSection>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -90,9 +90,12 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFFFF8E1), Colors.white], // Amber 50
+          colors: [
+            const Color(0xFFFFF8E1),
+            Theme.of(context).scaffoldBackgroundColor,
+          ], // Amber 50
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -158,8 +161,8 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey[300]!),
+                      color: Theme.of(context).cardColor,
+                      border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -167,9 +170,12 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
                         const SizedBox(width: 12),
                         Icon(Icons.search, color: Colors.grey[500], size: 20),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           "Search \"Kids Fashion\"",
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
+                          style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -324,7 +330,9 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
       child: Text(
         text,
         style: TextStyle(
-          color: isSelected ? const Color(0xFFFFB300) : Colors.black87,
+          color: isSelected
+              ? const Color(0xFFFFB300)
+              : Theme.of(context).textTheme.bodyLarge?.color,
           fontSize: 14,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
@@ -341,7 +349,7 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Icon(icon, color: Colors.black87, size: 26),
+            Icon(icon, color: Theme.of(context).iconTheme.color, size: 26),
             if (badgeCount > 0)
               Positioned(
                 right: -4,
@@ -415,7 +423,9 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? const Color(0xFFFFB300) : Colors.black87,
+                color: isSelected
+                    ? const Color(0xFFFFB300)
+                    : Theme.of(context).textTheme.bodySmall?.color,
               ),
             ),
             if (isSelected)
@@ -446,22 +456,22 @@ class KidsAllProductsTab extends StatelessWidget {
         const SliverToBoxAdapter(child: KidsCashbackOffer()),
         const SliverToBoxAdapter(child: KidsProductCategories()),
         const SliverToBoxAdapter(child: KidsBrandSection()),
-        SliverToBoxAdapter(child: _buildSectionHeader('TRENDING NOW')),
+        SliverToBoxAdapter(child: _buildSectionHeader(context, 'TRENDING NOW')),
         const KidsProductGrid(),
         const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
       ],
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w700,
-          color: Colors.black87,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
           letterSpacing: 0.5,
         ),
       ),
@@ -509,7 +519,7 @@ class KidsHorizontalCategories extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      color: const Color(0xFFFAFAFA),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SizedBox(
         height: 95,
         child: ListView.builder(
@@ -540,10 +550,10 @@ class KidsHorizontalCategories extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     categories[index]['name']!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -609,12 +619,12 @@ class _KidsFeaturedBannerState extends State<KidsFeaturedBanner> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            child: const Text(
+            child: Text(
               'KIDS COLLECTION',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 letterSpacing: 0.5,
               ),
             ),
@@ -771,7 +781,7 @@ class _KidsFeaturedBannerState extends State<KidsFeaturedBanner> {
                     const SizedBox(width: 6),
                     Text(
                       brand,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         color: Colors.black87,
@@ -958,10 +968,10 @@ class KidsProductCategories extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         categories[index]['name']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                     ],
@@ -1005,7 +1015,7 @@ class KidsBrandSection extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      color: const Color(0xFFFAFAFA),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: brands.map((brand) {
@@ -1035,12 +1045,12 @@ class KidsBrandSection extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: brand['name'] == 'GAP'
                               ? const Color(0xFFFFB300)
-                              : Colors.black87,
+                              : Theme.of(context).cardColor,
                           shape: BoxShape.circle,
                         ),
                         child: Text(
                           brand['name']![0],
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
@@ -1050,10 +1060,10 @@ class KidsBrandSection extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         brand['name']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                       ),
                     ],
@@ -1347,7 +1357,7 @@ class KidsProductGrid extends StatelessWidget {
           child: Center(
             child: Text(
               'No items found in $category',
-              style: TextStyle(color: Colors.grey[600]),
+              style: TextStyle(color: Theme.of(context).hintColor),
             ),
           ),
         ),
@@ -1386,7 +1396,7 @@ class KidsProductGrid extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey[200]!),
       ),
@@ -1498,10 +1508,10 @@ class KidsProductGrid extends StatelessWidget {
                     children: [
                       Text(
                         product['brand'],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1522,10 +1532,12 @@ class KidsProductGrid extends StatelessWidget {
                         children: [
                           Text(
                             '₹${product['price']}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black87,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color,
                             ),
                           ),
                           const SizedBox(width: 4),

@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 520" width="200" height="520">
+  <defs>
+    <!-- Skin gradient -->
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5CBA7"/>
+      <stop offset="100%" style="stop-color:#E8A87C"/>
+    </linearGradient>
+    <!-- Skin shadow -->
+    <linearGradient id="skinShadow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4956A;stop-opacity:0.4"/>
+      <stop offset="50%" style="stop-color:#D4956A;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#D4956A;stop-opacity:0.4"/>
+    </linearGradient>
+    <!-- Hair gradient -->
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3D1C02"/>
+      <stop offset="60%" style="stop-color:#6B3A2A"/>
+      <stop offset="100%" style="stop-color:#2C1208"/>
+    </linearGradient>
+    <!-- Hair highlight -->
+    <linearGradient id="hairHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5E3C;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#8B5E3C;stop-opacity:0"/>
+    </linearGradient>
+    <!-- Neck shadow -->
+    <linearGradient id="neckGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4956A"/>
+      <stop offset="30%" style="stop-color:#F5CBA7"/>
+      <stop offset="70%" style="stop-color:#F5CBA7"/>
+      <stop offset="100%" style="stop-color:#D4956A"/>
+    </linearGradient>
+    <!-- Leg skin gradient -->
+    <linearGradient id="legGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4956A"/>
+      <stop offset="20%" style="stop-color:#F5CBA7"/>
+      <stop offset="80%" style="stop-color:#F5CBA7"/>
+      <stop offset="100%" style="stop-color:#D4956A"/>
+    </linearGradient>
+    <!-- Arm skin -->
+    <linearGradient id="armGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4956A"/>
+      <stop offset="40%" style="stop-color:#F5CBA7"/>
+      <stop offset="100%" style="stop-color:#D4956A"/>
+    </linearGradient>
+    <!-- Clothing placeholder gradients (will be overridden by Flutter) -->
+    <linearGradient id="topGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EEEEEE"/>
+      <stop offset="100%" style="stop-color:#BDBDBD"/>
+    </linearGradient>
+    <linearGradient id="bottomGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EEEEEE"/>
+      <stop offset="100%" style="stop-color:#BDBDBD"/>
+    </linearGradient>
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#00000022"/>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#00000015"/>
+    </filter>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- HAIR (back layer) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Back hair volume -->
+  <ellipse cx="100" cy="52" rx="42" ry="50" fill="url(#hairGrad)"/>
+  <!-- Long hair strands left -->
+  <path d="M 62 70 Q 45 120 50 180 Q 52 200 58 210" stroke="#3D1C02" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <path d="M 65 75 Q 50 130 54 185 Q 56 205 60 215" stroke="#4A2510" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <!-- Long hair strands right -->
+  <path d="M 138 70 Q 155 120 150 180 Q 148 200 142 210" stroke="#3D1C02" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <path d="M 135 75 Q 150 130 146 185 Q 144 205 140 215" stroke="#4A2510" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <!-- Hair highlight -->
+  <ellipse cx="88" cy="35" rx="14" ry="10" fill="url(#hairHighlight)" transform="rotate(-15 88 35)"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- NECK -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="88" y="100" width="24" height="28" rx="4" fill="url(#neckGrad)"/>
+  <!-- Neck shadow lines (collarbone hint) -->
+  <line x1="72" y1="128" x2="88" y2="124" stroke="#D4956A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="128" y1="128" x2="112" y2="124" stroke="#D4956A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ARMS (behind torso) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Left upper arm -->
+  <path d="M 68 132 Q 48 155 44 195 Q 42 215 48 230" stroke="url(#armGrad)" stroke-width="22" fill="none" stroke-linecap="round" filter="url(#softShadow)"/>
+  <!-- Left forearm -->
+  <path d="M 48 230 Q 44 255 46 275 Q 47 285 52 290" stroke="url(#armGrad)" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Left hand -->
+  <ellipse cx="53" cy="295" rx="9" ry="12" fill="url(#skinGrad)" transform="rotate(10 53 295)"/>
+
+  <!-- Right upper arm -->
+  <path d="M 132 132 Q 152 155 156 195 Q 158 215 152 230" stroke="url(#armGrad)" stroke-width="22" fill="none" stroke-linecap="round" filter="url(#softShadow)"/>
+  <!-- Right forearm -->
+  <path d="M 152 230 Q 156 255 154 275 Q 153 285 148 290" stroke="url(#armGrad)" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Right hand -->
+  <ellipse cx="147" cy="295" rx="9" ry="12" fill="url(#skinGrad)" transform="rotate(-10 147 295)"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TORSO (clothing top - ID: clothing-top) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <path id="clothing-top" d="M 68 130 Q 60 145 58 165 Q 56 185 60 205 Q 65 220 100 225 Q 135 220 140 205 Q 144 185 142 165 Q 140 145 132 130 Q 118 122 100 120 Q 82 122 68 130 Z" fill="url(#topGrad)" filter="url(#shadow)"/>
+  <!-- Torso shading overlay -->
+  <path d="M 68 130 Q 60 145 58 165 Q 56 185 60 205 Q 65 220 100 225 Q 135 220 140 205 Q 144 185 142 165 Q 140 145 132 130 Q 118 122 100 120 Q 82 122 68 130 Z" fill="url(#skinShadow)" opacity="0.3"/>
+  <!-- Neckline V shape -->
+  <path d="M 88 128 L 100 148 L 112 128" stroke="#00000022" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- WAIST TRANSITION -->
+  <!-- ═══════════════════════════════════════════ -->
+  <path d="M 72 218 Q 100 228 128 218 L 132 232 Q 100 244 68 232 Z" fill="#00000010"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- BOTTOM (clothing - ID: clothing-bottom) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Hips -->
+  <path id="clothing-bottom" d="M 68 232 Q 58 245 56 265 Q 54 290 58 315 Q 62 335 72 345 L 100 348 L 128 345 Q 138 335 142 315 Q 146 290 144 265 Q 142 245 132 232 Q 116 238 100 240 Q 84 238 68 232 Z" fill="url(#bottomGrad)" filter="url(#shadow)"/>
+  <!-- Bottom shading -->
+  <path d="M 68 232 Q 58 245 56 265 Q 54 290 58 315 Q 62 335 72 345 L 100 348 L 128 345 Q 138 335 142 315 Q 146 290 144 265 Q 142 245 132 232 Q 116 238 100 240 Q 84 238 68 232 Z" fill="url(#skinShadow)" opacity="0.2"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LEGS (skin - ID: legs) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Left leg -->
+  <path id="left-leg" d="M 72 345 Q 68 370 66 400 Q 64 430 66 455 Q 68 470 76 478 Q 84 482 90 480 Q 96 478 98 470 Q 100 460 100 448 L 100 348 Z" fill="url(#legGrad)" filter="url(#softShadow)"/>
+  <!-- Left leg inner shadow -->
+  <path d="M 96 348 Q 97 380 97 420 Q 97 450 96 470" stroke="#D4956A" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.4"/>
+  <!-- Right leg -->
+  <path id="right-leg" d="M 128 345 Q 132 370 134 400 Q 136 430 134 455 Q 132 470 124 478 Q 116 482 110 480 Q 104 478 102 470 Q 100 460 100 448 L 100 348 Z" fill="url(#legGrad)" filter="url(#softShadow)"/>
+  <!-- Right leg inner shadow -->
+  <path d="M 104 348 Q 103 380 103 420 Q 103 450 104 470" stroke="#D4956A" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.4"/>
+  <!-- Knee highlights -->
+  <ellipse cx="80" cy="410" rx="8" ry="6" fill="#F5CBA7" opacity="0.5"/>
+  <ellipse cx="120" cy="410" rx="8" ry="6" fill="#F5CBA7" opacity="0.5"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SHOES (ID: shoes) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Left shoe -->
+  <path id="left-shoe" d="M 66 476 Q 60 482 58 490 Q 57 498 62 502 Q 68 505 82 504 Q 92 503 95 498 Q 97 493 95 488 Q 93 483 88 480 Q 82 478 76 478 Z" fill="#BDBDBD" filter="url(#shadow)"/>
+  <!-- Right shoe -->
+  <path id="right-shoe" d="M 134 476 Q 140 482 142 490 Q 143 498 138 502 Q 132 505 118 504 Q 108 503 105 498 Q 103 493 105 488 Q 107 483 112 480 Q 118 478 124 478 Z" fill="#BDBDBD" filter="url(#shadow)"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- HEAD (on top of hair) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Face shape - slightly oval, realistic -->
+  <path d="M 100 10 Q 138 10 142 45 Q 146 75 140 95 Q 134 112 100 115 Q 66 112 60 95 Q 54 75 58 45 Q 62 10 100 10 Z" fill="url(#skinGrad)" filter="url(#softShadow)"/>
+  <!-- Face shading (sides) -->
+  <path d="M 100 10 Q 138 10 142 45 Q 146 75 140 95 Q 134 112 100 115 Q 66 112 60 95 Q 54 75 58 45 Q 62 10 100 10 Z" fill="url(#skinShadow)" opacity="0.35"/>
+  <!-- Forehead highlight -->
+  <ellipse cx="100" cy="32" rx="22" ry="12" fill="white" opacity="0.12"/>
+
+  <!-- ── EYEBROWS ── -->
+  <path d="M 72 52 Q 80 48 88 50" stroke="#3D1C02" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M 112 50 Q 120 48 128 52" stroke="#3D1C02" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- ── EYES ── -->
+  <!-- Left eye socket shadow -->
+  <ellipse cx="80" cy="62" rx="11" ry="8" fill="#C8956A" opacity="0.2"/>
+  <!-- Left eye white -->
+  <path d="M 70 62 Q 80 56 90 62 Q 80 68 70 62 Z" fill="white"/>
+  <!-- Left iris -->
+  <circle cx="80" cy="62" r="5.5" fill="#5D4037"/>
+  <!-- Left pupil -->
+  <circle cx="80" cy="62" r="3" fill="#1A0A00"/>
+  <!-- Left eye shine -->
+  <circle cx="82" cy="59.5" r="1.5" fill="white" opacity="0.9"/>
+  <!-- Left eyelid top -->
+  <path d="M 70 62 Q 80 55 90 62" stroke="#3D1C02" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Left lower lash line -->
+  <path d="M 70 62 Q 80 67 90 62" stroke="#3D1C02" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Right eye socket shadow -->
+  <ellipse cx="120" cy="62" rx="11" ry="8" fill="#C8956A" opacity="0.2"/>
+  <!-- Right eye white -->
+  <path d="M 110 62 Q 120 56 130 62 Q 120 68 110 62 Z" fill="white"/>
+  <!-- Right iris -->
+  <circle cx="120" cy="62" r="5.5" fill="#5D4037"/>
+  <!-- Right pupil -->
+  <circle cx="120" cy="62" r="3" fill="#1A0A00"/>
+  <!-- Right eye shine -->
+  <circle cx="122" cy="59.5" r="1.5" fill="white" opacity="0.9"/>
+  <!-- Right eyelid top -->
+  <path d="M 110 62 Q 120 55 130 62" stroke="#3D1C02" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Right lower lash line -->
+  <path d="M 110 62 Q 120 67 130 62" stroke="#3D1C02" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- ── NOSE ── -->
+  <path d="M 100 68 Q 96 78 94 82 Q 97 85 100 84 Q 103 85 106 82 Q 104 78 100 68 Z" fill="#D4956A" opacity="0.5"/>
+  <path d="M 94 82 Q 97 86 100 85 Q 103 86 106 82" stroke="#C8856A" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- ── CHEEKS ── -->
+  <ellipse cx="72" cy="78" rx="10" ry="7" fill="#FFB3BA" opacity="0.35"/>
+  <ellipse cx="128" cy="78" rx="10" ry="7" fill="#FFB3BA" opacity="0.35"/>
+
+  <!-- ── LIPS ── -->
+  <!-- Upper lip -->
+  <path d="M 88 90 Q 94 87 100 89 Q 106 87 112 90 Q 106 94 100 93 Q 94 94 88 90 Z" fill="#E91E63" opacity="0.9"/>
+  <!-- Lower lip -->
+  <path d="M 88 90 Q 94 96 100 97 Q 106 96 112 90 Q 106 94 100 93 Q 94 94 88 90 Z" fill="#C2185B"/>
+  <!-- Lip highlight -->
+  <ellipse cx="100" cy="91" rx="5" ry="1.5" fill="white" opacity="0.25"/>
+  <!-- Lip line -->
+  <path d="M 88 90 Q 100 92 112 90" stroke="#AD1457" stroke-width="0.8" fill="none" opacity="0.6"/>
+
+  <!-- ── EYELASHES (top) ── -->
+  <path d="M 70 61 L 68 57" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 74 58 L 73 54" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 80 57 L 80 53" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 86 58 L 87 54" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 90 61 L 92 57" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 110 61 L 108 57" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 114 58 L 113 54" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 120 57 L 120 53" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 126 58 L 127 54" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M 130 61 L 132 57" stroke="#1A0A00" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- ── EAR ── -->
+  <ellipse cx="58" cy="72" rx="6" ry="9" fill="#E8A87C"/>
+  <ellipse cx="58" cy="72" rx="3.5" ry="6" fill="#D4956A" opacity="0.5"/>
+  <ellipse cx="142" cy="72" rx="6" ry="9" fill="#E8A87C"/>
+  <ellipse cx="142" cy="72" rx="3.5" ry="6" fill="#D4956A" opacity="0.5"/>
+
+  <!-- ── HAIR (front layer, over face sides) ── -->
+  <!-- Left side hair over ear -->
+  <path d="M 60 20 Q 52 35 54 55 Q 56 70 60 80" stroke="#3D1C02" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <!-- Right side hair over ear -->
+  <path d="M 140 20 Q 148 35 146 55 Q 144 70 140 80" stroke="#3D1C02" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <!-- Top hair parting -->
+  <path d="M 100 10 Q 100 25 98 35" stroke="#2C1208" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+</svg>

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/firestore_service.dart';
 import 'home_screen.dart';
+import 'package:lottie/lottie.dart';
 
 class CheckoutPage extends StatefulWidget {
   final double totalAmount;
@@ -44,9 +43,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text('Order Placed!'),
-            content: const Text(
-              'Your order has been placed successfully. Thank you for shopping with us!',
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.network(
+                  'https://assets6.lottiefiles.com/packages/lf20_touohxv0.json',
+                  width: 150,
+                  height: 150,
+                  repeat: false,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(
+                      Icons.check_circle_outline,
+                      size: 100,
+                      color: Colors.green,
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Order Placed!',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Your order has been placed successfully. Thank you for shopping with us!',
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
             actions: [
               TextButton(
@@ -84,13 +107,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Checkout',
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
+        iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -110,7 +136,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
@@ -172,7 +198,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
@@ -227,7 +253,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey[200]!),
               ),
@@ -252,7 +278,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),

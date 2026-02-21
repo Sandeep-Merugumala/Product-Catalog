@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/theme_animator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,8 +35,8 @@ class ProfilePage extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Profile'),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
           elevation: 0,
         ),
         body: Center(
@@ -93,8 +94,8 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
         elevation: 0,
         actions: [
           Padding(
@@ -139,7 +140,7 @@ class ProfilePage extends StatelessWidget {
                 // User Info Section
                 Container(
                   padding: const EdgeInsets.all(20),
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -152,9 +153,12 @@ class ProfilePage extends StatelessWidget {
                               children: [
                                 Text(
                                   userName,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge?.color,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -162,7 +166,11 @@ class ProfilePage extends StatelessWidget {
                                   userEmail,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey[600],
+                                    color:
+                                        Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
                                   ),
                                 ),
                               ],
@@ -193,8 +201,17 @@ class ProfilePage extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFFFE5EC), Color(0xFFFFF0F5)],
+                          gradient: LinearGradient(
+                            colors:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? [
+                                    const Color(0xFF2C1E22),
+                                    const Color(0xFF3E1E22),
+                                  ]
+                                : [
+                                    const Color(0xFFFFE5EC),
+                                    const Color(0xFFFFF0F5),
+                                  ],
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -221,7 +238,11 @@ class ProfilePage extends StatelessWidget {
                                     'Extra Rewards and Better Discounts!',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey[700],
+                                      color:
+                                          Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[700],
                                     ),
                                   ),
                                 ],
@@ -251,28 +272,32 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 8),
                 // Menu Items
                 Container(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   child: Column(
                     children: [
                       _buildMenuItem(
+                        context,
                         icon: Icons.shopping_bag_outlined,
                         title: 'Orders',
                         subtitle: 'Check your order status',
                         onTap: () {},
                       ),
                       _buildMenuItem(
+                        context,
                         icon: Icons.card_membership,
                         title: 'Insider',
                         subtitle: 'View benefits and rewards',
                         onTap: () {},
                       ),
                       _buildMenuItem(
+                        context,
                         icon: Icons.help_outline,
                         title: 'Help Center',
                         subtitle: 'Get support and FAQs',
                         onTap: () {},
                       ),
                       _buildMenuItem(
+                        context,
                         icon: Icons.local_offer_outlined,
                         title: 'Coupons',
                         subtitle: 'View available offers',
@@ -289,17 +314,19 @@ class ProfilePage extends StatelessWidget {
                             horizontal: 20,
                             vertical: 0,
                           ),
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.edit_outlined,
                             size: 28,
-                            color: Colors.black87,
+                            color: Theme.of(context).iconTheme.color,
                           ),
-                          title: const Text(
+                          title: Text(
                             'Manage Account',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyLarge?.color,
                             ),
                           ),
                           subtitle: Text(
@@ -313,8 +340,8 @@ class ProfilePage extends StatelessWidget {
                             Icons.chevron_right,
                             color: Colors.grey[400],
                           ),
-                          collapsedBackgroundColor: Colors.white,
-                          backgroundColor: Colors.white,
+                          collapsedBackgroundColor: Theme.of(context).cardColor,
+                          backgroundColor: Theme.of(context).cardColor,
                           children: [
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -428,20 +455,82 @@ class ProfilePage extends StatelessWidget {
                 ),
 
                 Container(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   child: Column(
                     children: [
                       _buildMenuItem(
+                        context,
                         icon: Icons.favorite_border,
                         title: 'Wishlist',
                         subtitle: 'Your most loved styles',
                         onTap: () {},
                       ),
                       _buildMenuItem(
+                        context,
                         icon: Icons.settings_outlined,
                         title: 'Settings',
                         subtitle: 'Manage notifications',
                         onTap: () {},
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.dark_mode_outlined,
+                                  size: 28,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(width: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Dark Mode',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'Toggle app theme',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            ValueListenableBuilder<ThemeMode>(
+                              valueListenable: themeNotifier,
+                              builder: (context, mode, child) {
+                                return Switch(
+                                  value: mode == ThemeMode.dark,
+                                  onChanged: (value) {
+                                    final newMode = value
+                                        ? ThemeMode.dark
+                                        : ThemeMode.light;
+                                    ThemeAnimator.of(context).changeTheme(() {
+                                      themeNotifier.value = newMode;
+                                    });
+                                  },
+                                  thumbColor: MaterialStateProperty.all(
+                                    const Color(0xFFFF3F6C),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -485,7 +574,7 @@ class ProfilePage extends StatelessWidget {
                             rootNavigator: true,
                           ).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (context) => const AuthWrapper(),
+                              builder: (context) => const Wrapper(),
                             ),
                             (route) => false,
                           );
@@ -525,7 +614,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem({
+  Widget _buildMenuItem(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -537,7 +627,7 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           children: [
-            Icon(icon, size: 28, color: Colors.black87),
+            Icon(icon, size: 28, color: Theme.of(context).iconTheme.color),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -545,9 +635,10 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 2),

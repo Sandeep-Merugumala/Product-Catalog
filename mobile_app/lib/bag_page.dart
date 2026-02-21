@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/firestore_service.dart';
 import 'home_screen.dart';
 import 'checkout_page.dart';
+import 'package:lottie/lottie.dart';
 
 class BagPage extends StatelessWidget {
   const BagPage({super.key});
@@ -13,13 +14,16 @@ class BagPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Shopping Bag',
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
+        iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: firestoreService.getCartStream(),
@@ -33,7 +37,69 @@ class BagPage extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return _buildEmptyCart(context);
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.network(
+                    'https://assets9.lottiefiles.com/packages/lf20_0s6tfbuc.json',
+                    width: 250,
+                    height: 250,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 100,
+                        color: Colors.grey[300],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Your bag is empty!',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Looks like you haven\'t added anything yet.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey[400]
+                          : Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF3F6C),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text('SHOP NOW'),
+                  ),
+                ],
+              ),
+            );
           }
 
           final cartItems = snapshot.data!.docs;
@@ -85,15 +151,22 @@ class BagPage extends StatelessWidget {
                                 children: [
                                   Text(
                                     data['title'] ?? data['name'] ?? 'Product',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
+                                      color: Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge?.color,
                                     ),
                                   ),
                                   Text(
                                     data['subtitle'] ?? data['brand'] ?? '',
                                     style: TextStyle(
-                                      color: Colors.grey[600],
+                                      color:
+                                          Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600],
                                       fontSize: 12,
                                     ),
                                   ),
@@ -214,7 +287,7 @@ class BagPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
@@ -267,53 +340,6 @@ class BagPage extends StatelessWidget {
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildEmptyCart(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.shopping_bag_outlined, size: 100, color: Colors.grey[300]),
-          const SizedBox(height: 24),
-          Text(
-            'Your bag is empty',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Add items to get started',
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
-                (route) => false,
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF3F6C),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              'START SHOPPING',
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2),
-            ),
-          ),
-        ],
       ),
     );
   }

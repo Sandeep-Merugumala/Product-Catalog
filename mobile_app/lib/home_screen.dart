@@ -38,6 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
       const ProfilePage(),
     ];
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: SafeArea(child: widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
@@ -80,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: const Color(0xFFFF3F6C),
-          unselectedItemColor: Colors.grey[600],
+          unselectedItemColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
           onTap: _onItemTapped,
@@ -93,7 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.w500,
           ),
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(
+            context,
+          ).bottomNavigationBarTheme.backgroundColor,
         ),
       ),
     );
@@ -159,18 +163,21 @@ class MyntraAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return SliverAppBar(
       floating: true,
       pinned: true,
       snap: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       elevation: 0,
       titleSpacing: 0,
       toolbarHeight: 110, // Adjusted height for 2 rows
       flexibleSpace: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFFFE5EC), Colors.white],
+            colors: isDarkMode
+                ? [const Color(0xFF2C1E22), const Color(0xFF121212)]
+                : [const Color(0xFFFFE5EC), Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -232,8 +239,12 @@ class MyntraAppBar extends StatelessWidget {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey[300]!),
+                      color: isDarkMode ? Colors.grey[900] : Colors.white,
+                      border: Border.all(
+                        color: isDarkMode
+                            ? Colors.grey[800]!
+                            : Colors.grey[300]!,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -257,9 +268,9 @@ class MyntraAppBar extends StatelessWidget {
                 Stack(
                   alignment: Alignment.topRight,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.notifications_none_outlined,
-                      color: Colors.black87,
+                      color: Theme.of(context).iconTheme.color,
                       size: 26,
                     ),
                     Container(
@@ -289,18 +300,18 @@ class MyntraAppBar extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.favorite_border,
-                    color: Colors.black87,
+                    color: Theme.of(context).iconTheme.color,
                     size: 26,
                   ),
                 ),
                 const SizedBox(width: 12),
                 InkWell(
                   onTap: onProfileTap,
-                  child: const Icon(
+                  child: Icon(
                     Icons.person_outline,
-                    color: Colors.black87,
+                    color: Theme.of(context).iconTheme.color,
                     size: 26,
                   ),
                 ),
@@ -317,7 +328,7 @@ class MyntraAppBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildTabItem("All", isSelected: true),
+                      _buildTabItem("All", context, isSelected: true),
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -330,7 +341,7 @@ class MyntraAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: _buildTabItem("Men"),
+                        child: _buildTabItem("Men", context),
                       ),
                       InkWell(
                         onTap: () {
@@ -344,7 +355,7 @@ class MyntraAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: _buildTabItem("Women"),
+                        child: _buildTabItem("Women", context),
                       ),
                       InkWell(
                         onTap: () {
@@ -358,7 +369,7 @@ class MyntraAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: _buildTabItem("Kids"),
+                        child: _buildTabItem("Kids", context),
                       ),
                     ],
                   ),
@@ -366,12 +377,14 @@ class MyntraAppBar extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.white.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     Icons.grid_view,
-                    color: Colors.grey[800],
+                    color: isDarkMode ? Colors.white : Colors.grey[800],
                     size: 20,
                   ),
                 ),
@@ -383,7 +396,11 @@ class MyntraAppBar extends StatelessWidget {
     );
   }
 
-  Widget _buildTabItem(String text, {bool isSelected = false}) {
+  Widget _buildTabItem(
+    String text,
+    BuildContext context, {
+    bool isSelected = false,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: isSelected
@@ -396,7 +413,11 @@ class MyntraAppBar extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: isSelected ? const Color(0xFFFF3F6C) : Colors.black87,
+          color: isSelected
+              ? const Color(0xFFFF3F6C)
+              : (Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black87),
           fontSize: 14,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
@@ -478,7 +499,7 @@ class CategoryList extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[800],
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                   ],
@@ -1406,9 +1427,13 @@ class FeaturedProductCarousel extends StatelessWidget {
             width: 170, // Slightly wider
             margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[200]!),
+              border: Border.all(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[800]!
+                    : Colors.grey[200]!,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.06),
@@ -1997,9 +2022,13 @@ class ProductGrid extends StatelessWidget {
 
           return Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey[200]!),
+              border: Border.all(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[800]!
+                    : Colors.grey[200]!,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.06),
@@ -2153,9 +2182,10 @@ class ProductGrid extends StatelessWidget {
                     children: [
                       Text(
                         product['title'],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -2172,9 +2202,12 @@ class ProductGrid extends StatelessWidget {
                         children: [
                           Text(
                             '₹${product['price']}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyLarge?.color,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -2223,6 +2256,7 @@ class ProductGrid extends StatelessWidget {
                             firestoreService
                                 .addToCart(product)
                                 .then((_) {
+                                  if (!context.mounted) return;
                                   Navigator.pop(
                                     context,
                                   ); // Close processing dialog
@@ -2237,6 +2271,7 @@ class ProductGrid extends StatelessWidget {
                                   );
                                 })
                                 .catchError((e) {
+                                  if (!context.mounted) return;
                                   Navigator.pop(
                                     context,
                                   ); // Close processing dialog

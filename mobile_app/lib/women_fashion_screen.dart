@@ -34,7 +34,7 @@ class _WomensSectionState extends State<WomensSection>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -90,9 +90,12 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFFCE4EC), Colors.white], // Pink 50
+          colors: [
+            const Color(0xFFFCE4EC),
+            Theme.of(context).scaffoldBackgroundColor,
+          ], // Pink 50
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -142,7 +145,7 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
                         }
                         return Text(
                           initial,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -158,8 +161,8 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey[300]!),
+                      color: Theme.of(context).cardColor,
+                      border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -167,9 +170,12 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
                         const SizedBox(width: 12),
                         Icon(Icons.search, color: Colors.grey[500], size: 20),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           "Search \"Women's Fashion\"",
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
+                          style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -250,7 +256,7 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
                   ),
                   child: Icon(
                     Icons.grid_view,
-                    color: Colors.grey[800],
+                    color: Theme.of(context).iconTheme.color,
                     size: 20,
                   ),
                 ),
@@ -324,7 +330,9 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
       child: Text(
         text,
         style: TextStyle(
-          color: isSelected ? const Color(0xFFFF3F6C) : Colors.black87,
+          color: isSelected
+              ? const Color(0xFFFF3F6C)
+              : Theme.of(context).textTheme.bodyLarge?.color,
           fontSize: 14,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
@@ -341,7 +349,7 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Icon(icon, color: Colors.black87, size: 26),
+            Icon(icon, color: Theme.of(context).iconTheme.color, size: 26),
             if (badgeCount > 0)
               Positioned(
                 right: -4,
@@ -415,7 +423,9 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? const Color(0xFFFF3F6C) : Colors.black87,
+                color: isSelected
+                    ? const Color(0xFFFF3F6C)
+                    : Theme.of(context).textTheme.bodySmall?.color,
               ),
             ),
             if (isSelected)
@@ -446,22 +456,22 @@ class WomensAllProductsTab extends StatelessWidget {
         const SliverToBoxAdapter(child: WomensCashbackOffer()),
         const SliverToBoxAdapter(child: WomensProductCategories()),
         const SliverToBoxAdapter(child: WomensBrandSection()),
-        SliverToBoxAdapter(child: _buildSectionHeader('TRENDING NOW')),
+        SliverToBoxAdapter(child: _buildSectionHeader(context, 'TRENDING NOW')),
         const WomensProductGrid(),
         const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
       ],
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w700,
-          color: Colors.black87,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
           letterSpacing: 0.5,
         ),
       ),
@@ -511,7 +521,7 @@ class WomensHorizontalCategories extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      color: const Color(0xFFFAFAFA),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SizedBox(
         height: 95,
         child: ListView.builder(
@@ -542,10 +552,10 @@ class WomensHorizontalCategories extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     categories[index]['name']!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -611,12 +621,12 @@ class _WomensFeaturedBannerState extends State<WomensFeaturedBanner> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            child: const Text(
+            child: Text(
               'THE TREND EDIT',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 letterSpacing: 0.5,
               ),
             ),
@@ -776,10 +786,10 @@ class _WomensFeaturedBannerState extends State<WomensFeaturedBanner> {
                     const SizedBox(width: 6),
                     Text(
                       brand,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                        color: Theme.of(context).textTheme.bodySmall?.color,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -960,10 +970,10 @@ class WomensProductCategories extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         categories[index]['name']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                     ],
@@ -1007,7 +1017,7 @@ class WomensBrandSection extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      color: const Color(0xFFFAFAFA),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: brands.map((brand) {
@@ -1042,7 +1052,7 @@ class WomensBrandSection extends StatelessWidget {
                         ),
                         child: Text(
                           brand['name']![0],
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
@@ -1052,10 +1062,10 @@ class WomensBrandSection extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         brand['name']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                       ),
                     ],
@@ -1351,7 +1361,7 @@ class WomensProductGrid extends StatelessWidget {
           child: Center(
             child: Text(
               'No items found in $category',
-              style: TextStyle(color: Colors.grey[600]),
+              style: TextStyle(color: Theme.of(context).hintColor),
             ),
           ),
         ),
@@ -1390,7 +1400,7 @@ class WomensProductGrid extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey[200]!),
       ),
@@ -1502,10 +1512,10 @@ class WomensProductGrid extends StatelessWidget {
                     children: [
                       Text(
                         product['brand'],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1526,10 +1536,12 @@ class WomensProductGrid extends StatelessWidget {
                         children: [
                           Text(
                             '₹${product['price']}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: Colors.black87,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color,
                             ),
                           ),
                           const SizedBox(width: 4),

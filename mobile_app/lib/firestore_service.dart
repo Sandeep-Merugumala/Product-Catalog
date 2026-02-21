@@ -177,7 +177,7 @@ class FirestoreService {
       print('✅ Order placed successfully');
     } catch (e) {
       print('❌ Error placing order: $e');
-      throw e;
+      rethrow;
     }
   }
 }

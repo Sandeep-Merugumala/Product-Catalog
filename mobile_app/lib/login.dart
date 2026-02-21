@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
+
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +51,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final ImagePicker _picker = ImagePicker();
 
   // --- THEME COLORS ---
+  // --- THEME COLORS ---
   final Color _primaryColor = const Color(0xFFEC407A);
   final Color _accentColor = const Color(0xFFF48FB1);
-  final Color _backgroundColorStart = const Color(0xFFF8BBD0);
-  final Color _backgroundColorEnd = const Color(
-    0xFFAD1457,
-  ); // Darker end for depth
+  final Color _lightBackgroundColorStart = const Color(0xFFF8BBD0);
+  final Color _lightBackgroundColorEnd = const Color(0xFFAD1457);
+
+  final Color _darkBackgroundColorStart = const Color(0xFF2C1E22);
+  final Color _darkBackgroundColorEnd = const Color(0xFF000000);
 
   // --- ANIMATION CONTROLLERS ---
   late AnimationController _mainController;
@@ -214,6 +216,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     // Get screen dimensions for particle math
     final Size screenSize = MediaQuery.of(context).size;
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       resizeToAvoidBottomInset: false, // Prevents background squishing
       body: Stack(
@@ -224,7 +228,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [_backgroundColorStart, _backgroundColorEnd],
+                colors: isDarkMode
+                    ? [_darkBackgroundColorStart, _darkBackgroundColorEnd]
+                    : [_lightBackgroundColorStart, _lightBackgroundColorEnd],
               ),
             ),
           ),
@@ -273,20 +279,22 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           width: particle.size,
                           height: particle.size,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(particle.opacity),
+                            color: Colors.white.withValues(
+                              alpha: particle.opacity,
+                            ),
                             // If it's a cube, borderRadius is small. If sphere, it's 50%.
                             borderRadius: BorderRadius.circular(
                               particle.isCube ? 8 : particle.size / 2,
                             ),
                             border: Border.all(
-                              color: Colors.white.withOpacity(
-                                particle.opacity * 1.5,
+                              color: Colors.white.withValues(
+                                alpha: particle.opacity * 1.5,
                               ),
                               width: 1,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: _primaryColor.withOpacity(0.2),
+                                color: _primaryColor.withValues(alpha: 0.2),
                                 blurRadius: 15,
                                 spreadRadius: 2,
                               ),
@@ -295,7 +303,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               );
             },
@@ -355,7 +363,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     gradient: SweepGradient(
                                       colors: [
                                         Colors.transparent,
-                                        Colors.white.withOpacity(0.8),
+                                        Colors.white.withValues(alpha: 0.8),
                                         Colors.transparent,
                                       ],
                                     ),
@@ -397,16 +405,22 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             child: Container(
                               padding: const EdgeInsets.all(32),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(
-                                  0.85,
-                                ), // Glass opacity
+                                color:
+                                    (isDarkMode ? Colors.black : Colors.white)
+                                        .withValues(
+                                          alpha: 0.85,
+                                        ), // Glass opacity
                                 borderRadius: BorderRadius.circular(30),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.6),
+                                  color:
+                                      (isDarkMode
+                                              ? Colors.grey[800]!
+                                              : Colors.white)
+                                          .withValues(alpha: 0.6),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: Colors.black.withValues(alpha: 0.1),
                                     blurRadius: 20,
                                     spreadRadius: 5,
                                   ),
@@ -425,7 +439,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.grey[800],
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey[800],
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
@@ -436,6 +452,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                         _nameController,
                                         'Full Name',
                                         Icons.person_outline,
+                                        isDarkMode,
                                       ),
                                       const SizedBox(height: 16),
                                     ],
@@ -444,6 +461,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       _emailController,
                                       'Email',
                                       Icons.email_outlined,
+                                      isDarkMode,
                                     ),
                                     const SizedBox(height: 16),
 
@@ -469,7 +487,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         filled: true,
-                                        fillColor: Colors.pink[50],
+                                        fillColor: isDarkMode
+                                            ? Colors.grey[900]
+                                            : Colors.pink[50],
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                             15,
@@ -553,7 +573,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       label: Text(
                                         'Sign in with Google',
                                         style: TextStyle(
-                                          color: Colors.grey[700],
+                                          color: isDarkMode
+                                              ? Colors.white70
+                                              : Colors.grey[700],
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -589,7 +611,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -630,7 +652,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: Colors.white.withOpacity(0.05), // Very faint
+              color: Colors.white.withValues(alpha: 0.05), // Very faint
               width: 20, // Thick faint lines
             ),
           ),
@@ -643,14 +665,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     TextEditingController controller,
     String label,
     IconData icon,
+    bool isDarkMode,
   ) {
     return TextFormField(
       controller: controller,
+      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black87),
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(
+          color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
+        ),
         prefixIcon: Icon(icon, color: _accentColor),
         filled: true,
-        fillColor: Colors.pink[50],
+        fillColor: isDarkMode ? Colors.grey[900] : Colors.pink[50],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide.none,

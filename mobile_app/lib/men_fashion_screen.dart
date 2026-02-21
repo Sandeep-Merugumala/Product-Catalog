@@ -34,7 +34,7 @@ class _MensSectionState extends State<MensSection>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -90,9 +90,12 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFE3F2FD), Colors.white],
+          colors: [
+            const Color(0xFFE3F2FD),
+            Theme.of(context).scaffoldBackgroundColor,
+          ], // Blue 50
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -155,7 +158,7 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       border: Border.all(color: Colors.grey[300]!),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -322,7 +325,9 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
       child: Text(
         text,
         style: TextStyle(
-          color: isSelected ? const Color(0xFF1E88E5) : Colors.black87,
+          color: isSelected
+              ? const Color(0xFF1E88E5)
+              : Theme.of(context).textTheme.bodyLarge?.color,
           fontSize: 14,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
@@ -339,7 +344,7 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Icon(icon, color: Colors.black87, size: 26),
+            Icon(icon, color: Theme.of(context).iconTheme.color, size: 26),
             if (badgeCount > 0)
               Positioned(
                 right: -4,
@@ -413,7 +418,9 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? const Color(0xFF1E88E5) : Colors.black87,
+                color: isSelected
+                    ? const Color(0xFF1E88E5)
+                    : Theme.of(context).textTheme.bodyLarge?.color,
               ),
             ),
             if (isSelected)
@@ -444,22 +451,22 @@ class MensAllProductsTab extends StatelessWidget {
         const SliverToBoxAdapter(child: MensCashbackOffer()),
         const SliverToBoxAdapter(child: MensProductCategories()),
         const SliverToBoxAdapter(child: MensBrandSection()),
-        SliverToBoxAdapter(child: _buildSectionHeader('TRENDING NOW')),
+        SliverToBoxAdapter(child: _buildSectionHeader(context, 'TRENDING NOW')),
         const MensProductGrid(),
         const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
       ],
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w700,
-          color: Colors.black87,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
           letterSpacing: 0.5,
         ),
       ),
@@ -509,7 +516,7 @@ class MensHorizontalCategories extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      color: const Color(0xFFFAFAFA),
+      color: Theme.of(context).cardColor,
       child: SizedBox(
         height: 95,
         child: ListView.builder(
@@ -540,10 +547,10 @@ class MensHorizontalCategories extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     categories[index]['name']!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -609,12 +616,12 @@ class _MensFeaturedBannerState extends State<MensFeaturedBanner> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            child: const Text(
+            child: Text(
               'THE DENIM EDIT',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 letterSpacing: 0.5,
               ),
             ),
