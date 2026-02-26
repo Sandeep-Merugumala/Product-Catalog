@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'home_screen.dart';
 
 // --- DATA STRUCTURE FOR PARTICLES ---
@@ -168,16 +169,35 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Future<void> _signInWithGoogle() async {
     setState(() => _isLoading = true);
     try {
-      // Check if we're on Web - signInWithPopup ONLY works on Web!
-      if (!kIsWeb) {
-        throw 'Google Sign-In with popup is only supported on Web (Chrome). Please run this app in Chrome or use email/password login on Windows.';
+      UserCredential userCredential;
+
+      if (kIsWeb) {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        // On web: clear any stale Firebase session first so the account chooser appears fresh
+        await FirebaseAuth.instance.signOut();
+        // Using signInWithPopup as requested by the user logic
+        userCredential = await FirebaseAuth.instance.signInWithPopup(
+          googleProvider,
+        );
+      } else {
+        // Mobile flow
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (googleUser == null) {
+          setState(() => _isLoading = false);
+          return; // User cancelled
+        }
+
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        userCredential = await FirebaseAuth.instance.signInWithCredential(
+          credential,
+        );
       }
-
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-      // Using signInWithPopup as requested by the user logic
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithPopup(googleProvider);
 
       // Check if user exists in Firestore, if not create
       final doc = await FirebaseFirestore.instance
@@ -197,7 +217,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       }
 
       if (mounted) {
-        // AuthWrapper will handle the redirect
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
       }
     } catch (e) {
       if (mounted) _showSnackBar(e.toString(), Colors.redAccent);

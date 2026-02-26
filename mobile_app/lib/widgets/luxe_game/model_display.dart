@@ -37,7 +37,7 @@ class AvatarDisplay extends StatelessWidget {
               height: 120,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFE91E63).withOpacity(0.05),
+                color: const Color(0xFFE91E63).withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -49,7 +49,7 @@ class AvatarDisplay extends StatelessWidget {
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF9C27B0).withOpacity(0.05),
+                color: const Color(0xFF9C27B0).withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -131,7 +131,7 @@ class AvatarDisplay extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: item.primaryColor.withOpacity(0.35),
+                            color: item.primaryColor.withValues(alpha: 0.35),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
@@ -333,9 +333,9 @@ class _FashionModelPainter extends CustomPainter {
         ..shader =
             LinearGradient(
               colors: [
-                _skinDark.withOpacity(0.4),
+                _skinDark.withValues(alpha: 0.4),
                 Colors.transparent,
-                _skinDark.withOpacity(0.4),
+                _skinDark.withValues(alpha: 0.4),
               ],
               stops: const [0, 0.4, 1],
             ).createShader(
@@ -417,7 +417,7 @@ class _FashionModelPainter extends CustomPainter {
               LinearGradient(
                 colors: [
                   sleeveColor,
-                  sleeveAccent ?? sleeveColor.withOpacity(0.8),
+                  sleeveAccent ?? sleeveColor.withValues(alpha: 0.8),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -507,7 +507,7 @@ class _FashionModelPainter extends CustomPainter {
 
     if (top != null) {
       final c1 = top!.primaryColor;
-      final c2 = top!.accentColor ?? c1.withOpacity(0.75);
+      final c2 = top!.accentColor ?? c1.withValues(alpha: 0.75);
       canvas.drawPath(
         torsoPath,
         Paint()
@@ -527,9 +527,9 @@ class _FashionModelPainter extends CustomPainter {
           ..shader =
               LinearGradient(
                 colors: [
-                  Colors.black.withOpacity(0.10),
+                  Colors.black.withValues(alpha: 0.10),
                   Colors.transparent,
-                  Colors.black.withOpacity(0.06),
+                  Colors.black.withValues(alpha: 0.06),
                 ],
                 stops: const [0, 0.5, 1],
               ).createShader(
@@ -559,7 +559,7 @@ class _FashionModelPainter extends CustomPainter {
         canvas.drawPath(
           vPath,
           Paint()
-            ..color = Colors.black.withOpacity(0.12)
+            ..color = Colors.black.withValues(alpha: 0.12)
             ..strokeWidth = w * 0.012
             ..style = PaintingStyle.stroke
             ..strokeCap = StrokeCap.round
@@ -582,7 +582,7 @@ class _FashionModelPainter extends CustomPainter {
 
     if (bottom != null) {
       final c1 = bottom!.primaryColor;
-      final c2 = bottom!.accentColor ?? c1.withOpacity(0.75);
+      final c2 = bottom!.accentColor ?? c1.withValues(alpha: 0.75);
       final grad =
           LinearGradient(
             colors: [c1, c2],
@@ -621,7 +621,7 @@ class _FashionModelPainter extends CustomPainter {
             Rect.fromLTWH(cx - w * 0.16, h * 0.458, w * 0.32, h * 0.018),
             Radius.circular(w * 0.01),
           ),
-          Paint()..color = c1.withOpacity(0.9),
+          Paint()..color = c1.withValues(alpha: 0.9),
         );
       } else {
         // Pants hips
@@ -638,14 +638,14 @@ class _FashionModelPainter extends CustomPainter {
             Rect.fromLTWH(cx - w * 0.16, h * 0.458, w * 0.32, h * 0.018),
             Radius.circular(w * 0.01),
           ),
-          Paint()..color = c1.withOpacity(0.9),
+          Paint()..color = c1.withValues(alpha: 0.9),
         );
         // Center seam
         canvas.drawLine(
           Offset(cx, h * 0.476),
           Offset(cx, h * 0.61),
           Paint()
-            ..color = Colors.black.withOpacity(0.1)
+            ..color = Colors.black.withValues(alpha: 0.1)
             ..strokeWidth = w * 0.008,
         );
       }
@@ -729,7 +729,7 @@ class _FashionModelPainter extends CustomPainter {
 
     if (isPants) {
       final c1 = bottom!.primaryColor;
-      final c2 = bottom!.accentColor ?? c1.withOpacity(0.75);
+      final c2 = bottom!.accentColor ?? c1.withValues(alpha: 0.75);
       final grad = LinearGradient(
         colors: [c1, c2],
         begin: Alignment.topLeft,
@@ -742,14 +742,14 @@ class _FashionModelPainter extends CustomPainter {
         Offset(cx - gap - legW * 0.5, legTop),
         Offset(cx - gap - legW * 0.5, legBot),
         Paint()
-          ..color = Colors.black.withOpacity(0.08)
+          ..color = Colors.black.withValues(alpha: 0.08)
           ..strokeWidth = w * 0.006,
       );
       canvas.drawLine(
         Offset(cx + gap + legW * 0.5, legTop),
         Offset(cx + gap + legW * 0.5, legBot),
         Paint()
-          ..color = Colors.black.withOpacity(0.08)
+          ..color = Colors.black.withValues(alpha: 0.08)
           ..strokeWidth = w * 0.006,
       );
     } else {
@@ -765,7 +765,7 @@ class _FashionModelPainter extends CustomPainter {
           width: legW * 0.55,
           height: h * 0.022,
         ),
-        Paint()..color = Colors.white.withOpacity(0.22),
+        Paint()..color = Colors.white.withValues(alpha: 0.22),
       );
       canvas.drawOval(
         Rect.fromCenter(
@@ -776,7 +776,7 @@ class _FashionModelPainter extends CustomPainter {
           width: legW * 0.55,
           height: h * 0.022,
         ),
-        Paint()..color = Colors.white.withOpacity(0.22),
+        Paint()..color = Colors.white.withValues(alpha: 0.22),
       );
     }
   }
@@ -784,7 +784,7 @@ class _FashionModelPainter extends CustomPainter {
   // ── SHOES ──────────────────────────────────────────────────────────────────
   void _drawShoes(Canvas canvas, double w, double h, double cx) {
     final c1 = shoes?.primaryColor ?? const Color(0xFF9E9E9E);
-    final c2 = shoes?.accentColor ?? c1.withOpacity(0.7);
+    final c2 = shoes?.accentColor ?? c1.withValues(alpha: 0.7);
     final isHeel = shoes?.name.toLowerCase().contains('heel') ?? false;
     final isBoot = shoes?.name.toLowerCase().contains('boot') ?? false;
 
@@ -921,7 +921,7 @@ class _FashionModelPainter extends CustomPainter {
         ),
         Radius.circular(w * 0.01),
       ),
-      Paint()..color = c1.withOpacity(0.55),
+      Paint()..color = c1.withValues(alpha: 0.55),
     );
 
     // Shine
@@ -931,7 +931,7 @@ class _FashionModelPainter extends CustomPainter {
         width: sw * 0.38,
         height: shoeH * 0.15,
       ),
-      Paint()..color = Colors.white.withOpacity(0.18),
+      Paint()..color = Colors.white.withValues(alpha: 0.18),
     );
   }
 
@@ -990,9 +990,9 @@ class _FashionModelPainter extends CustomPainter {
       Paint()
         ..shader = LinearGradient(
           colors: [
-            _skinDark.withOpacity(0.28),
+            _skinDark.withValues(alpha: 0.28),
             Colors.transparent,
-            _skinDark.withOpacity(0.28),
+            _skinDark.withValues(alpha: 0.28),
           ],
           stops: const [0, 0.45, 1],
         ).createShader(headRect),
@@ -1005,7 +1005,7 @@ class _FashionModelPainter extends CustomPainter {
         width: w * 0.22,
         height: h * 0.055,
       ),
-      Paint()..color = Colors.white.withOpacity(0.12),
+      Paint()..color = Colors.white.withValues(alpha: 0.12),
     );
 
     // Ears
@@ -1116,7 +1116,7 @@ class _FashionModelPainter extends CustomPainter {
     canvas.drawPath(rSidePath, hairPaint);
 
     // Hair highlight
-    final hlPaint = Paint()..color = _hairHL.withOpacity(0.45);
+    final hlPaint = Paint()..color = _hairHL.withValues(alpha: 0.45);
     final hlPath = Path()
       ..moveTo(cx - w * 0.06, h * 0.005)
       ..cubicTo(
@@ -1184,7 +1184,7 @@ class _FashionModelPainter extends CustomPainter {
 
     // ── Nose ──
     final nosePaint = Paint()
-      ..color = _skinDark.withOpacity(0.5)
+      ..color = _skinDark.withValues(alpha: 0.5)
       ..strokeWidth = w * 0.012
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
@@ -1219,7 +1219,7 @@ class _FashionModelPainter extends CustomPainter {
         width: w * 0.12,
         height: h * 0.025,
       ),
-      Paint()..color = const Color(0xFFFFB3BA).withOpacity(0.38),
+      Paint()..color = const Color(0xFFFFB3BA).withValues(alpha: 0.38),
     );
     canvas.drawOval(
       Rect.fromCenter(
@@ -1227,7 +1227,7 @@ class _FashionModelPainter extends CustomPainter {
         width: w * 0.12,
         height: h * 0.025,
       ),
-      Paint()..color = const Color(0xFFFFB3BA).withOpacity(0.38),
+      Paint()..color = const Color(0xFFFFB3BA).withValues(alpha: 0.38),
     );
 
     // ── Lips ──
@@ -1247,7 +1247,7 @@ class _FashionModelPainter extends CustomPainter {
       ..quadraticBezierTo(cx, lipY + lipH * 0.5, cx - lipW, lipY);
     canvas.drawPath(
       upperLip,
-      Paint()..color = const Color(0xFFE91E63).withOpacity(0.88),
+      Paint()..color = const Color(0xFFE91E63).withValues(alpha: 0.88),
     );
 
     // Lower lip
@@ -1264,7 +1264,7 @@ class _FashionModelPainter extends CustomPainter {
         width: lipW * 0.5,
         height: lipH * 0.4,
       ),
-      Paint()..color = Colors.white.withOpacity(0.22),
+      Paint()..color = Colors.white.withValues(alpha: 0.22),
     );
   }
 
@@ -1299,7 +1299,7 @@ class _FashionModelPainter extends CustomPainter {
     canvas.drawCircle(
       Offset(cx + r * 0.18, cy - r * 0.22),
       r * 0.16,
-      Paint()..color = Colors.white.withOpacity(0.92),
+      Paint()..color = Colors.white.withValues(alpha: 0.92),
     );
 
     // Upper lid line
@@ -1343,7 +1343,7 @@ class _FashionModelPainter extends CustomPainter {
       final glassW = w * 0.085;
       final glassH = h * 0.028;
       final frameColor = c1;
-      final lensColor = c1.withOpacity(0.75);
+      final lensColor = c1.withValues(alpha: 0.75);
 
       // Bridge
       canvas.drawLine(
@@ -1449,7 +1449,7 @@ class _FashionModelPainter extends CustomPainter {
       canvas.drawCircle(
         Offset(cx, neckY + h * 0.022),
         w * 0.013,
-        Paint()..color = c1.withOpacity(0.6),
+        Paint()..color = c1.withValues(alpha: 0.6),
       );
     } else if (name.contains('bag')) {
       // Handbag on right side
@@ -1457,7 +1457,7 @@ class _FashionModelPainter extends CustomPainter {
       final bagY = h * 0.38;
       final bagW = w * 0.18;
       final bagH = h * 0.12;
-      final c2 = acc!.accentColor ?? c1.withOpacity(0.7);
+      final c2 = acc!.accentColor ?? c1.withValues(alpha: 0.7);
 
       // Strap
       canvas.drawPath(
@@ -1504,7 +1504,7 @@ class _FashionModelPainter extends CustomPainter {
           ),
           Radius.circular(w * 0.01),
         ),
-        Paint()..color = c2.withOpacity(0.7),
+        Paint()..color = c2.withValues(alpha: 0.7),
       );
     }
   }

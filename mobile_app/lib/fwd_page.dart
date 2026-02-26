@@ -467,16 +467,6 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
           const Text('🪔', style: TextStyle(fontSize: 18)),
         ],
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search, color: Colors.white),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: const Icon(Icons.tune, color: Colors.white),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 
@@ -1236,28 +1226,9 @@ class _ProductCard extends StatefulWidget {
   State<_ProductCard> createState() => _ProductCardState();
 }
 
-class _ProductCardState extends State<_ProductCard>
-    with SingleTickerProviderStateMixin {
-  bool _wishlisted = false;
-  late AnimationController _wishController;
-  late Animation<double> _wishScale;
-
-  @override
-  void initState() {
-    super.initState();
-    _wishController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    _wishScale = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.4), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 1.4, end: 1.0), weight: 50),
-    ]).animate(CurvedAnimation(parent: _wishController, curve: Curves.easeOut));
-  }
-
+class _ProductCardState extends State<_ProductCard> {
   @override
   void dispose() {
-    _wishController.dispose();
     super.dispose();
   }
 
@@ -1323,42 +1294,6 @@ class _ProductCardState extends State<_ProductCard>
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 6,
-                  right: 6,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() => _wishlisted = !_wishlisted);
-                      _wishController.forward(from: 0);
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: AnimatedBuilder(
-                        animation: _wishScale,
-                        builder: (context, child) => Transform.scale(
-                          scale: _wishScale.value,
-                          child: child,
-                        ),
-                        child: Icon(
-                          _wishlisted ? Icons.favorite : Icons.favorite_border,
-                          color: _wishlisted ? _saffron : Colors.grey[400],
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -1420,30 +1355,6 @@ class _ProductCardState extends State<_ProductCard>
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           color: _darkBrown,
-                        ),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [_saffron, _turmeric],
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            'Add',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
                         ),
                       ),
                     ],

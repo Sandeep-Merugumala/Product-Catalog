@@ -58,7 +58,7 @@ class ScoreScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(28),
             boxShadow: [
               BoxShadow(
-                color: ratingColor.withOpacity(0.3),
+                color: ratingColor.withValues(alpha: 0.3),
                 blurRadius: 30,
                 offset: const Offset(0, 10),
               ),

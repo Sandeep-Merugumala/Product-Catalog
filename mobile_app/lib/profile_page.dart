@@ -8,6 +8,8 @@ import 'login.dart';
 import 'main.dart';
 import 'package:mobile_app/address_management.dart';
 import 'package:mobile_app/account_details.dart';
+import 'package:mobile_app/orders_screen.dart';
+import 'package:mobile_app/insider_screen.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -253,7 +255,14 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const InsiderScreen(),
+                                  ),
+                                );
+                              },
                               style: TextButton.styleFrom(
                                 backgroundColor: const Color(0xFFFF3F6C),
                                 foregroundColor: Colors.white,
@@ -284,14 +293,28 @@ class ProfilePage extends StatelessWidget {
                         icon: Icons.shopping_bag_outlined,
                         title: 'orders'.tr(),
                         subtitle: 'check_order_status'.tr(),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OrdersScreen(),
+                            ),
+                          );
+                        },
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.card_membership,
                         title: 'insider'.tr(),
                         subtitle: 'view_benefits_rewards'.tr(),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const InsiderScreen(),
+                            ),
+                          );
+                        },
                       ),
                       _buildMenuItem(
                         context,
@@ -527,7 +550,7 @@ class ProfilePage extends StatelessWidget {
                                       themeNotifier.value = newMode;
                                     });
                                   },
-                                  thumbColor: MaterialStateProperty.all(
+                                  thumbColor: WidgetStateProperty.all(
                                     const Color(0xFFFF3F6C),
                                   ),
                                 );
@@ -635,12 +658,14 @@ class ProfilePage extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () async {
                         try {
-                          // 1. Sign out from Google if possible
-                          await GoogleSignIn().signOut();
+                          // 1. Sign out from Firebase first
+                          await FirebaseAuth.instance.signOut();
                         } catch (_) {}
 
-                        // 2. Sign out from Firebase
-                        await FirebaseAuth.instance.signOut();
+                        try {
+                          // 2. Disconnect Google session to force account chooser on next login
+                          await GoogleSignIn().disconnect();
+                        } catch (_) {}
 
                         // 3. Fallback: Force navigation reset to the AuthWrapper
                         // This ensures that even if state updates are slow, the UI resets.

@@ -7,6 +7,7 @@ import 'women_fashion_screen.dart';
 import 'wishlist_page.dart';
 import 'bag_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KidsSection extends StatefulWidget {
@@ -1117,9 +1118,41 @@ class KidsBrandSection extends StatelessWidget {
   }
 }
 
-class KidsProductGrid extends StatelessWidget {
+class KidsProductGrid extends StatefulWidget {
   final String? category;
   const KidsProductGrid({super.key, this.category});
+
+  @override
+  State<KidsProductGrid> createState() => _KidsProductGridState();
+}
+
+class _KidsProductGridState extends State<KidsProductGrid> {
+  SortOption _currentSort = SortOption.relevance;
+  int _currentDiscountFilter = 0;
+
+  void _openSortFilterSheet() async {
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + kToolbarHeight,
+        ),
+        child: SortFilterBottomSheet(
+          initialSort: _currentSort,
+          initialDiscountFilter: _currentDiscountFilter,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _currentSort = result['sort'];
+        _currentDiscountFilter = result['discount'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1376,9 +1409,38 @@ class KidsProductGrid extends StatelessWidget {
       },
     ];
 
-    final products = category == null || category == 'All'
-        ? allProducts
-        : allProducts.where((p) => p['category'] == category).toList();
+    List<Map<String, dynamic>> products =
+        widget.category == null || widget.category == 'All'
+        ? List.from(allProducts)
+        : allProducts.where((p) => p['category'] == widget.category).toList();
+
+    // 1. Apply Discount Filter
+    if (_currentDiscountFilter > 0) {
+      products = products
+          .where((p) => (p['discount'] as num) >= _currentDiscountFilter)
+          .toList();
+    }
+
+    // 2. Apply Sort
+    switch (_currentSort) {
+      case SortOption.priceLowToHigh:
+        products.sort(
+          (a, b) => (a['price'] as num).compareTo(b['price'] as num),
+        );
+        break;
+      case SortOption.priceHighToLow:
+        products.sort(
+          (a, b) => (b['price'] as num).compareTo(a['price'] as num),
+        );
+        break;
+      case SortOption.rating:
+        products.sort(
+          (a, b) => (b['rating'] as num).compareTo(a['rating'] as num),
+        );
+        break;
+      case SortOption.relevance:
+        break;
+    }
 
     if (products.isEmpty) {
       return SliverToBoxAdapter(
@@ -1386,7 +1448,7 @@ class KidsProductGrid extends StatelessWidget {
           padding: const EdgeInsets.all(32.0),
           child: Center(
             child: Text(
-              'No items found in $category',
+              'No items found in ${widget.category}',
               style: TextStyle(color: Theme.of(context).hintColor),
             ),
           ),
@@ -1394,20 +1456,53 @@ class KidsProductGrid extends StatelessWidget {
       );
     }
 
-    return SliverPadding(
-      padding: const EdgeInsets.all(12),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.48,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 10,
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _openSortFilterSheet,
+                    icon: const Icon(Icons.tune, size: 18),
+                    label: Text(
+                      _currentSort != SortOption.relevance ||
+                              _currentDiscountFilter > 0
+                          ? 'SORT & FILTER (Active)'
+                          : 'SORT & FILTER',
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      side: BorderSide(color: Colors.grey[300]!),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        delegate: SliverChildBuilderDelegate((context, index) {
-          final product = products[index % products.length];
-          return _buildProductCard(context, product, firestoreService);
-        }, childCount: products.length),
-      ),
+        SliverPadding(
+          padding: const EdgeInsets.all(12),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.48,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 10,
+            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final product = products[index % products.length];
+              return _buildProductCard(context, product, firestoreService);
+            }, childCount: products.length),
+          ),
+        ),
+      ],
     );
   }
 

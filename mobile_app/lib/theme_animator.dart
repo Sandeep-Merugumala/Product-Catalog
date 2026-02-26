@@ -121,7 +121,7 @@ class ThemeAnimatorState extends State<ThemeAnimator>
             Positioned.fill(
               child: AnimatedBuilder(
                 animation: _animation,
-                builder: (_, __) {
+                builder: (context, child) {
                   return CustomPaint(
                     painter: _UltraThemePainter(
                       image: _oldThemeImage!,
@@ -175,8 +175,8 @@ class _UltraThemePainter extends CustomPainter {
       canvas.drawRect(
         Offset.zero & size,
         Paint()
-          ..color = (isDark ? Colors.white : Colors.black).withOpacity(
-            flashOpacity * 0.2,
+          ..color = (isDark ? Colors.white : Colors.black).withValues(
+            alpha: flashOpacity * 0.2,
           ),
       );
     }
@@ -221,8 +221,8 @@ class _UltraThemePainter extends CustomPainter {
         Offset(size.width / 2, cutoffY),
         size.width * 0.5,
         [
-          (isDark ? Colors.white : Colors.black).withOpacity(
-            0.12 * (1 - progress),
+          (isDark ? Colors.white : Colors.black).withValues(
+            alpha: 0.12 * (1 - progress),
           ),
           Colors.transparent,
         ],
@@ -248,7 +248,7 @@ class _UltraThemePainter extends CustomPainter {
         Offset(0, cutoffY + 30),
         [
           Colors.transparent,
-          (isDark ? Colors.white : Colors.black).withOpacity(0.85),
+          (isDark ? Colors.white : Colors.black).withValues(alpha: 0.85),
           Colors.transparent,
         ],
         [0.0, 0.5, 1.0],
@@ -286,10 +286,10 @@ class _UltraThemePainter extends CustomPainter {
         final paint = Paint()
           ..style = PaintingStyle.fill
           ..color = p.type == 0
-              ? const Color(0xFFFF3F6C).withOpacity(opacity)
+              ? const Color(0xFFFF3F6C).withValues(alpha: opacity)
               : p.type == 1
-              ? (isDark ? Colors.cyanAccent : Colors.amberAccent).withOpacity(
-                  opacity,
+              ? (isDark ? Colors.cyanAccent : Colors.amberAccent).withValues(
+                  alpha: opacity,
                 )
               : HSLColor.fromAHSL(opacity, p.x * 360, 0.8, 0.6).toColor();
 

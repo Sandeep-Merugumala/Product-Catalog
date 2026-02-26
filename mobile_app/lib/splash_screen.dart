@@ -233,7 +233,7 @@ class _SplashScreenState extends State<SplashScreen>
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(
+                                  color: Colors.white.withValues(alpha: 
                                     0.3 / _pulseAnim.value,
                                   ),
                                   width: 2,
@@ -250,7 +250,7 @@ class _SplashScreenState extends State<SplashScreen>
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(
+                                  color: Colors.white.withValues(alpha: 
                                     0.4 / _pulseAnim.value,
                                   ),
                                   width: 2,
@@ -273,12 +273,12 @@ class _SplashScreenState extends State<SplashScreen>
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
+                                        color: Colors.black.withValues(alpha: 0.3),
                                         blurRadius: 30,
                                         spreadRadius: 5,
                                       ),
                                       BoxShadow(
-                                        color: Colors.white.withOpacity(0.2),
+                                        color: Colors.white.withValues(alpha: 0.2),
                                         blurRadius: 20,
                                         spreadRadius: -5,
                                       ),
@@ -293,10 +293,10 @@ class _SplashScreenState extends State<SplashScreen>
                                       ),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.25),
+                                          color: Colors.white.withValues(alpha: 0.25),
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                            color: Colors.white.withOpacity(
+                                            color: Colors.white.withValues(alpha: 
                                               0.5,
                                             ),
                                             width: 2,
@@ -305,8 +305,8 @@ class _SplashScreenState extends State<SplashScreen>
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                             colors: [
-                                              Colors.white.withOpacity(0.3),
-                                              Colors.white.withOpacity(0.1),
+                                              Colors.white.withValues(alpha: 0.3),
+                                              Colors.white.withValues(alpha: 0.1),
                                             ],
                                           ),
                                         ),
@@ -459,11 +459,11 @@ class _SplashScreenState extends State<SplashScreen>
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7 + scale * 0.3),
+                    color: Colors.white.withValues(alpha: 0.7 + scale * 0.3),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.white.withOpacity(scale * 0.5),
+                        color: Colors.white.withValues(alpha: scale * 0.5),
                         blurRadius: 8,
                         spreadRadius: 2,
                       ),
@@ -509,7 +509,7 @@ class ParticlePainter extends CustomPainter {
       particle.y = (particle.y + particle.speed * 0.005) % 1.0;
 
       final paint = Paint()
-        ..color = Colors.white.withOpacity(particle.opacity * 0.6)
+        ..color = Colors.white.withValues(alpha: particle.opacity * 0.6)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
 
       canvas.drawCircle(
@@ -536,7 +536,7 @@ class ShimmerPainter extends CustomPainter {
       ..shader = LinearGradient(
         colors: [
           Colors.transparent,
-          Colors.white.withOpacity(0.3),
+          Colors.white.withValues(alpha: 0.3),
           Colors.transparent,
         ],
         stops: [animation - 0.2, animation, animation + 0.2],

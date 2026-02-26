@@ -37,7 +37,7 @@ class BagPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? true)) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +103,7 @@ class BagPage extends StatelessWidget {
             );
           }
 
-          final cartItems = snapshot.data!.docs;
+          final cartItems = snapshot.data?.docs ?? [];
           double total = 0;
           for (var doc in cartItems) {
             final data = doc.data() as Map<String, dynamic>;

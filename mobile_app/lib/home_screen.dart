@@ -14,6 +14,7 @@ import 'luxe_page.dart';
 import 'wishlist_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'notifications_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -268,30 +269,40 @@ class MyntraAppBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 // Icons
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Icon(
-                      Icons.notifications_none_outlined,
-                      color: Theme.of(context).iconTheme.color,
-                      size: 26,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFF3F6C),
-                        shape: BoxShape.circle,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationsPage(),
                       ),
-                      child: const Text(
-                        '1',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
+                    );
+                  },
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Icon(
+                        Icons.notifications_none_outlined,
+                        color: Theme.of(context).iconTheme.color,
+                        size: 26,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFF3F6C),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Text(
+                          '1',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 12),
                 InkWell(
@@ -819,20 +830,23 @@ class _FlashSaleSectionState extends State<FlashSaleSection> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.flash_on, color: Colors.white, size: 28),
-                  const SizedBox(width: 8),
-                  Text(
-                    'flash_sale'.tr(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
+              Flexible(
+                child: Row(
+                  children: [
+                    const Icon(Icons.flash_on, color: Colors.white, size: 28),
+                    const SizedBox(width: 8),
+                    Text(
+                      'flash_sale'.tr(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -2293,7 +2307,6 @@ class ProductGrid extends StatelessWidget {
                         height: 40,
                         child: ElevatedButton(
                           onPressed: () {
-                            print('🔘 ADD TO BAG BUTTON TAPPED!');
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
