@@ -8,6 +8,7 @@ import 'main.dart';
 import 'package:aura/address_management.dart';
 import 'package:aura/account_details.dart';
 import 'package:aura/orders_screen.dart';
+import 'package:aura/insider_screen.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -250,7 +251,14 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const InsiderScreen(),
+                                  ),
+                                );
+                              },
                               style: TextButton.styleFrom(
                                 backgroundColor: const Color(0xFFFF3F6C),
                                 foregroundColor: Colors.white,
@@ -295,7 +303,14 @@ class ProfilePage extends StatelessWidget {
                         icon: Icons.card_membership,
                         title: 'Insider',
                         subtitle: 'View benefits and rewards',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const InsiderScreen(),
+                            ),
+                          );
+                        },
                       ),
                       _buildMenuItem(
                         context,
