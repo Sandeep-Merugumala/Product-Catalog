@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:aura/widgets/map_location_picker.dart';
+import 'package:mobile_app/widgets/map_location_picker.dart';
 
 // Address Model
 class Address {
@@ -196,7 +197,7 @@ class AddressesPage extends StatelessWidget {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("No addresses found."));
+                  return Center(child: Text('no_addresses_found'.tr()));
                 }
 
                 final addresses = snapshot.data!;
@@ -683,7 +684,7 @@ class _AddEditAddressPageState extends State<AddEditAddressPage> {
                     },
                     activeColor: const Color(0xFFFF3F6C),
                   ),
-                  const Text("Make this as default address"),
+                  Text('make_this_default_address'.tr()),
                 ],
               ),
               const SizedBox(height: 32),

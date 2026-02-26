@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:aura/firestore_service.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_app/firestore_service.dart';
 import 'package:lottie/lottie.dart';
 
 class WishlistPage extends StatelessWidget {
@@ -13,7 +14,7 @@ class WishlistPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'My Wishlist',
+          'wishlist'.tr(),
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
@@ -27,7 +28,7 @@ class WishlistPage extends StatelessWidget {
         stream: firestoreService.getWishlistStream(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
+            return Center(child: Text('something_went_wrong'.tr()));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -170,8 +171,8 @@ class WishlistPage extends StatelessWidget {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Moved to Bag'),
+                                          SnackBar(
+                                            content: Text('moved_to_bag'.tr()),
                                             duration: Duration(seconds: 1),
                                           ),
                                         );

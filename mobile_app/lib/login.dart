@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:math' as math;
 
 import 'dart:ui';
@@ -491,7 +492,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       controller: _passwordController,
                                       obscureText: _obscurePassword,
                                       decoration: InputDecoration(
-                                        labelText: 'Password',
+                                        labelText: 'password'.tr(),
                                         prefixIcon: Icon(
                                           Icons.lock_outline,
                                           color: _accentColor,
@@ -593,7 +594,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                         height: 20,
                                       ),
                                       label: Text(
-                                        'Sign in with Google',
+                                        'sign_in_with_google'.tr(),
                                         style: TextStyle(
                                           color: isDarkMode
                                               ? Colors.white70

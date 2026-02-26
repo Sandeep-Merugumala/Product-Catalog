@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:aura/firestore_service.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_app/firestore_service.dart';
 import 'women_fashion_screen.dart';
 import 'kid_fashion_screen.dart';
 import 'wishlist_page.dart';
 import 'bag_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:aura/widgets/sort_filter_bottom_sheet.dart';
+import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MensSection extends StatefulWidget {
-  const MensSection({super.key});
+  final int? initialIndex;
+
+  const MensSection({super.key, this.initialIndex});
 
   @override
   State<MensSection> createState() => _MensSectionState();
@@ -23,7 +26,11 @@ class _MensSectionState extends State<MensSection>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(
+      length: 6,
+      vsync: this,
+      initialIndex: widget.initialIndex ?? 0,
+    );
   }
 
   @override
@@ -43,13 +50,17 @@ class _MensSectionState extends State<MensSection>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  MensAllProductsTab(),
-                  MensCategoryTab(category: 'Topwear'),
-                  MensCategoryTab(category: 'Bottomwear'),
-                  MensCategoryTab(category: 'Footwear'),
-                  MensCategoryTab(category: 'Accessories'),
-                  MensCategoryTab(category: 'Grooming'),
+                children: [
+                  MensAllProductsTab(
+                    onTabSelected: (index) {
+                      _tabController.animateTo(index);
+                    },
+                  ),
+                  const MensCategoryTab(category: 'topwear'),
+                  const MensCategoryTab(category: 'Bottomwear'),
+                  const MensCategoryTab(category: 'Footwear'),
+                  const MensCategoryTab(category: 'Accessories'),
+                  const MensCategoryTab(category: 'Grooming'),
                 ],
               ),
             ),
@@ -209,9 +220,9 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: _buildTextTabItem("All", isSelected: false),
+                        child: _buildTextTabItem("all".tr(), isSelected: false),
                       ),
-                      _buildTextTabItem("Men", isSelected: true),
+                      _buildTextTabItem("men".tr(), isSelected: true),
                       InkWell(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -224,7 +235,10 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                             ),
                           );
                         },
-                        child: _buildTextTabItem("Women", isSelected: false),
+                        child: _buildTextTabItem(
+                          "women".tr(),
+                          isSelected: false,
+                        ),
                       ),
                       InkWell(
                         onTap: () {
@@ -238,7 +252,10 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                             ),
                           );
                         },
-                        child: _buildTextTabItem("Kids", isSelected: false),
+                        child: _buildTextTabItem(
+                          "kids".tr(),
+                          isSelected: false,
+                        ),
                       ),
                     ],
                   ),
@@ -275,32 +292,32 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                   children: [
                     _buildImageTab(
                       0,
-                      'All',
+                      'all',
                       'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&auto=format&fit=crop',
                     ),
                     _buildImageTab(
                       1,
-                      'Topwear',
+                      'topwear',
                       'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop',
                     ),
                     _buildImageTab(
                       2,
-                      'Bottomwear',
+                      'bottomwear',
                       'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&auto=format&fit=crop',
                     ),
                     _buildImageTab(
                       3,
-                      'Footwear',
+                      'footwear',
                       'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop',
                     ),
                     _buildImageTab(
                       4,
-                      'Accessories',
+                      'accessories',
                       'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500&auto=format&fit=crop',
                     ),
                     _buildImageTab(
                       5,
-                      'Grooming',
+                      'grooming',
                       'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop',
                     ),
                   ],
@@ -415,7 +432,7 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
             ),
             const SizedBox(height: 6),
             Text(
-              title,
+              title.tr(),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -442,17 +459,22 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
 }
 
 class MensAllProductsTab extends StatelessWidget {
-  const MensAllProductsTab({super.key});
+  final Function(int)? onTabSelected;
+  const MensAllProductsTab({super.key, this.onTabSelected});
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const SliverToBoxAdapter(child: MensFeaturedBanner()),
+        SliverToBoxAdapter(
+          child: MensFeaturedBanner(onTabSelected: onTabSelected),
+        ),
         const SliverToBoxAdapter(child: MensCashbackOffer()),
         const SliverToBoxAdapter(child: MensProductCategories()),
         const SliverToBoxAdapter(child: MensBrandSection()),
-        SliverToBoxAdapter(child: _buildSectionHeader(context, 'TRENDING NOW')),
+        SliverToBoxAdapter(
+          child: _buildSectionHeader(context, 'trending_now'.tr()),
+        ),
         const MensProductGrid(),
         const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
       ],
@@ -463,7 +485,7 @@ class MensAllProductsTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       child: Text(
-        title,
+        title.tr(),
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w700,
@@ -484,32 +506,32 @@ class MensHorizontalCategories extends StatelessWidget {
     // Modify the 'image' URL for each category below.
     final categories = [
       {
-        'name': 'Casual',
+        'name': 'casual',
         'image':
             'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Ethnic',
+        'name': 'ethnic',
         'image':
             'https://images.unsplash.com/photo-1583391733975-5e8c3b44c09e?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Footwear',
+        'name': 'footwear',
         'image':
             'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Sports',
+        'name': 'sports',
         'image':
             'https://images.unsplash.com/photo-1556906781-9cba4c4fb3f5?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Essentials',
+        'name': 'essentials',
         'image':
             'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Active',
+        'name': 'active',
         'image':
             'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&auto=format&fit=crop',
       },
@@ -547,7 +569,7 @@ class MensHorizontalCategories extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    categories[index]['name']!,
+                    categories[index]['name']!.tr(),
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
@@ -566,7 +588,8 @@ class MensHorizontalCategories extends StatelessWidget {
 }
 
 class MensFeaturedBanner extends StatefulWidget {
-  const MensFeaturedBanner({super.key});
+  final Function(int)? onTabSelected;
+  const MensFeaturedBanner({super.key, this.onTabSelected});
 
   @override
   State<MensFeaturedBanner> createState() => _MensFeaturedBannerState();
@@ -618,7 +641,7 @@ class _MensFeaturedBannerState extends State<MensFeaturedBanner> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: Text(
-              'THE DENIM EDIT',
+              'the_denim_edit'.tr(),
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
@@ -657,31 +680,38 @@ class _MensFeaturedBannerState extends State<MensFeaturedBanner> {
                       // Format: _buildBannerItem(imageUrl, brandName, mainTitle, subTitle, tag)
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&auto=format&fit=crop',
-                        'RARE RABBIT',
-                        'Denim All Over',
-                        'Denim Wear •',
-                        '#FeaturedBrands',
+                        'rare_rabbit',
+                        'denim_all_over',
+                        'denim_wear',
+                        'featured_brands',
+                        onTap: () =>
+                            widget.onTabSelected?.call(2), // Bottomwear
                       ),
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop',
-                        'LEVIS',
-                        'Classic Denim',
-                        'Premium Jeans •',
-                        '#Trending',
+                        'levis',
+                        'classic_denim',
+                        'premium_jeans',
+                        'trending_hashtag',
+                        onTap: () =>
+                            widget.onTabSelected?.call(2), // Bottomwear
                       ),
                       _buildBannerItem(
                         'https://media.istockphoto.com/id/692909922/photo/hes-off-on-an-adventure.webp?a=1&b=1&s=612x612&w=0&k=20&c=d-bqdMaEQakXXATRVAAy9EhXDm0zSsiAKevpLlkuKBE=',
-                        'JACK & JONES',
-                        'Urban Style',
-                        'Streetwear •',
-                        '#NewArrivals',
+                        'jack_and_jones',
+                        'urban_style',
+                        'streetwear',
+                        'new_arrivals',
+                        onTap: () => widget.onTabSelected?.call(1), // Topwear
                       ),
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop',
-                        'WROGN',
-                        'Stay Wrogn',
-                        'Casuals •',
-                        '#YouthFashion',
+                        'wrogn',
+                        'stay_wrogn',
+                        'casuals',
+                        'youthfashion',
+                        onTap: () =>
+                            widget.onTabSelected?.call(4), // Accessories
                       ),
                     ],
                   ),
@@ -739,91 +769,101 @@ class _MensFeaturedBannerState extends State<MensFeaturedBanner> {
     String brand,
     String title,
     String subtitle,
-    String tag,
-  ) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.network(image, fit: BoxFit.cover),
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: const [0.5, 1.0],
+    String tag, {
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(image, fit: BoxFit.cover),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withValues(alpha: 0.6),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.5, 1.0],
+              ),
             ),
           ),
-        ),
-        Positioned(
-          left: 20,
-          bottom: 20,
-          right: 20,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.9),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
+          Positioned(
+            left: 20,
+            bottom: 20,
+            right: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      brand,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87,
-                        letterSpacing: 0.5,
+                      const SizedBox(width: 6),
+                      Text(
+                        brand.tr(),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                          letterSpacing: 0.5,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5,
+                const SizedBox(height: 12),
+                Text(
+                  title.tr(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                const SizedBox(height: 4),
+                Text(
+                  subtitle.tr(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                tag,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
+                const SizedBox(height: 4),
+                Text(
+                  tag.tr(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -900,27 +940,27 @@ class MensProductCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     final categories = [
       {
-        'name': 'Jeans',
+        'name': 'jeans',
         'image':
             'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Sweaters',
+        'name': 'sweaters',
         'image':
             'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Jackets',
+        'name': 'jackets',
         'image':
             'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Blazers',
+        'name': 'blazers',
         'image':
             'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop',
       },
       {
-        'name': 'Hoodies',
+        'name': 'hoodies',
         'image':
             'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&auto=format&fit=crop',
       },
@@ -965,7 +1005,7 @@ class MensProductCategories extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        categories[index]['name']!,
+                        categories[index]['name']!.tr(),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -1006,9 +1046,9 @@ class MensBrandSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brands = [
-      {'name': 'FWD', 'subtitle': 'Under ₹999'},
-      {'name': 'LUXE', 'subtitle': 'Luxury'},
-      {'name': 'BAG', 'subtitle': 'Accessories'},
+      {'name': 'fwd', 'subtitle': 'under_999'},
+      {'name': 'luxe', 'subtitle': 'luxury'},
+      {'name': 'bag', 'subtitle': 'accessories'},
     ];
 
     return Container(
@@ -1057,7 +1097,7 @@ class MensBrandSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        brand['name']!,
+                        brand['name']!.tr(),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -1070,7 +1110,7 @@ class MensBrandSection extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                brand['subtitle']!,
+                brand['subtitle']!.tr(),
                 style: TextStyle(fontSize: 11, color: Colors.grey[700]),
               ),
             ],
@@ -1126,219 +1166,219 @@ class _MensProductGridState extends State<MensProductGrid> {
       {
         'image':
             'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop',
-        'brand': 'Roadster',
-        'name': 'Men Typography Printed T-Shirt',
+        'brand': 'roadster',
+        'name': 'men_typography_printed_t_shirt',
         'price': 499,
         'originalPrice': 1499,
         'discount': 67,
         'rating': 4.3,
         'reviews': 2100,
-        'category': 'Topwear',
+        'category': 'topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop',
-        'brand': 'HIGHLANDER',
-        'name': 'Men Slim Fit Casual Shirt',
+        'brand': 'highlander',
+        'name': 'men_slim_fit_casual_shirt',
         'price': 699,
         'originalPrice': 1999,
         'discount': 65,
         'rating': 4.1,
         'reviews': 1800,
-        'category': 'Topwear',
+        'category': 'topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop',
-        'brand': 'Levis',
-        'name': '511 Slim Fit Jeans',
+        'brand': 'levis',
+        'name': 'n_511_slim_fit_jeans',
         'price': 1799,
         'originalPrice': 3999,
         'discount': 55,
         'rating': 4.5,
         'reviews': 3200,
-        'category': 'Bottomwear',
+        'category': 'bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&auto=format&fit=crop',
-        'brand': 'WROGN',
-        'name': 'Men Solid Bomber Jacket',
+        'brand': 'wrogn',
+        'name': 'men_solid_bomber_jacket',
         'price': 1299,
         'originalPrice': 3999,
         'discount': 68,
         'rating': 4.2,
         'reviews': 980,
-        'category': 'Topwear',
+        'category': 'topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop',
-        'brand': 'Nike',
-        'name': 'Air Max 270 Running Shoes',
+        'brand': 'nike',
+        'name': 'air_max_270_running_shoes',
         'price': 8995,
         'originalPrice': 12995,
         'discount': 31,
         'rating': 4.6,
         'reviews': 4500,
-        'category': 'Footwear',
+        'category': 'footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&auto=format&fit=crop',
-        'brand': 'HRX',
-        'name': 'Rapid Dry Training T-Shirt',
+        'brand': 'hrx',
+        'name': 'rapid_dry_training_t_shirt',
         'price': 599,
         'originalPrice': 1299,
         'discount': 54,
         'rating': 4.4,
         'reviews': 2800,
-        'category': 'Topwear',
+        'category': 'topwear',
       },
       {
         'image':
             'https://media.istockphoto.com/id/692909922/photo/hes-off-on-an-adventure.webp?a=1&b=1&s=612x612&w=0&k=20&c=d-bqdMaEQakXXATRVAAy9EhXDm0zSsiAKevpLlkuKBE=',
-        'brand': 'Jack & Jones',
-        'name': 'Men Slim Fit Chinos',
+        'brand': 'jack_and_jones',
+        'name': 'men_slim_fit_chinos',
         'price': 1499,
         'originalPrice': 2999,
         'discount': 50,
         'rating': 4.3,
         'reviews': 1560,
-        'category': 'Bottomwear',
+        'category': 'bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1554568218-ffd1e72a2151?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHN3ZWF0c2hpcnR8ZW58MHx8MHx8fDA%3D',
-        'brand': 'Puma',
-        'name': 'Essential Logo Crew Sweatshirt',
+        'brand': 'puma',
+        'name': 'essential_logo_crew_sweatshirt',
         'price': 1199,
         'originalPrice': 2999,
         'discount': 60,
         'rating': 4.2,
         'reviews': 890,
-        'category': 'Topwear',
+        'category': 'topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500&auto=format&fit=crop',
-        'brand': 'Fossil',
-        'name': 'Men Leather Watch',
+        'brand': 'fossil',
+        'name': 'men_leather_watch',
         'price': 5995,
         'originalPrice': 8995,
         'discount': 33,
         'rating': 4.5,
         'reviews': 1200,
-        'category': 'Accessories',
+        'category': 'accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop',
-        'brand': 'Beardo',
-        'name': 'Beard Growth Oil',
+        'brand': 'beardo',
+        'name': 'beard_growth_oil',
         'price': 499,
         'originalPrice': 750,
         'discount': 33,
         'rating': 4.1,
         'reviews': 3500,
-        'category': 'Grooming',
+        'category': 'grooming',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&auto=format&fit=crop',
-        'brand': 'Adidas',
-        'name': 'Ultraboost 21',
+        'brand': 'adidas',
+        'name': 'ultraboost_21',
         'price': 14999,
         'originalPrice': 17999,
         'discount': 17,
         'rating': 4.8,
         'reviews': 3200,
-        'category': 'Footwear',
+        'category': 'footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&auto=format&fit=crop',
-        'brand': 'Puma',
-        'name': 'RS-X Reinvention',
+        'brand': 'puma',
+        'name': 'rs_x_reinvention',
         'price': 8999,
         'originalPrice': 9999,
         'discount': 10,
         'rating': 4.5,
         'reviews': 1500,
-        'category': 'Footwear',
+        'category': 'footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1627094522148-ac0c843a1383?w=500&auto=format&fit=crop',
-        'brand': 'Titan',
-        'name': 'Neo Men Leather Watch',
+        'brand': 'titan',
+        'name': 'neo_men_leather_watch',
         'price': 4595,
         'originalPrice': 6595,
         'discount': 30,
         'rating': 4.4,
         'reviews': 2100,
-        'category': 'Accessories',
+        'category': 'accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&auto=format&fit=crop',
-        'brand': 'Ray-Ban',
-        'name': 'Aviator Sunglasses',
+        'brand': 'ray_ban',
+        'name': 'aviator_sunglasses',
         'price': 8590,
         'originalPrice': 10590,
         'discount': 19,
         'rating': 4.7,
         'reviews': 4100,
-        'category': 'Accessories',
+        'category': 'accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&auto=format&fit=crop',
-        'brand': 'U.S. Polo Assn.',
-        'name': 'Men Cotton Sweater',
+        'brand': 'u_s_polo_assn',
+        'name': 'men_cotton_sweater',
         'price': 1899,
         'originalPrice': 3299,
         'discount': 42,
         'rating': 4.3,
         'reviews': 1800,
-        'category': 'Topwear',
+        'category': 'topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1727835523545-70ee992b5763?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWVucyUyMGt1cnRhfGVufDB8fDB8fHww',
-        'brand': 'Manyavar',
-        'name': 'Men Kurta Set',
+        'brand': 'manyavar',
+        'name': 'men_kurta_set',
         'price': 3999,
         'originalPrice': 5999,
         'discount': 33,
         'rating': 4.6,
         'reviews': 2400,
         'category':
-            'Ethnic', // Added for potential future use or if category logic is updated
+            'ethnic', // Added for potential future use or if category logic is updated
       },
       {
         'image':
             'https://images.unsplash.com/photo-1559563458-527698bf5295?w=500&auto=format&fit=crop',
-        'brand': 'The Man Company',
-        'name': 'Charcoal Face Wash',
+        'brand': 'the_man_company',
+        'name': 'charcoal_face_wash',
         'price': 299,
         'originalPrice': 349,
         'discount': 14,
         'rating': 4.2,
         'reviews': 5600,
-        'category': 'Grooming',
+        'category': 'grooming',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1621607512214-68297480165e?w=500&auto=format&fit=crop',
-        'brand': 'Bombay Shaving Co.',
-        'name': 'Shaving Kit',
+        'brand': 'bombay_shaving_co',
+        'name': 'shaving_kit',
         'price': 1299,
         'originalPrice': 1999,
         'discount': 35,
         'rating': 4.4,
         'reviews': 1200,
-        'category': 'Grooming',
+        'category': 'grooming',
       },
     ];
 
@@ -1510,8 +1550,10 @@ class _MensProductGridState extends State<MensProductGrid> {
                                 );
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Removed from Wishlist'),
+                                    SnackBar(
+                                      content: Text(
+                                        'removed_from_wishlist'.tr(),
+                                      ),
                                       duration: Duration(seconds: 1),
                                     ),
                                   );
@@ -1520,8 +1562,8 @@ class _MensProductGridState extends State<MensProductGrid> {
                                 await firestoreService.addToWishlist(product);
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Added to Wishlist'),
+                                    SnackBar(
+                                      content: Text('added_to_wishlist'.tr()),
                                       duration: Duration(seconds: 1),
                                     ),
                                   );
@@ -1531,7 +1573,9 @@ class _MensProductGridState extends State<MensProductGrid> {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('Error: $e'),
+                                    content: Text(
+                                      'error_msg'.tr(args: [e.toString()]),
+                                    ),
                                     backgroundColor: Colors.red,
                                     duration: const Duration(seconds: 2),
                                   ),
@@ -1568,7 +1612,7 @@ class _MensProductGridState extends State<MensProductGrid> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product['brand'],
+                        product['brand'].toString().tr(),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
@@ -1579,7 +1623,7 @@ class _MensProductGridState extends State<MensProductGrid> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        product['name'],
+                        product['name'].toString().tr(),
                         style: TextStyle(color: Colors.grey[600], fontSize: 11),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -1645,7 +1689,11 @@ class _MensProductGridState extends State<MensProductGrid> {
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('❌ Error: $e'),
+                                        content: Text(
+                                          'error_with_icon'.tr(
+                                            args: [e.toString()],
+                                          ),
+                                        ),
                                         backgroundColor: Colors.red,
                                         duration: const Duration(seconds: 2),
                                       ),
@@ -1710,7 +1758,7 @@ class MensCategoryTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  category.toUpperCase(),
+                  category.toUpperCase().tr(),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,

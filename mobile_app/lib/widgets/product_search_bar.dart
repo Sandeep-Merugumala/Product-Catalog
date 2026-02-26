@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:aura/firestore_service.dart';
-import 'package:aura/product_details_page.dart';
+import 'package:mobile_app/firestore_service.dart';
+import 'package:mobile_app/product_details_page.dart';
 
 class ProductSearchBar extends StatefulWidget {
   const ProductSearchBar({super.key});

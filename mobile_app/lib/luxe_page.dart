@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'widgets/luxe_game/game_engine.dart'; // Import the game engine
 
 class LuxePage extends StatelessWidget {
@@ -8,9 +9,9 @@ class LuxePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Luxe Studio',
-          style: TextStyle(
+        title: Text(
+          '${"luxe".tr()} Studio',
+          style: const TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.2,
@@ -28,14 +29,14 @@ class LuxePage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text("How to Play"),
+                  title: Text('how_to_play'.tr()),
                   content: const Text(
                     "Select items from the wardrobe below to style your model. Try to match items to get the highest Fashion Score!",
                   ),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text("Got it"),
+                      child: Text('got_it'.tr()),
                     ),
                   ],
                 ),

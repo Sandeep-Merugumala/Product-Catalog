@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:aura/firestore_service.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:mobile_app/firestore_service.dart';
 import 'home_screen.dart';
 import 'checkout_page.dart';
 import 'package:lottie/lottie.dart';
@@ -15,7 +16,7 @@ class BagPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Shopping Bag',
+          'bag'.tr(),
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
@@ -29,7 +30,7 @@ class BagPage extends StatelessWidget {
         stream: firestoreService.getCartStream(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
+            return Center(child: Text('something_went_wrong'.tr()));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -95,7 +96,7 @@ class BagPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text('SHOP NOW'),
+                    child: Text('shop_now'.tr()),
                   ),
                 ],
               ),
@@ -270,9 +271,9 @@ class BagPage extends StatelessWidget {
                               onPressed: () {
                                 firestoreService.removeFromCart(productId);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Removed from Bag'),
-                                    duration: Duration(seconds: 1),
+                                  SnackBar(
+                                    content: Text('removed_from_bag'.tr()),
+                                    duration: const Duration(seconds: 1),
                                   ),
                                 );
                               },
@@ -322,7 +323,7 @@ class BagPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: const Text('CHECKOUT'),
+                        child: Text('checkout'.tr()),
                         onPressed: () {
                           Navigator.push(
                             context,
