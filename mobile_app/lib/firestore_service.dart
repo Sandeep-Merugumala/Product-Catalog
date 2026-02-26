@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+// ignore_for_file: avoid_print
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'product_data.dart';
@@ -272,6 +273,30 @@ class FirestoreService {
     } catch (e) {
       debugPrint('❌ Error placing order: $e');
       rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getProductsByCategory(
+    String category,
+  ) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .where('category', isEqualTo: category)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        print('No products found for $category.');
+      }
+
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } catch (e) {
+      print('❌ Error fetching products by category: $e');
+      return [];
     }
   }
 

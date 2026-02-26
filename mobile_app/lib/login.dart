@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/foundation.dart';

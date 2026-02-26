@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'men_fashion_screen.dart';
 import 'women_fashion_screen.dart';
 import 'kid_fashion_screen.dart';
-import 'package:aura/firestore_service.dart';
+import 'package:mobile_app/winter_collection_screen.dart';
+import 'package:mobile_app/wedding_season_screen.dart';
+import 'package:mobile_app/firestore_service.dart';
 import 'bag_page.dart';
 import 'fwd_page.dart';
 import 'profile_page.dart';
@@ -54,31 +57,31 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Home',
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: 'home'.tr(),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.flash_on_outlined),
-              activeIcon: Icon(Icons.flash_on),
-              label: 'Fwd',
+              icon: const Icon(Icons.flash_on_outlined),
+              activeIcon: const Icon(Icons.flash_on),
+              label: 'fwd'.tr(),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.diamond_outlined),
-              activeIcon: Icon(Icons.diamond),
-              label: 'Luxe',
+              icon: const Icon(Icons.diamond_outlined),
+              activeIcon: const Icon(Icons.diamond),
+              label: 'luxe'.tr(),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag_outlined),
-              activeIcon: Icon(Icons.shopping_bag),
-              label: 'Bag',
+              icon: const Icon(Icons.shopping_bag_outlined),
+              activeIcon: const Icon(Icons.shopping_bag),
+              label: 'bag'.tr(),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'Profile',
+              icon: const Icon(Icons.person_outline),
+              activeIcon: const Icon(Icons.person),
+              label: 'profile'.tr(),
             ),
           ],
           currentIndex: _selectedIndex,
@@ -126,9 +129,9 @@ class MyntraHomeContent extends StatelessWidget {
               const CategoryMegaDeals(),
               const SizedBox(height: 12),
 
-              const SectionHeader(title: "Deal of the Day"),
+              SectionHeader(title: 'deal_of_the_day'.tr()),
               const DealOfTheDay(),
-              const SectionHeader(title: "Top Picks for You"),
+              SectionHeader(title: 'top_picks_for_you'.tr()),
               const FeaturedProductCarousel(),
               const SizedBox(height: 16),
               const FullWidthBanner(
@@ -137,16 +140,16 @@ class MyntraHomeContent extends StatelessWidget {
               ),
 
               const SizedBox(height: 12),
-              const SectionHeader(title: "Brands in Focus"),
+              SectionHeader(title: 'brands_in_focus'.tr()),
               const BrandsInFocus(),
-              const SectionHeader(title: "Shop by Category"),
+              SectionHeader(title: 'shop_by_category'.tr()),
               const ShopByCategoryGrid(),
               const SizedBox(height: 16),
               const FullWidthBanner(
                 imageUrl:
                     'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fGNsb3RoZXN8ZW58MHx8MHx8fDA%3D',
               ),
-              const SectionHeader(title: "Continue Browsing"),
+              SectionHeader(title: 'continue_browsing'.tr()),
             ],
           ),
         ),
@@ -254,7 +257,7 @@ class MyntraAppBar extends StatelessWidget {
                         Icon(Icons.search, color: Colors.grey[500], size: 20),
                         const SizedBox(width: 8),
                         Text(
-                          "Search \"Midi Skirt\"",
+                          '${"search".tr()} "Midi Skirt"',
                           style: TextStyle(
                             color: Colors.grey[500],
                             fontSize: 13,
@@ -339,7 +342,7 @@ class MyntraAppBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildTabItem("All", context, isSelected: true),
+                      _buildTabItem('all'.tr(), context, isSelected: true),
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -352,7 +355,7 @@ class MyntraAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: _buildTabItem("Men", context),
+                        child: _buildTabItem("men".tr(), context),
                       ),
                       InkWell(
                         onTap: () {
@@ -366,7 +369,7 @@ class MyntraAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: _buildTabItem("Women", context),
+                        child: _buildTabItem("women".tr(), context),
                       ),
                       InkWell(
                         onTap: () {
@@ -380,7 +383,7 @@ class MyntraAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: _buildTabItem("Kids", context),
+                        child: _buildTabItem("kids".tr(), context),
                       ),
                     ],
                   ),
@@ -442,27 +445,27 @@ class CategoryList extends StatelessWidget {
 
   final List<Map<String, dynamic>> categories = const [
     {
-      "name": "Fashion",
+      "name": "fashion",
       "img":
           "https://media.istockphoto.com/id/1484146410/photo/young-friends-complimenting-female-friend-carrying-shopping-bag.webp?a=1&b=1&s=612x612&w=0&k=20&c=X57nAy44dv-xtsbk53d5Z-7Xu9Qxyg2kR_5vtOBjI2A=",
     },
     {
-      "name": "Beauty",
+      "name": "beauty",
       "img":
           "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmVhdXR5fGVufDB8fDB8fHww",
     },
     {
-      "name": "Footwear",
+      "name": 'footwear',
       "img":
           "https://plus.unsplash.com/premium_photo-1665664652418-91f260a84842?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vdHdlYXJ8ZW58MHx8MHx8fDA%3D",
     },
     {
-      "name": "Accessories",
+      "name": 'accessories',
       "img":
           "https://images.unsplash.com/photo-1627094522148-ac0c843a1383?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2F0Y2hlcyUyMGFuZCUyMGJhZ3N8ZW58MHx8MHx8fDA%3D",
     },
     {
-      "name": "Gadgets",
+      "name": "gadgets",
       "img":
           "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGdhZGdldHN8ZW58MHx8MHx8fDA%3D",
     },
@@ -506,7 +509,7 @@ class CategoryList extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      category["name"] as String,
+                      (category["name"] as String).tr(),
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -540,26 +543,26 @@ class _BannerCarouselState extends State<BannerCarousel> {
     {
       'image':
           'https://uspoloassn.in/cdn/shop/files/SWEATERS_DEKSTOP_BANNER_1.png?v=1765187631&width=1500',
-      'title': 'Winter Collection',
-      'subtitle': 'Up to 70% OFF',
+      'title': 'winter_collection',
+      'subtitle': 'up_to_70percent_off',
     },
     {
       'image':
           'https://cdn.shopify.com/s/files/1/0667/0685/files/blog_wedding_season.jpg?v=1490982674',
-      'title': 'Wedding Season',
-      'subtitle': 'Ethnic Wear Sale',
+      'title': 'wedding_season',
+      'subtitle': 'ethnic_wear_sale',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1618677831741-6260a73ff4f9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c25lYWtlciUyMGNvbGxlY3Rpb258ZW58MHx8MHx8fDA%3D',
-      'title': 'Sneaker Fest',
-      'subtitle': 'Starting at ₹999',
+      'title': 'sneaker_fest',
+      'subtitle': 'starting_at_999',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1517420879524-86d64ac2f339?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHNtYXJ0JTIwd2F0Y2hlc3xlbnwwfHwwfHx8MA%3D%3D',
-      'title': 'Smart Watches',
-      'subtitle': 'Flat 50% OFF',
+      'title': 'smart_watches',
+      'subtitle': 'flat_50percent_off',
     },
   ];
 
@@ -609,96 +612,136 @@ class _BannerCarouselState extends State<BannerCarousel> {
               });
             },
             itemBuilder: (context, index) {
-              return AnimatedBuilder(
-                animation: _pageController,
-                builder: (context, child) {
-                  double value = 1.0;
-                  if (_pageController.position.haveDimensions) {
-                    value = (_pageController.page ?? 0.0) - index;
-                    value = (1 - (value.abs() * 0.15)).clamp(0.85, 1.0);
-                  }
-                  return Center(
-                    child: SizedBox(
-                      height: Curves.easeInOut.transform(value) * 200,
-                      child: child,
-                    ),
-                  );
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
+              return GestureDetector(
+                onTap: () {
+                  if (index == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WinterCollectionScreen(),
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.network(
-                          _banners[index]['image']!,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              color: Colors.grey[200],
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                  color: const Color(0xFFFF3F6C),
-                                ),
-                              ),
-                            );
-                          },
+                    );
+                  } else if (index == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WeddingSeasonScreen(),
+                      ),
+                    );
+                  } else if (index == 2) {
+                    // Navigate to Sneakers (Men's Footwear Tag)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const MensSection(initialIndex: 3),
+                      ),
+                    );
+                  } else if (index == 3) {
+                    // Navigate to Watches (Men's Accessories Tag)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const MensSection(initialIndex: 4),
+                      ),
+                    );
+                  }
+                },
+                child: AnimatedBuilder(
+                  animation: _pageController,
+                  builder: (context, child) {
+                    double value = 1.0;
+                    if (_pageController.position.haveDimensions) {
+                      value = _pageController.page! - index;
+                      value = (1 - (value.abs() * 0.15)).clamp(0.85, 1.0);
+                    }
+                    return Center(
+                      child: SizedBox(
+                        height: Curves.easeInOut.transform(value) * 200,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withValues(alpha: 0.5),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.network(
+                            _banners[index]['image']!,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                color: Colors.grey[200],
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value:
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress
+                                                  .expectedTotalBytes!
+                                        : null,
+                                    color: const Color(0xFFFF3F6C),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withValues(alpha: 0.5),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 16,
+                            left: 16,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _banners[index]['title']!.tr(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  _banners[index]['subtitle']!.tr(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 16,
-                          left: 16,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _banners[index]['title']!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                _banners[index]['subtitle']!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -792,9 +835,9 @@ class _FlashSaleSectionState extends State<FlashSaleSection> {
                   children: [
                     const Icon(Icons.flash_on, color: Colors.white, size: 28),
                     const SizedBox(width: 8),
-                    const Text(
-                      'FLASH SALE',
-                      style: TextStyle(
+                    Text(
+                      'flash_sale'.tr(),
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -987,7 +1030,7 @@ class CategoryMegaDeals extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
-            'MEGA DEALS',
+            'mega_deals'.tr(),
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w900,
@@ -1196,7 +1239,7 @@ class BrandShowcase extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'BRANDS IN FOCUS',
+                'brands_in_focus'.tr(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w900,
@@ -1205,7 +1248,7 @@ class BrandShowcase extends StatelessWidget {
                 ),
               ),
               Text(
-                'View All',
+                'view_all'.tr(),
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -1335,9 +1378,9 @@ class DealOfTheDay extends StatelessWidget {
                     color: const Color(0xFFFF6F00),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: const Text(
-                    'DEAL OF THE DAY',
-                    style: TextStyle(
+                  child: Text(
+                    'deal_of_the_day'.tr(),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 11,
                       fontWeight: FontWeight.w900,
@@ -1347,7 +1390,7 @@ class DealOfTheDay extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Flat 50-70% Off',
+                  'flat_50_70percent_off',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -1356,7 +1399,7 @@ class DealOfTheDay extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'On trending styles',
+                  'on_trending_styles',
                   style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                 ),
                 const SizedBox(height: 12),
@@ -1437,73 +1480,73 @@ class FeaturedProductCarousel extends StatelessWidget {
         'id': 'Nike_Shoe_001',
         'image':
             'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmlrZSUyMHNob2VzfGVufDB8fDB8fHww',
-        'title': 'Nike Air Max',
-        'subtitle': 'Running Shoes',
+        'title': 'nike_air_max',
+        'subtitle': 'running_shoes',
         'price': 4995,
         'originalPrice': 8995,
         'rating': 4.5,
         'ratingCount': '2.4k',
-        'offer': '45% OFF',
+        'offer': 'n_45percent_off',
       },
       {
         'id': 'Adidas_Shoe_002',
         'image':
             'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-        'title': 'Adidas Ultraboost',
-        'subtitle': 'Performance Wear',
+        'title': 'adidas_ultraboost',
+        'subtitle': 'performance_wear',
         'price': 6500,
         'originalPrice': 12000,
         'rating': 4.7,
         'ratingCount': '1.8k',
-        'offer': '46% OFF',
+        'offer': 'n_46percent_off',
       },
       {
         'id': 'Puma_Shoe_003',
         'image':
             'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-        'title': 'Puma RS-X',
-        'subtitle': 'Casual Sneakers',
+        'title': 'puma_rs_x',
+        'subtitle': 'casual_sneakers',
         'price': 3999,
         'originalPrice': 7999,
         'rating': 4.3,
         'ratingCount': '950',
-        'offer': '50% OFF',
+        'offer': 'n_50percent_off',
       },
       {
         'id': 'Reebok_Shoe_004',
         'image':
             'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww',
-        'title': 'Reebok Classic',
-        'subtitle': 'Everyday Comfort',
+        'title': 'reebok_classic',
+        'subtitle': 'everyday_comfort',
         'price': 2499,
         'originalPrice': 4999,
         'rating': 4.2,
         'ratingCount': '1.2k',
-        'offer': '50% OFF',
+        'offer': 'n_50percent_off',
       },
       {
         'id': 'UnderArmour_Shoe_005',
         'image':
             'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww',
-        'title': 'Under Armour',
-        'subtitle': 'Sport Style',
+        'title': 'under_armour',
+        'subtitle': 'sport_style',
         'price': 5500,
         'originalPrice': 8000,
         'rating': 4.6,
         'ratingCount': '500',
-        'offer': '30% OFF',
+        'offer': 'n_30percent_off',
       },
       {
         'id': 'Skechers_Shoe_006',
         'image':
             'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNob2VzfGVufDB8fDB8fHww',
-        'title': 'Skechers GoWalk',
-        'subtitle': 'Walking Shoes',
+        'title': 'skechers_gowalk',
+        'subtitle': 'walking_shoes',
         'price': 2999,
         'originalPrice': 4500,
         'rating': 4.4,
         'ratingCount': '3.1k',
-        'offer': '33% OFF',
+        'offer': 'n_33percent_off',
       },
     ];
 
@@ -1608,8 +1651,10 @@ class FeaturedProductCarousel extends StatelessWidget {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Added to Wishlist'),
+                                          SnackBar(
+                                            content: Text(
+                                              'added_to_wishlist'.tr(),
+                                            ),
                                             duration: Duration(seconds: 1),
                                           ),
                                         );
@@ -1621,7 +1666,11 @@ class FeaturedProductCarousel extends StatelessWidget {
                                         context,
                                       ).showSnackBar(
                                         SnackBar(
-                                          content: Text('Error: $e'),
+                                          content: Text(
+                                            'error_msg'.tr(
+                                              args: [e.toString()],
+                                            ),
+                                          ),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
@@ -1699,7 +1748,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  product['title'],
+                                  product['title'].toString().tr(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
@@ -1709,7 +1758,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  product['subtitle'],
+                                  product['subtitle'].toString().tr(),
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 11,
@@ -1728,7 +1777,9 @@ class FeaturedProductCarousel extends StatelessWidget {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Error: $e'),
+                                      content: Text(
+                                        'error_msg'.tr(args: [e.toString()]),
+                                      ),
                                       backgroundColor: Colors.red,
                                     ),
                                   );
@@ -1839,7 +1890,7 @@ class BrandsInFocus extends StatelessWidget {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/2560px-Adidas_Logo.svg.png",
     },
     {
-      "name": "Puma",
+      "name": 'puma',
       "offer": "MIN 30% OFF",
       "img":
           "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Puma_Logo.svg/2560px-Puma_Logo.svg.png",
@@ -1857,7 +1908,7 @@ class BrandsInFocus extends StatelessWidget {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Zara_Logo.svg/2560px-Zara_Logo.svg.png",
     },
     {
-      "name": "Levi's",
+      "name": 'levis',
       "offer": "MIN 55% OFF",
       "img":
           "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Levis-logo-query.png/640px-Levis-logo-query.png",
@@ -1905,7 +1956,7 @@ class BrandsInFocus extends StatelessWidget {
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) {
                         return Text(
-                          brands[index]["name"]!,
+                          brands[index]["name"]!.tr(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -1938,32 +1989,32 @@ class ShopByCategoryGrid extends StatelessWidget {
 
   final List<Map<String, dynamic>> categories = const [
     {
-      'name': 'T-Shirts',
+      'name': 't_shirts',
       'image':
           'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dCUyMHNoaXJ0c3xlbnwwfHwwfHx8MA%3D%3D',
     },
     {
-      'name': 'Jeans',
+      'name': 'jeans',
       'image':
           'https://media.istockphoto.com/id/2182097485/photo/serie-of-studio-photos-of-woman-in-classic-smart-casual-outfit-black-denim-trousers-black.webp?a=1&b=1&s=612x612&w=0&k=20&c=E-9k4wHthgTe9hhxWeprPC8cEt2DW_hdkbaQGlAwZlA=',
     },
     {
-      'name': 'Dresses',
+      'name': 'dresses',
       'image':
           'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZHJlc3Nlc3xlbnwwfHwwfHx8MA%3D%3D',
     },
     {
-      'name': 'Shoes',
+      'name': 'shoes',
       'image':
           'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww',
     },
     {
-      'name': 'Accessories',
+      'name': 'accessories',
       'image':
           'https://images.unsplash.com/photo-1590736969955-71cc94801759?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGFjY2Vzc29yaWVzfGVufDB8fDB8fHww',
     },
     {
-      'name': 'Watches',
+      'name': 'watches',
       'image':
           'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8d2F0Y2hlc3xlbnwwfHwwfHx8MA%3D%3D',
     },
@@ -2021,7 +2072,7 @@ class ShopByCategoryGrid extends StatelessWidget {
                     left: 8,
                     right: 8,
                     child: Text(
-                      categories[index]['name'] as String,
+                      (categories[index]['name'] as String).tr(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 13,
@@ -2052,8 +2103,8 @@ class ProductGrid extends StatelessWidget {
         'id': '1',
         'image':
             'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-        'title': 'Premium Brand',
-        'subtitle': 'Stylish Fashion Wear',
+        'title': 'premium_brand',
+        'subtitle': 'stylish_fashion_wear',
         'rating': 4.3,
         'ratingCount': '2.5k',
         'price': 1299,
@@ -2064,8 +2115,8 @@ class ProductGrid extends StatelessWidget {
         'id': '2',
         'image':
             'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-        'title': 'Urban Chic',
-        'subtitle': 'Trendy Streetwear',
+        'title': 'urban_chic',
+        'subtitle': 'trendy_streetwear',
         'rating': 4.5,
         'ratingCount': '1.2k',
         'price': 999,
@@ -2077,8 +2128,8 @@ class ProductGrid extends StatelessWidget {
         'id': '3',
         'image':
             'https://images.unsplash.com/photo-1604436607823-d721dfe2df46?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODN8fHdvbWVuJTIwZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-        'title': 'Elegant Wear',
-        'subtitle': 'Office & Casual',
+        'title': 'elegant_wear',
+        'subtitle': 'office_and_casual',
         'rating': 4.2,
         'ratingCount': '850',
         'price': 1599,
@@ -2089,8 +2140,8 @@ class ProductGrid extends StatelessWidget {
         'id': '4',
         'image':
             'https://images.unsplash.com/photo-1618886614638-80e3c103d31a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVuJTIwZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D',
-        'title': 'Men\'s Classic',
-        'subtitle': 'Timeless Style',
+        'title': 'men_s_classic',
+        'subtitle': 'timeless_style',
         'rating': 4.6,
         'ratingCount': '3.1k',
         'price': 1899,
@@ -2213,8 +2264,10 @@ class ProductGrid extends StatelessWidget {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Added to Wishlist'),
+                                          SnackBar(
+                                            content: Text(
+                                              'added_to_wishlist'.tr(),
+                                            ),
                                             duration: Duration(seconds: 1),
                                           ),
                                         );
@@ -2226,7 +2279,11 @@ class ProductGrid extends StatelessWidget {
                                         context,
                                       ).showSnackBar(
                                         SnackBar(
-                                          content: Text('Error: $e'),
+                                          content: Text(
+                                            'error_msg'.tr(
+                                              args: [e.toString()],
+                                            ),
+                                          ),
                                           backgroundColor: Colors.red,
                                           duration: const Duration(seconds: 2),
                                         ),
@@ -2273,7 +2330,7 @@ class ProductGrid extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product['title'],
+                        product['title'].toString().tr(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -2284,7 +2341,7 @@ class ProductGrid extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        product['subtitle'],
+                        product['subtitle'].toString().tr(),
                         style: TextStyle(color: Colors.grey[600], fontSize: 11),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -2331,14 +2388,14 @@ class ProductGrid extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text('Processing...'),
+                                title: Text('processing'.tr()),
                                 content: const Text(
                                   'Adding item to your cart.',
                                 ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text('OK'),
+                                    child: Text('ok'.tr()),
                                   ),
                                 ],
                               ),
@@ -2368,7 +2425,11 @@ class ProductGrid extends StatelessWidget {
                                   ); // Close processing dialog
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('❌ Error: $e'),
+                                      content: Text(
+                                        'error_with_icon'.tr(
+                                          args: [e.toString()],
+                                        ),
+                                      ),
                                       backgroundColor: Colors.red,
                                       duration: const Duration(seconds: 3),
                                     ),
