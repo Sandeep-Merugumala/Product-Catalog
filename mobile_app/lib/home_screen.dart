@@ -1003,28 +1003,74 @@ class CategoryMegaDeals extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             children: [
               _buildMegaDealCard(
+                context,
                 'Men\'s Fashion',
                 '50-80% OFF',
                 'https://plus.unsplash.com/premium_photo-1706806943465-68c2a32bd888?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWVucyUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D',
                 const Color(0xFF1976D2),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, a1, a2) => const MensSection(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
               ),
               _buildMegaDealCard(
+                context,
                 'Women\'s Wear',
                 '40-70% OFF',
                 'https://media.istockphoto.com/id/694044976/photo/i-know-ill-find-something-i-like-here.webp?a=1&b=1&s=612x612&w=0&k=20&c=vZ5rDmWlfTIlbh1Fx1kpw19ggGzQ5zaeZ4EoPOYo4R8=',
                 const Color(0xFFE91E63),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, a1, a2) => const WomensSection(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
               ),
               _buildMegaDealCard(
+                context,
                 'Kids Collection',
                 '30-60% OFF',
                 'https://images.unsplash.com/photo-1627859774205-83c1279a6382?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fGtpZHMlMjBmYXNoaW9ufGVufDB8fDB8fHww',
                 const Color(0xFFFF9800),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, a1, a2) => const KidsSection(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
               ),
               _buildMegaDealCard(
+                context,
                 'Beauty & More',
                 'Up to 50% OFF',
                 'https://images.unsplash.com/photo-1608979048467-6194dabc6a3d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGJlYXV0eSUyMGFuZCUyMGNvc21ldGljc3xlbnwwfHwwfHx8MA%3D%3D',
                 const Color(0xFF9C27B0),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, a1, a2) => const WomensSection(
+                        initialTabIndex: 5,
+                      ), // Grooming tab
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -1034,11 +1080,13 @@ class CategoryMegaDeals extends StatelessWidget {
   }
 
   Widget _buildMegaDealCard(
+    BuildContext context,
     String title,
     String offer,
     String imageUrl,
-    Color accentColor,
-  ) {
+    Color accentColor, {
+    VoidCallback? onTap,
+  }) {
     return Container(
       width: 280,
       margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
@@ -1115,6 +1163,16 @@ class CategoryMegaDeals extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+            ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onTap,
+                  splashColor: Colors.white.withValues(alpha: 0.3),
+                  highlightColor: Colors.white.withValues(alpha: 0.1),
+                ),
               ),
             ),
           ],
@@ -1302,29 +1360,49 @@ class DealOfTheDay extends StatelessWidget {
                   style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                 ),
                 const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF6F00),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, a1, a2) => const MensSection(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
                     borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFFF6F00).withValues(alpha: 0.3),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
+                    splashColor: Colors.white.withValues(alpha: 0.4),
+                    highlightColor: Colors.white.withValues(alpha: 0.2),
+                    child: Ink(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                    ],
-                  ),
-                  child: const Text(
-                    'SHOP NOW',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.8,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF6F00),
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(
+                              0xFFFF6F00,
+                            ).withValues(alpha: 0.3),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'SHOP NOW',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
                     ),
                   ),
                 ),

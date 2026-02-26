@@ -10,7 +10,8 @@ import 'package:aura/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WomensSection extends StatefulWidget {
-  const WomensSection({super.key});
+  final int initialTabIndex;
+  const WomensSection({super.key, this.initialTabIndex = 0});
 
   @override
   State<WomensSection> createState() => _WomensSectionState();
@@ -23,7 +24,11 @@ class _WomensSectionState extends State<WomensSection>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(
+      length: 6,
+      vsync: this,
+      initialIndex: widget.initialTabIndex,
+    );
   }
 
   @override

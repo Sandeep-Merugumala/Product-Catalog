@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,29 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_screen.dart';
-
-// --- DATA STRUCTURE FOR PARTICLES ---
-class Particle {
-  double x;
-  double y;
-  double size;
-  double speed;
-  double angle;
-  double spinSpeed;
-  double opacity;
-  bool isCube;
-
-  Particle({
-    required this.x,
-    required this.y,
-    required this.size,
-    required this.speed,
-    required this.angle,
-    required this.spinSpeed,
-    required this.opacity,
-    required this.isCube,
-  });
-}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -45,59 +21,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   bool _obscurePassword = true;
   bool _isLogin = true;
   bool _isLoading = false;
   Uint8List? _profileImageBytes;
   final ImagePicker _picker = ImagePicker();
 
-  // --- THEME COLORS ---
-  // --- THEME COLORS ---
-  final Color _primaryColor = const Color(0xFFEC407A);
-  final Color _accentColor = const Color(0xFFF48FB1);
-  final Color _lightBackgroundColorStart = const Color(0xFFF8BBD0);
-  final Color _lightBackgroundColorEnd = const Color(0xFFAD1457);
-
-  final Color _darkBackgroundColorStart = const Color(0xFF2C1E22);
-  final Color _darkBackgroundColorEnd = const Color(0xFF000000);
-
-  // --- ANIMATION CONTROLLERS ---
-  late AnimationController _mainController;
-  final List<Particle> _particles = [];
-  final int _particleCount = 30; // "WAY MORE" items
+  // Star animation
+  late AnimationController _starController;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeIn;
 
   @override
   void initState() {
     super.initState();
-
-    // 1. Setup Main Animation Loop
-    _mainController = AnimationController(
+    // Stars scroll continuously – 40 s for a full loop feels natural
+    _starController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 40),
     )..repeat();
 
-    // 2. Generate Random Particles
-    final rng = math.Random();
-    for (int i = 0; i < _particleCount; i++) {
-      _particles.add(
-        Particle(
-          x: rng.nextDouble(), // 0.0 to 1.0 (screen width percentage)
-          y: rng.nextDouble(), // 0.0 to 1.0 (screen height percentage)
-          size: rng.nextDouble() * 40 + 10, // Size 10 to 50
-          speed: rng.nextDouble() * 0.2 + 0.05, // Random upward speed
-          angle: rng.nextDouble() * math.pi * 2, // Initial rotation
-          spinSpeed:
-              (rng.nextDouble() - 0.5) * 4, // Random spin direction/speed
-          opacity: rng.nextDouble() * 0.3 + 0.1, // Random opacity
-          isCube: rng.nextBool(), // 50% chance of cube vs circle
-        ),
-      );
-    }
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _fadeIn = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
+    _fadeController.forward();
   }
 
   @override
   void dispose() {
-    _mainController.dispose();
+    _starController.dispose();
+    _fadeController.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -105,551 +61,179 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
+    final XFile? f = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
     );
-    if (pickedFile != null) {
-      final Uint8List bytes = await pickedFile.readAsBytes();
+    if (f != null) {
+      final bytes = await f.readAsBytes();
       setState(() => _profileImageBytes = bytes);
     }
   }
 
   Future<void> _submit() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      try {
-        if (_isLogin) {
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
+    try {
+      if (_isLogin) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+      } else {
+        final uc = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        String? imgUrl;
+        if (_profileImageBytes != null) {
+          final ref = FirebaseStorage.instance.ref().child(
+            'profile_images/${uc.user!.uid}.jpg',
           );
-          // AuthWrapper handles navigation
-        } else {
-          UserCredential userCredential = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                email: _emailController.text.trim(),
-                password: _passwordController.text.trim(),
-              );
-
-          String? profileImageUrl;
-
-          // Upload image to Firebase Storage if available
-          if (_profileImageBytes != null) {
-            final storageRef = FirebaseStorage.instance
-                .ref()
-                .child('profile_images')
-                .child('${userCredential.user!.uid}.jpg');
-
-            UploadTask uploadTask = storageRef.putData(_profileImageBytes!);
-            TaskSnapshot snapshot = await uploadTask;
-            profileImageUrl = await snapshot.ref.getDownloadURL();
-          }
-
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userCredential.user!.uid)
-              .set({
-                'name': _nameController.text.trim(),
-                'email': _emailController.text.trim(),
-                'profileImageUrl': profileImageUrl,
-                'createdAt': FieldValue.serverTimestamp(),
-              });
-          if (mounted) _showSnackBar('Account created!', Colors.green);
+          imgUrl = await (await ref.putData(
+            _profileImageBytes!,
+          )).ref.getDownloadURL();
         }
-      } catch (e) {
-        if (mounted) _showSnackBar(e.toString(), Colors.redAccent);
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uc.user!.uid)
+            .set({
+              'name': _nameController.text.trim(),
+              'email': _emailController.text.trim(),
+              'profileImageUrl': imgUrl,
+              'createdAt': FieldValue.serverTimestamp(),
+            });
+        if (mounted) _snack('Account created!', Colors.green);
       }
+    } catch (e) {
+      if (mounted) _snack(e.toString(), Colors.redAccent);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithGoogle() async {
     setState(() => _isLoading = true);
     try {
-      UserCredential userCredential;
-
+      UserCredential uc;
       if (kIsWeb) {
-        GoogleAuthProvider googleProvider = GoogleAuthProvider();
-        // On web: clear any stale Firebase session first so the account chooser appears fresh
         await FirebaseAuth.instance.signOut();
-        // Using signInWithPopup as requested by the user logic
-        userCredential = await FirebaseAuth.instance.signInWithPopup(
-          googleProvider,
-        );
+        uc = await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
       } else {
-        // Mobile flow
-        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-        if (googleUser == null) {
+        final g = await GoogleSignIn().signIn();
+        if (g == null) {
           setState(() => _isLoading = false);
-          return; // User cancelled
+          return;
         }
-
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        userCredential = await FirebaseAuth.instance.signInWithCredential(
-          credential,
+        final ga = await g.authentication;
+        uc = await FirebaseAuth.instance.signInWithCredential(
+          GoogleAuthProvider.credential(
+            accessToken: ga.accessToken,
+            idToken: ga.idToken,
+          ),
         );
       }
-
-      // Check if user exists in Firestore, if not create
       final doc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userCredential.user!.uid)
+          .doc(uc.user!.uid)
           .get();
-
       if (!doc.exists) {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(userCredential.user!.uid)
+            .doc(uc.user!.uid)
             .set({
-              'name': userCredential.user!.displayName ?? 'Google User',
-              'email': userCredential.user!.email,
+              'name': uc.user!.displayName ?? 'Google User',
+              'email': uc.user!.email,
               'createdAt': FieldValue.serverTimestamp(),
             });
       }
-
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
       }
     } catch (e) {
-      if (mounted) _showSnackBar(e.toString(), Colors.redAccent);
+      if (mounted) _snack(e.toString(), Colors.redAccent);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  void _showSnackBar(String message, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
-  }
+  void _snack(String msg, Color color) => ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: color));
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions for particle math
-    final Size screenSize = MediaQuery.of(context).size;
-
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Prevents background squishing
+      backgroundColor: const Color(0xFF111318),
+      resizeToAvoidBottomInset: false,
       body: Stack(
+        fit: StackFit.expand,
         children: [
-          // 1. Deep Gradient Background
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: isDarkMode
-                    ? [_darkBackgroundColorStart, _darkBackgroundColorEnd]
-                    : [_lightBackgroundColorStart, _lightBackgroundColorEnd],
-              ),
+          // ── Deep sky background ──
+          Container(color: const Color(0xFF060B14)),
+
+          // ── Animated starfield ──
+          AnimatedBuilder(
+            animation: _starController,
+            builder: (_, __) => CustomPaint(
+              painter: _StarfieldPainter(_starController.value),
+              size: size,
             ),
           ),
 
-          // 2. THE PARTICLE SYSTEM (The "Way More")
-          AnimatedBuilder(
-            animation: _mainController,
-            builder: (context, child) {
-              return Stack(
-                children: [
-                  // A. The Giant Gyroscope Rings (Background)
-                  _buildGyroscopeRing(screenSize, 300, 1.0),
-                  _buildGyroscopeRing(screenSize, 450, -0.7),
-                  _buildGyroscopeRing(screenSize, 600, 0.5),
+          // ── Very subtle dark overlay so card stays readable ──
+          Container(color: Colors.black.withValues(alpha: 0.10)),
 
-                  // B. The Floating Particles
-                  ..._particles.map((particle) {
-                    // Calculate dynamic position based on time
-                    double time = _mainController.value;
-
-                    // Vertical Movement (Looping)
-                    // We move Y upwards. (1.0 - time) makes it go up.
-                    // We add particle.speed to randomize rate.
-                    double newY = (particle.y - (time * particle.speed)) % 1.0;
-                    if (newY < 0) newY += 1.0;
-
-                    // Horizontal Wobble (Sine Wave)
-                    double newX =
-                        particle.x +
-                        (math.sin((time * 5) + particle.angle) * 0.05);
-
-                    return Positioned(
-                      top: newY * screenSize.height,
-                      left: newX * screenSize.width,
-                      child: Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()
-                          ..setEntry(3, 2, 0.001) // Perspective
-                          ..rotateX(
-                            (time * particle.spinSpeed) + particle.angle,
-                          )
-                          ..rotateY(
-                            (time * particle.spinSpeed) + particle.angle,
-                          ),
-                        child: Container(
-                          width: particle.size,
-                          height: particle.size,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(
-                              alpha: particle.opacity,
-                            ),
-                            // If it's a cube, borderRadius is small. If sphere, it's 50%.
-                            borderRadius: BorderRadius.circular(
-                              particle.isCube ? 8 : particle.size / 2,
-                            ),
-                            border: Border.all(
-                              color: Colors.white.withValues(
-                                alpha: particle.opacity * 1.5,
-                              ),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: _primaryColor.withValues(alpha: 0.2),
-                                blurRadius: 15,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              );
-            },
-          ),
-
-          // 3. Glassmorphism Blur Layer (Optional: Makes text readable)
-          BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 2,
-              sigmaY: 2,
-            ), // Subtle blur on particles
-            child: Container(color: Colors.transparent),
-          ),
-
-          // 4. Main Foreground UI
+          // ── Content ──
           SafeArea(
-            child: Stack(
-              children: [
-                // Back Button
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                    onPressed: () {
-                      if (Navigator.of(context).canPop()) {
-                        Navigator.of(context).pop();
-                      } else {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        );
-                      }
-                    },
+            child: FadeTransition(
+              opacity: _fadeIn,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 4,
+                    left: 4,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white70,
+                        size: 18,
+                      ),
+                      onPressed: () {
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        } else {
+                          // LoginPage is the root — go to HomeScreen and clear stack
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => const HomeScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(24, 50, 24, 40),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // --- PROFILE IMAGE ---
-                        GestureDetector(
-                          onTap: _isLogin ? null : _pickImage,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              // Rotating Glow Ring around profile
-                              RotationTransition(
-                                turns: _mainController,
-                                child: Container(
-                                  width: 110,
-                                  height: 110,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: SweepGradient(
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.white.withValues(alpha: 0.8),
-                                        Colors.transparent,
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: CircleAvatar(
-                                  radius: 45,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage: _profileImageBytes != null
-                                      ? MemoryImage(_profileImageBytes!)
-                                      : null,
-                                  child: _profileImageBytes == null
-                                      ? Icon(
-                                          Icons.person,
-                                          size: 40,
-                                          color: _primaryColor,
-                                        )
-                                      : null,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        // --- GLASS CARD ---
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                            child: Container(
-                              padding: const EdgeInsets.all(32),
-                              decoration: BoxDecoration(
-                                color:
-                                    (isDarkMode ? Colors.black : Colors.white)
-                                        .withValues(
-                                          alpha: 0.85,
-                                        ), // Glass opacity
-                                borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                  color:
-                                      (isDarkMode
-                                              ? Colors.grey[800]!
-                                              : Colors.white)
-                                          .withValues(alpha: 0.6),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      _isLogin
-                                          ? 'Hello There!'
-                                          : 'Start Journey',
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                        color: isDarkMode
-                                            ? Colors.white
-                                            : Colors.grey[800],
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 30),
-
-                                    if (!_isLogin) ...[
-                                      _buildTextField(
-                                        _nameController,
-                                        'Full Name',
-                                        Icons.person_outline,
-                                        isDarkMode,
-                                      ),
-                                      const SizedBox(height: 16),
-                                    ],
-
-                                    _buildTextField(
-                                      _emailController,
-                                      'Email',
-                                      Icons.email_outlined,
-                                      isDarkMode,
-                                    ),
-                                    const SizedBox(height: 16),
-
-                                    TextFormField(
-                                      controller: _passwordController,
-                                      obscureText: _obscurePassword,
-                                      decoration: InputDecoration(
-                                        labelText: 'Password',
-                                        prefixIcon: Icon(
-                                          Icons.lock_outline,
-                                          color: _accentColor,
-                                        ),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _obscurePassword
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: _accentColor,
-                                          ),
-                                          onPressed: () => setState(
-                                            () => _obscurePassword =
-                                                !_obscurePassword,
-                                          ),
-                                        ),
-                                        filled: true,
-                                        fillColor: isDarkMode
-                                            ? Colors.grey[900]
-                                            : Colors.pink[50],
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            15,
-                                          ),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 24),
-
-                                    ElevatedButton(
-                                      onPressed: _submit,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: _primaryColor,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            15,
-                                          ),
-                                        ),
-                                        elevation: 8,
-                                      ),
-                                      child: _isLoading
-                                          ? const SizedBox(
-                                              height: 20,
-                                              width: 20,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                                strokeWidth: 2,
-                                              ),
-                                            )
-                                          : Text(
-                                              _isLogin ? 'LOGIN' : 'SIGN UP',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                    ),
-                                    const SizedBox(height: 16),
-
-                                    // OR Divider
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Divider(
-                                            color: Colors.grey[400],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          ),
-                                          child: Text(
-                                            'OR',
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Divider(
-                                            color: Colors.grey[400],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    const SizedBox(height: 16),
-
-                                    // Google Sign In Button
-                                    OutlinedButton.icon(
-                                      onPressed: _signInWithGoogle,
-                                      icon: Image.network(
-                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
-                                        height: 20,
-                                      ),
-                                      label: Text(
-                                        'Sign in with Google',
-                                        style: TextStyle(
-                                          color: isDarkMode
-                                              ? Colors.white70
-                                              : Colors.grey[700],
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      style: OutlinedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 14,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            15,
-                                          ),
-                                        ),
-                                        side: BorderSide(
-                                          color: Colors.grey[300]!,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Toggle Button
-                        GestureDetector(
-                          onTap: () => setState(() => _isLogin = !_isLogin),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              _isLogin ? "Create an Account" : "Back to Login",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
+                        const SizedBox(height: 16),
+                        _buildHeader(),
+                        const SizedBox(height: 32),
+                        _buildCard(),
+                        const SizedBox(height: 24),
+                        _buildToggleRow(),
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -657,25 +241,176 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
-  // Helper to build the giant background rings
-  Widget _buildGyroscopeRing(Size screenSize, double size, double speedMult) {
-    return Positioned(
-      top: (screenSize.height - size) / 2,
-      left: (screenSize.width - size) / 2,
-      child: Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.001) // Perspective
-          ..rotateX(_mainController.value * 2 * math.pi * speedMult)
-          ..rotateY(_mainController.value * 2 * math.pi * (speedMult * 0.5)),
+  // ─── Header ───────────────────────────────
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: _isLogin ? null : _pickImage,
+          child: Center(
+            child: Stack(
+              children: [
+                Container(
+                  width: 78,
+                  height: 78,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF667EEA).withValues(alpha: 0.4),
+                        blurRadius: 20,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: _profileImageBytes != null
+                      ? ClipOval(
+                          child: Image.memory(
+                            _profileImageBytes!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.shopping_bag_outlined,
+                          color: Colors.white,
+                          size: 34,
+                        ),
+                ),
+                if (!_isLogin)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF667EEA),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          _isLogin ? 'Sign in' : 'Create account',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          _isLogin ? 'Good to see you again' : 'Start your shopping journey',
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.45),
+            fontSize: 14,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ─── Card ─────────────────────────────────
+  Widget _buildCard() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
-          width: size,
-          height: size,
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.05), // Very faint
-              width: 20, // Thick faint lines
+            color: Colors.white.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (!_isLogin) ...[
+                  _inputField(
+                    controller: _nameController,
+                    label: 'Full name',
+                    icon: Icons.person_outline_rounded,
+                    validator: (v) =>
+                        v == null || v.isEmpty ? 'Enter your name' : null,
+                  ),
+                  const SizedBox(height: 14),
+                ],
+                _inputField(
+                  controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.mail_outline_rounded,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (v) => v == null || !v.contains('@')
+                      ? 'Valid email required'
+                      : null,
+                ),
+                const SizedBox(height: 14),
+                _inputField(
+                  controller: _passwordController,
+                  label: 'Password',
+                  icon: Icons.lock_outline_rounded,
+                  obscure: _obscurePassword,
+                  validator: (v) =>
+                      v == null || v.length < 6 ? 'Min 6 characters' : null,
+                  suffix: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.white38,
+                      size: 18,
+                    ),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
+                  ),
+                ),
+                const SizedBox(height: 22),
+                _primaryButton(),
+                const SizedBox(height: 18),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white.withValues(alpha: 0.12),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        'or',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.35),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white.withValues(alpha: 0.12),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                _googleButton(),
+              ],
             ),
           ),
         ),
@@ -683,28 +418,227 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildTextField(
-    TextEditingController controller,
-    String label,
-    IconData icon,
-    bool isDarkMode,
-  ) {
+  Widget _inputField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool obscure = false,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+    Widget? suffix,
+  }) {
     return TextFormField(
       controller: controller,
-      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black87),
+      obscureText: obscure,
+      keyboardType: keyboardType,
+      style: const TextStyle(color: Colors.white, fontSize: 14),
+      validator: validator,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
+          color: Colors.white.withValues(alpha: 0.45),
+          fontSize: 13,
         ),
-        prefixIcon: Icon(icon, color: _accentColor),
+        prefixIcon: Icon(
+          icon,
+          color: Colors.white.withValues(alpha: 0.4),
+          size: 18,
+        ),
+        suffixIcon: suffix,
         filled: true,
-        fillColor: isDarkMode ? Colors.grey[900] : Colors.pink[50],
+        fillColor: Colors.white.withValues(alpha: 0.07),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF667EEA), width: 1.5),
+        ),
+        errorStyle: const TextStyle(color: Color(0xFFFF6B6B), fontSize: 11),
+      ),
+    );
+  }
+
+  Widget _primaryButton() {
+    return GestureDetector(
+      onTap: _isLoading ? null : _submit,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: 50,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF667EEA).withValues(alpha: 0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: _isLoading
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : Text(
+                  _isLogin ? 'Sign in' : 'Create account',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    letterSpacing: 0.2,
+                  ),
+                ),
         ),
       ),
     );
   }
+
+  Widget _googleButton() {
+    return GestureDetector(
+      onTap: _isLoading ? null : _signInWithGoogle,
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
+              height: 18,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.g_mobiledata, color: Colors.white, size: 20),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'Continue with Google',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.8),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Toggle ───────────────────────────────
+  Widget _buildToggleRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          _isLogin ? "Don't have an account? " : 'Already a member? ',
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.45),
+            fontSize: 13,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() => _isLogin = !_isLogin);
+            _fadeController.reset();
+            _fadeController.forward();
+          },
+          child: const Text(
+            'Click here',
+            style: TextStyle(
+              color: Color(0xFF667EEA),
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// PAINTER: Moving starfield
+// Stars are seeded from a fixed Random so they never jump between frames.
+// t goes 0.0 → 1.0 looping; each star drifts upward at its own speed.
+// ─────────────────────────────────────────────────────────────────────────
+class _StarfieldPainter extends CustomPainter {
+  final double t; // 0.0 → 1.0
+
+  static final _rng = math.Random(42); // fixed seed keeps positions stable
+  static const int _count = 180;
+
+  static final List<double> _sx = List.generate(
+    _count,
+    (_) => _rng.nextDouble(),
+  ); // x fraction
+  static final List<double> _sy = List.generate(
+    _count,
+    (_) => _rng.nextDouble(),
+  ); // y fraction
+  static final List<double> _sz = List.generate(
+    _count,
+    (_) => _rng.nextDouble() * 1.8 + 0.3,
+  ); // radius
+  static final List<double> _sp = List.generate(
+    _count,
+    (_) => _rng.nextDouble() * 0.28 + 0.08,
+  ); // speed
+  static final List<double> _op = List.generate(
+    _count,
+    (_) => _rng.nextDouble() * 0.55 + 0.35,
+  );
+  static final List<bool> _twinkle = List.generate(
+    _count,
+    (_) => _rng.nextBool(),
+  );
+
+  _StarfieldPainter(this.t);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (int i = 0; i < _count; i++) {
+      double y = (_sy[i] - t * _sp[i]) % 1.0;
+      if (y < 0) y += 1.0;
+      final double x = _sx[i] * size.width;
+      final double py = y * size.height;
+      final double r = _sz[i];
+
+      double opacity = _op[i];
+      if (_twinkle[i]) {
+        opacity *= 0.55 + 0.45 * math.sin(t * 2 * math.pi * 2.5 + i * 1.7);
+      }
+
+      final paint = Paint()
+        ..color = Colors.white.withValues(alpha: opacity)
+        ..maskFilter = r > 1.2
+            ? const MaskFilter.blur(BlurStyle.normal, 0.8)
+            : null;
+
+      canvas.drawCircle(Offset(x, py), r, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_StarfieldPainter old) => old.t != t;
 }
