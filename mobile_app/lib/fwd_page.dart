@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 // ─────────────────────────────────────────────
 //  FWD PAGE – Ugadi & Pongal Festival Edition
 // ─────────────────────────────────────────────
@@ -13,7 +13,6 @@ const Color _turmeric = Color(0xFFFFB300);
 const Color _deepGreen = Color(0xFF2E7D32);
 const Color _leafGreen = Color(0xFF43A047);
 const Color _crimson = Color(0xFFC62828);
-const Color _gold = Color(0xFFFFD700);
 const Color _cream = Color(0xFFFFF8E1);
 const Color _darkBrown = Color(0xFF3E2723);
 
@@ -116,75 +115,75 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
     {
       'image':
           'https://images.unsplash.com/photo-1610189352649-6f773f7c8b3b?w=800&auto=format&fit=crop&q=80',
-      'title': 'Ugadi & Pongal Utsav 🌸',
-      'subtitle': 'Up to 70% OFF on Ethnic Wear',
-      'tag': 'FESTIVAL SPECIAL',
+      'title': 'ugadi_and_pongal_utsav',
+      'subtitle': 'up_to_70percent_off_on_ethnic_wear',
+      'tag': 'festival_special',
       'color': '0xFFFF6B00',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80',
-      'title': 'Silk Sarees & Lehengas',
-      'subtitle': 'Kanjivaram from ₹2,999',
-      'tag': 'ETHNIC EDIT',
+      'title': 'silk_sarees_and_lehengas',
+      'subtitle': 'kanjivaram_from_2_999',
+      'tag': 'ethnic_edit',
       'color': '0xFFC62828',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=800&auto=format&fit=crop&q=80',
-      'title': 'Festive Jewellery',
-      'subtitle': 'Temple & Gold Jewellery from ₹999',
-      'tag': 'GOLD & GEMS',
+      'title': 'festive_jewellery',
+      'subtitle': 'temple_and_gold_jewellery_from_999',
+      'tag': 'gold_and_gems',
       'color': '0xFFFFB300',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&auto=format&fit=crop&q=80',
-      'title': 'Puja & Home Decor',
-      'subtitle': 'Rangoli, Diyas & Flowers',
-      'tag': 'HOME FESTIVE',
+      'title': 'puja_and_home_decor',
+      'subtitle': 'rangoli_diyas_and_flowers',
+      'tag': 'home_festive',
       'color': '0xFF2E7D32',
     },
   ];
 
   static const List<Map<String, dynamic>> _categories = [
     {
-      'label': 'Sarees',
+      'label': 'sarees',
       'icon': Icons.woman,
       'color': _crimson,
       'img':
           'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=300&auto=format&fit=crop&q=80',
     },
     {
-      'label': 'Kurtas',
+      'label': 'kurtas',
       'icon': Icons.man,
       'color': _saffron,
       'img':
           'https://images.unsplash.com/photo-1594938298603-c8148c4b4c4a?w=300&auto=format&fit=crop&q=80',
     },
     {
-      'label': 'Jewellery',
+      'label': 'jewellery',
       'icon': Icons.diamond,
       'color': _turmeric,
       'img':
           'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&auto=format&fit=crop&q=80',
     },
     {
-      'label': 'Footwear',
+      'label': 'footwear',
       'icon': Icons.hiking,
       'color': _deepGreen,
       'img':
           'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=80',
     },
     {
-      'label': 'Home Decor',
+      'label': 'home_decor',
       'icon': Icons.home,
       'color': _leafGreen,
       'img':
           'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300&auto=format&fit=crop&q=80',
     },
     {
-      'label': 'Gifts',
+      'label': 'gifts',
       'icon': Icons.card_giftcard,
       'color': _darkBrown,
       'img':
@@ -194,69 +193,69 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
 
   static const List<Map<String, dynamic>> _flashDeals = [
     {
-      'name': 'Kanjivaram Silk Saree',
-      'brand': 'Nalli Silks',
+      'name': 'kanjivaram_silk_saree',
+      'brand': 'nalli_silks',
       'price': '₹3,499',
       'original': '₹8,999',
       'discount': '61% OFF',
       'rating': '4.8',
       'img':
           'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400&auto=format&fit=crop&q=80',
-      'tag': 'BESTSELLER',
+      'tag': 'bestseller',
     },
     {
-      'name': 'Men\'s Dhoti Kurta Set',
-      'brand': 'Fabindia',
+      'name': 'men_s_dhoti_kurta_set',
+      'brand': 'fabindia',
       'price': '₹1,299',
       'original': '₹3,499',
       'discount': '63% OFF',
       'rating': '4.6',
       'img':
           'https://images.unsplash.com/photo-1594938298603-c8148c4b4c4a?w=400&auto=format&fit=crop&q=80',
-      'tag': 'TRENDING',
+      'tag': 'trending',
     },
     {
-      'name': 'Temple Gold Necklace',
-      'brand': 'Tanishq',
+      'name': 'temple_gold_necklace',
+      'brand': 'tanishq',
       'price': '₹2,799',
       'original': '₹5,999',
       'discount': '53% OFF',
       'rating': '4.9',
       'img':
           'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&auto=format&fit=crop&q=80',
-      'tag': 'HOT',
+      'tag': 'hot',
     },
     {
-      'name': 'Kolhapuri Chappals',
-      'brand': 'Bata',
+      'name': 'kolhapuri_chappals',
+      'brand': 'bata',
       'price': '₹799',
       'original': '₹1,799',
       'discount': '56% OFF',
       'rating': '4.5',
       'img':
           'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&auto=format&fit=crop&q=80',
-      'tag': 'FESTIVE',
+      'tag': 'festive',
     },
   ];
 
   static const List<Map<String, dynamic>> _festiveGuide = [
     {
-      'title': 'For Women',
-      'subtitle': 'Sarees, Lehengas & Jewellery',
+      'title': 'for_women',
+      'subtitle': 'sarees_lehengas_and_jewellery',
       'img':
           'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&auto=format&fit=crop&q=80',
       'color': _crimson,
     },
     {
-      'title': 'For Men',
-      'subtitle': 'Kurtas, Dhotis & Sherwanis',
+      'title': 'for_men',
+      'subtitle': 'kurtas_dhotis_and_sherwanis',
       'img':
           'https://images.unsplash.com/photo-1488161628813-04466f872be2?w=500&auto=format&fit=crop&q=80',
       'color': _deepGreen,
     },
     {
-      'title': 'Home & Puja',
-      'subtitle': 'Decor, Diyas & Rangoli',
+      'title': 'home_and_puja',
+      'subtitle': 'decor_diyas_and_rangoli',
       'img':
           'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=80',
       'color': _saffron,
@@ -265,26 +264,26 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
 
   static const List<Map<String, dynamic>> _specialOffers = [
     {
-      'title': 'Buy 2 Get 1 Free',
-      'desc': 'On all ethnic wear',
+      'title': 'buy_2_get_1_free',
+      'desc': 'on_all_ethnic_wear',
       'icon': Icons.redeem,
       'color': _saffron,
     },
     {
-      'title': 'Free Gift Wrap',
-      'desc': 'On orders above ₹1,499',
+      'title': 'free_gift_wrap',
+      'desc': 'on_orders_above_1_499',
       'icon': Icons.card_giftcard,
       'color': _crimson,
     },
     {
-      'title': 'Express Delivery',
-      'desc': 'Delivered before Ugadi!',
+      'title': 'express_delivery',
+      'desc': 'delivered_before_ugadi',
       'icon': Icons.local_shipping,
       'color': _deepGreen,
     },
     {
-      'title': 'Extra 15% Off',
-      'desc': 'Use code: UGADI15',
+      'title': 'extra_15percent_off',
+      'desc': 'use_code_ugadi15',
       'icon': Icons.discount,
       'color': _turmeric,
     },
@@ -292,8 +291,8 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
 
   static const List<Map<String, dynamic>> _products = [
     {
-      'name': 'Pattu Pavadai Set',
-      'brand': 'Pothys',
+      'name': 'pattu_pavadai_set',
+      'brand': 'pothys',
       'price': '₹1,899',
       'original': '₹3,999',
       'discount': '53%',
@@ -302,8 +301,8 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
           'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400&auto=format&fit=crop&q=80',
     },
     {
-      'name': 'Gold Jhumka Earrings',
-      'brand': 'Malabar Gold',
+      'name': 'gold_jhumka_earrings',
+      'brand': 'malabar_gold',
       'price': '₹1,499',
       'original': '₹2,999',
       'discount': '50%',
@@ -312,8 +311,8 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
           'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&auto=format&fit=crop&q=80',
     },
     {
-      'name': 'Angavastram Shawl',
-      'brand': 'Fabindia',
+      'name': 'angavastram_shawl',
+      'brand': 'fabindia',
       'price': '₹699',
       'original': '₹1,499',
       'discount': '53%',
@@ -322,8 +321,8 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
           'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&auto=format&fit=crop&q=80',
     },
     {
-      'name': 'Brass Puja Thali Set',
-      'brand': 'Craftsvilla',
+      'name': 'brass_puja_thali_set',
+      'brand': 'craftsvilla',
       'price': '₹899',
       'original': '₹1,999',
       'discount': '55%',
@@ -332,8 +331,8 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
           'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&auto=format&fit=crop&q=80',
     },
     {
-      'name': 'Anarkali Suit',
-      'brand': 'W for Woman',
+      'name': 'anarkali_suit',
+      'brand': 'w_for_woman',
       'price': '₹1,599',
       'original': '₹3,499',
       'discount': '54%',
@@ -342,8 +341,8 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
           'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&auto=format&fit=crop&q=80',
     },
     {
-      'name': 'Sandalwood Attar',
-      'brand': 'Forest Essentials',
+      'name': 'sandalwood_attar',
+      'brand': 'forest_essentials',
       'price': '₹1,199',
       'original': '₹2,499',
       'discount': '52%',
@@ -398,12 +397,12 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                   _buildBannerCarousel(),
                   _buildSpecialOffersRow(),
                   _buildSectionTitle(
-                    'Shop by Category',
+                    'shop_by_category'.tr(),
                     subtitle: 'Celebrate in style 🌺',
                   ),
                   _buildCategoryChips(),
                   _buildSectionTitle(
-                    'Festival Flash Deals',
+                    'festival_flash_deals'.tr(),
                     subtitle: 'Limited stock – grab fast! ⚡',
                   ),
                   _buildFlashDeals(),
@@ -653,7 +652,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            b['tag']!,
+                            b['tag']!.tr(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 9,
@@ -676,7 +675,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              b['title']!,
+                              b['title']!.tr(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -685,7 +684,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              b['subtitle']!,
+                              b['subtitle']!.tr(),
                               style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 13,
@@ -775,7 +774,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            offer['title'] as String,
+                            (offer['title'] as String).tr(),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
@@ -785,7 +784,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            offer['desc'] as String,
+                            (offer['desc'] as String).tr(),
                             style: TextStyle(
                               fontSize: 9,
                               color: Colors.grey[600],
@@ -915,7 +914,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  cat['label'] as String,
+                  (cat['label'] as String).tr(),
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
@@ -937,7 +936,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
 
   Widget _buildFlashDeals() {
     return SizedBox(
-      height: 240,
+      height: 260,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -996,7 +995,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          deal['tag'] as String,
+                          (deal['tag'] as String).tr(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 8,
@@ -1024,7 +1023,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                           ],
                         ),
                         child: Text(
-                          deal['discount'] as String,
+                          (deal['discount'] as String).tr(),
                           style: const TextStyle(
                             color: _saffron,
                             fontSize: 9,
@@ -1041,7 +1040,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        deal['brand'] as String,
+                        (deal['brand'] as String).tr(),
                         style: TextStyle(
                           fontSize: 10,
                           color: Colors.grey[500],
@@ -1049,7 +1048,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                         ),
                       ),
                       Text(
-                        deal['name'] as String,
+                        (deal['name'] as String).tr(),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -1173,7 +1172,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                g['title'] as String,
+                                (g['title'] as String).tr(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 13,
@@ -1181,7 +1180,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
                                 ),
                               ),
                               Text(
-                                g['subtitle'] as String,
+                                (g['subtitle'] as String).tr(),
                                 style: const TextStyle(
                                   color: Colors.white70,
                                   fontSize: 9,
@@ -1371,7 +1370,7 @@ class _ProductCardState extends State<_ProductCard>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    p['brand'] as String,
+                    (p['brand'] as String).tr(),
                     style: TextStyle(
                       fontSize: 9,
                       color: Colors.grey[500],
@@ -1379,7 +1378,7 @@ class _ProductCardState extends State<_ProductCard>
                     ),
                   ),
                   Text(
-                    p['name'] as String,
+                    (p['name'] as String).tr(),
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,

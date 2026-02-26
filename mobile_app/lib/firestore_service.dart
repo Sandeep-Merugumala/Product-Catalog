@@ -180,4 +180,28 @@ class FirestoreService {
       rethrow;
     }
   }
+
+  Future<List<Map<String, dynamic>>> getProductsByCategory(
+    String category,
+  ) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .where('category', isEqualTo: category)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        print('No products found for $category.');
+      }
+
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } catch (e) {
+      print('❌ Error fetching products by category: $e');
+      return [];
+    }
+  }
 }

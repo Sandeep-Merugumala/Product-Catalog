@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/firestore_service.dart';
 import 'home_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CheckoutPage extends StatefulWidget {
   final double totalAmount;
@@ -79,7 +80,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     (route) => false,
                   );
                 },
-                child: const Text('OK'),
+                child: Text('ok'.tr()),
               ),
             ],
           ),
@@ -89,7 +90,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to place order: $e'),
+            content: Text('failed_to_place_order'.tr(args: [e.toString()])),
             backgroundColor: Colors.red,
           ),
         );
@@ -157,9 +158,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       Expanded(
                         child: TextField(
                           controller: _addressController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Enter delivery address',
+                            hintText: 'enter_delivery_address'.tr(),
                             isDense: true,
                           ),
                           maxLines: 2,
@@ -217,7 +218,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         _paymentMethod = value!;
                       });
                     },
-                    title: const Text('Cash on Delivery (Cash/UPI)'),
+                    title: Text('cash_on_delivery'.tr()),
                     activeColor: const Color(0xFFFF3F6C),
                   ),
                   const Divider(height: 1),
@@ -229,8 +230,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         _paymentMethod = value!;
                       });
                     },
-                    title: const Text('Credit/Debit Card / Netbanking'),
-                    subtitle: const Text('Coming soon'),
+                    title: Text('credit_debit_card'.tr()),
+                    subtitle: Text('coming_soon'.tr()),
                     activeColor: const Color(0xFFFF3F6C),
                     // enabled: false, // For now enabling it as a mock
                   ),
@@ -262,7 +263,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Total Amount'),
+                      Text('total_amount'.tr()),
                       Text(
                         '₹${widget.totalAmount.toStringAsFixed(0)}',
                         style: const TextStyle(fontWeight: FontWeight.bold),

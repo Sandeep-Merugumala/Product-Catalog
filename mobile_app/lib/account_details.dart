@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({super.key});
@@ -62,15 +63,15 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Profile Updated Successfully')),
+              SnackBar(content: Text('profile_updated_successfully'.tr())),
             );
           }
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Error: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('error_msg'.tr(args: [e.toString()]))),
+          );
         }
       } finally {
         if (mounted) {
@@ -137,21 +138,21 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                     TextFormField(
                       controller: _emailController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Email ID',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'email_id'.tr(),
+                        border: const OutlineInputBorder(),
                         enabled: false, // Visual cue that it's read-only
                         filled: true,
-                        fillColor: Color(0xFFF5F5F5),
+                        fillColor: const Color(0xFFF5F5F5),
                       ),
                     ),
                     const SizedBox(height: 24),
 
                     TextFormField(
                       controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Full Name',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: 'full_name'.tr(),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -165,10 +166,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                     TextFormField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        labelText: 'Mobile Number',
-                        border: OutlineInputBorder(),
-                        hintText: 'Add your mobile number',
+                      decoration: InputDecoration(
+                        labelText: 'mobile_number'.tr(),
+                        border: const OutlineInputBorder(),
+                        hintText: 'add_your_mobile_number'.tr(),
                       ),
                     ),
                     const SizedBox(height: 8),

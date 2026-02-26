@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/theme_animator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +35,7 @@ class ProfilePage extends StatelessWidget {
     if (user == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+          title: Text('profile'.tr()),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
           elevation: 0,
@@ -47,13 +48,16 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Icon(Icons.person_outline, size: 100, color: Colors.grey[400]),
                 const SizedBox(height: 24),
-                const Text(
-                  'Please Login',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Text(
+                  'please_login'.tr(),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Login to view your profile and orders',
+                  'login_to_view_profile'.tr(),
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
@@ -77,9 +81,9 @@ class ProfilePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      'Login / Sign Up',
-                      style: TextStyle(fontSize: 16),
+                    child: Text(
+                      'login_sign_up'.tr(),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 ),
@@ -93,7 +97,7 @@ class ProfilePage extends StatelessWidget {
     // If logged in, show profile page
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('profile'.tr()),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
         elevation: 0,
@@ -227,15 +231,15 @@ class ProfilePage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Become An Insider',
-                                    style: TextStyle(
+                                  Text(
+                                    'become_an_insider'.tr(),
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
-                                    'Extra Rewards and Better Discounts!',
+                                    'extra_rewards_description'.tr(),
                                     style: TextStyle(
                                       fontSize: 12,
                                       color:
@@ -261,7 +265,7 @@ class ProfilePage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              child: const Text('Know More'),
+                              child: Text('know_more'.tr()),
                             ),
                           ],
                         ),
@@ -278,29 +282,29 @@ class ProfilePage extends StatelessWidget {
                       _buildMenuItem(
                         context,
                         icon: Icons.shopping_bag_outlined,
-                        title: 'Orders',
-                        subtitle: 'Check your order status',
+                        title: 'orders'.tr(),
+                        subtitle: 'check_order_status'.tr(),
                         onTap: () {},
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.card_membership,
-                        title: 'Insider',
-                        subtitle: 'View benefits and rewards',
+                        title: 'insider'.tr(),
+                        subtitle: 'view_benefits_rewards'.tr(),
                         onTap: () {},
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.help_outline,
-                        title: 'Help Center',
-                        subtitle: 'Get support and FAQs',
+                        title: 'help_center'.tr(),
+                        subtitle: 'get_support_faqs'.tr(),
                         onTap: () {},
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.local_offer_outlined,
-                        title: 'Coupons',
-                        subtitle: 'View available offers',
+                        title: 'coupons'.tr(),
+                        subtitle: 'view_available_offers'.tr(),
                         onTap: () {},
                       ),
                       Theme(
@@ -320,7 +324,7 @@ class ProfilePage extends StatelessWidget {
                             color: Theme.of(context).iconTheme.color,
                           ),
                           title: Text(
-                            'Manage Account',
+                            'manage_account'.tr(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -330,7 +334,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            'Profile, Addresses',
+                            'profile_addresses'.tr(),
                             style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: 12,
@@ -383,9 +387,9 @@ class ProfilePage extends StatelessWidget {
                                               ),
                                             ),
                                             const SizedBox(height: 8),
-                                            const Text(
-                                              'Account Details',
-                                              style: TextStyle(
+                                            Text(
+                                              'account_details'.tr(),
+                                              style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 12,
                                               ),
@@ -432,9 +436,9 @@ class ProfilePage extends StatelessWidget {
                                               ),
                                             ),
                                             const SizedBox(height: 8),
-                                            const Text(
-                                              'Addresses',
-                                              style: TextStyle(
+                                            Text(
+                                              'addresses'.tr(),
+                                              style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 12,
                                               ),
@@ -461,15 +465,15 @@ class ProfilePage extends StatelessWidget {
                       _buildMenuItem(
                         context,
                         icon: Icons.favorite_border,
-                        title: 'Wishlist',
-                        subtitle: 'Your most loved styles',
+                        title: 'wishlist'.tr(),
+                        subtitle: 'your_most_loved_styles'.tr(),
                         onTap: () {},
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.settings_outlined,
-                        title: 'Settings',
-                        subtitle: 'Manage notifications',
+                        title: 'settings'.tr(),
+                        subtitle: 'manage_notifications'.tr(),
                         onTap: () {},
                       ),
                       Padding(
@@ -491,16 +495,16 @@ class ProfilePage extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'Dark Mode',
-                                      style: TextStyle(
+                                    Text(
+                                      'theme'.tr(),
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
-                                      'Toggle app theme',
+                                      'toggle_app_theme'.tr(),
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey[600],
@@ -532,6 +536,78 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.language_outlined,
+                                  size: 28,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                const SizedBox(width: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'language'.tr(),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'change_app_language'.tr(),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            DropdownButton<Locale>(
+                              value: context.locale,
+                              underline: const SizedBox(),
+                              items: const [
+                                DropdownMenuItem(
+                                  value: Locale('en'),
+                                  child: Text('English'),
+                                ),
+                                DropdownMenuItem(
+                                  value: Locale('hi'),
+                                  child: Text('हिंदी'),
+                                ),
+                                DropdownMenuItem(
+                                  value: Locale('te'),
+                                  child: Text('తెలుగు'),
+                                ),
+                                DropdownMenuItem(
+                                  value: Locale('ml'),
+                                  child: Text('മലയാളം'),
+                                ),
+                                DropdownMenuItem(
+                                  value: Locale('ta'),
+                                  child: Text('தமிழ்'),
+                                ),
+                              ],
+                              onChanged: (Locale? newLocale) {
+                                if (newLocale != null) {
+                                  context.setLocale(newLocale);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -542,11 +618,11 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildFooterLink('FAQs'),
-                      _buildFooterLink('ABOUT US'),
-                      _buildFooterLink('TERMS OF USE'),
-                      _buildFooterLink('PRIVACY POLICY'),
-                      _buildFooterLink('GRIEVANCE REDRESSAL'),
+                      _buildFooterLink('faqs'.tr()),
+                      _buildFooterLink('about_us'.tr()),
+                      _buildFooterLink('terms_of_use'.tr()),
+                      _buildFooterLink('privacy_policy'.tr()),
+                      _buildFooterLink('grievance_redressal'.tr()),
                     ],
                   ),
                 ),
@@ -587,9 +663,9 @@ class ProfilePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
-                        'LOG OUT',
-                        style: TextStyle(
+                      child: Text(
+                        'log_out'.tr(),
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
