@@ -17,7 +17,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile_app/category_products_screen.dart';
 import 'package:mobile_app/brand_products_screen.dart';
 import 'notifications_page.dart';
+
 import 'package:mobile_app/widgets/product_search_bar.dart';
+import 'chatbot/chatbot_widget.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +31,33 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  OverlayEntry? _chatbotEntry;
+
+  @override
+  void initState() {
+    super.initState();
+    // Insert chatbot FAB into the Navigator's Overlay after first frame.
+    // This makes it float above all pushed routes (Men's, Women's, etc.)
+    // while only appearing when the user is logged in.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _insertChatbotOverlay();
+    });
+  }
+
+  void _insertChatbotOverlay() {
+    _chatbotEntry = OverlayEntry(
+      builder: (_) => ChatbotFAB(onSwitchTab: _onItemTapped),
+    );
+    Overlay.of(context).insert(_chatbotEntry!);
+  }
+
+  @override
+  void dispose() {
+    _chatbotEntry?.remove();
+    _chatbotEntry?.dispose();
+    _chatbotEntry = null;
+    super.dispose();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
