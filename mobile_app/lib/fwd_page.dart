@@ -114,7 +114,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
   static const List<Map<String, String>> _festivalBanners = [
     {
       'image':
-          'https://images.unsplash.com/photo-1610189352649-6f773f7c8b3b?w=800&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop',
       'title': 'ugadi_and_pongal_utsav',
       'subtitle': 'up_to_70percent_off_on_ethnic_wear',
       'tag': 'festival_special',
@@ -159,7 +159,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
       'icon': Icons.man,
       'color': _saffron,
       'img':
-          'https://images.unsplash.com/photo-1594938298603-c8148c4b4c4a?w=300&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=300&auto=format&fit=crop',
     },
     {
       'label': 'jewellery',
@@ -211,7 +211,7 @@ class _FwdPageState extends State<FwdPage> with TickerProviderStateMixin {
       'discount': '63% OFF',
       'rating': '4.6',
       'img':
-          'https://images.unsplash.com/photo-1594938298603-c8148c4b4c4a?w=400&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&auto=format&fit=crop',
       'tag': 'trending',
     },
     {

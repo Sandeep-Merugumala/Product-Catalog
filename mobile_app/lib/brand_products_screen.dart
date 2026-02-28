@@ -3,15 +3,22 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/firestore_service.dart';
 import 'package:mobile_app/product_detail_screen.dart';
 
-class WeddingSeasonScreen extends StatelessWidget {
-  const WeddingSeasonScreen({super.key});
+class BrandProductsScreen extends StatelessWidget {
+  final String brandName;
+  final String? brandLogo;
+
+  const BrandProductsScreen({
+    super.key,
+    required this.brandName,
+    this.brandLogo,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('wedding_season'.tr()), centerTitle: true),
+      appBar: AppBar(title: Text(brandName.toUpperCase()), centerTitle: true),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: FirestoreService().getProductsByCategory('ethnic'),
+        future: FirestoreService().getProductsByBrand(brandName),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -34,17 +41,17 @@ class WeddingSeasonScreen extends StatelessWidget {
                   margin: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
-                      ),
-                      fit: BoxFit.cover,
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).primaryColor,
+                        const Color(0xFFFF3F6C),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(
-                          0xFFFFD700,
-                        ).withValues(alpha: 0.2), // Gold tint
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -58,7 +65,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
+                          Colors.black.withValues(alpha: 0.5),
                         ],
                       ),
                     ),
@@ -68,19 +75,41 @@ class WeddingSeasonScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'wedding_season'.tr(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
+                        if (brandLogo != null)
+                          Container(
+                            height: 60,
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: Image.network(
+                              brandLogo!,
+                              fit: BoxFit.contain,
+                              alignment: Alignment.centerLeft,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Text(
+                                  brandName.toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 2,
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        else
+                          Text(
+                            brandName.toUpperCase(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2,
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 4),
-                        const Text(
-                          'Celebrate in style. Premium ethnic wear.',
-                          style: TextStyle(
+                        Text(
+                          'Explore our exclusive collection from ${brandName.toUpperCase()}',
+                          style: const TextStyle(
                             color: Colors.white70,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -99,7 +128,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.celebration_outlined,
+                          Icons.shopping_bag_outlined,
                           size: 64,
                           color: Colors.grey[400],
                         ),
@@ -262,7 +291,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('added_to_bag'.tr()),
+                                content: Text('added_to_bag_msg'.tr()),
                                 backgroundColor: Colors.green,
                                 duration: const Duration(seconds: 2),
                               ),
@@ -273,7 +302,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'error_msg'.tr(args: [e.toString()]),
+                                  'error_with_icon'.tr(args: [e.toString()]),
                                 ),
                                 backgroundColor: Colors.red,
                               ),
@@ -289,9 +318,9 @@ class WeddingSeasonScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'ADD TO CART',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
                         ),

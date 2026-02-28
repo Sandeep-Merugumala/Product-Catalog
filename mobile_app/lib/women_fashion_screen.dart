@@ -9,6 +9,7 @@ import 'bag_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/widgets/product_search_bar.dart';
 
 class WomensSection extends StatefulWidget {
   final int initialTabIndex;
@@ -168,30 +169,7 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
                 ),
                 const SizedBox(width: 12),
                 // Search Bar
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(Icons.search, color: Colors.grey[500], size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Search \"Women's Fashion\"",
-                          style: TextStyle(
-                            color: Theme.of(context).hintColor,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
                 _buildIconButton(Icons.notifications_outlined, () {}, 1),
                 _buildIconButton(Icons.favorite_border, () {
@@ -514,7 +492,7 @@ class WomensHorizontalCategories extends StatelessWidget {
       {
         'name': 'ethnic',
         'image':
-            'https://images.unsplash.com/photo-1583391733975-5e8c3b44c09e?w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop',
       },
       {
         'name': 'footwear',
@@ -529,7 +507,7 @@ class WomensHorizontalCategories extends StatelessWidget {
       {
         'name': 'essentials',
         'image':
-            'https://images.unsplash.com/photo-1605763240004-7d93b470a3fa?w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500&auto=format&fit=crop',
       },
       {
         'name': 'active',
@@ -1421,7 +1399,13 @@ class _WomensProductGridState extends State<WomensProductGrid> {
     List<Map<String, dynamic>> products =
         widget.category == null || widget.category == 'All'
         ? List.from(allProducts)
-        : allProducts.where((p) => p['category'] == widget.category).toList();
+        : allProducts
+              .where(
+                (p) =>
+                    p['category'].toString().toLowerCase() ==
+                    widget.category!.toLowerCase(),
+              )
+              .toList();
 
     // 1. Apply Discount Filter
     if (_currentDiscountFilter > 0) {

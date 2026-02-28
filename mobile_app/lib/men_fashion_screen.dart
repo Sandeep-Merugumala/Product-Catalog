@@ -9,6 +9,7 @@ import 'bag_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/widgets/product_search_bar.dart';
 
 class MensSection extends StatefulWidget {
   final int? initialIndex;
@@ -166,27 +167,7 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                 ),
                 const SizedBox(width: 12),
                 // Search Bar
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Colors.grey[300]!),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(Icons.search, color: Colors.grey[500], size: 20),
-                        const SizedBox(width: 8),
-                        const Text(
-                          "Search \"Men's Fashion\"",
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
                 _buildIconButton(Icons.notifications_outlined, () {}, 1),
                 _buildIconButton(Icons.favorite_border, () {
@@ -513,7 +494,7 @@ class MensHorizontalCategories extends StatelessWidget {
       {
         'name': 'ethnic',
         'image':
-            'https://images.unsplash.com/photo-1583391733975-5e8c3b44c09e?w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop',
       },
       {
         'name': 'footwear',
@@ -523,7 +504,7 @@ class MensHorizontalCategories extends StatelessWidget {
       {
         'name': 'sports',
         'image':
-            'https://images.unsplash.com/photo-1556906781-9cba4c4fb3f5?w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&auto=format&fit=crop',
       },
       {
         'name': 'essentials',
@@ -1385,7 +1366,13 @@ class _MensProductGridState extends State<MensProductGrid> {
     List<Map<String, dynamic>> products =
         widget.category == null || widget.category == 'All'
         ? List.from(allProducts)
-        : allProducts.where((p) => p['category'] == widget.category).toList();
+        : allProducts
+              .where(
+                (p) =>
+                    p['category'].toString().toLowerCase() ==
+                    widget.category!.toLowerCase(),
+              )
+              .toList();
 
     // 1. Apply Discount Filter
     if (_currentDiscountFilter > 0) {

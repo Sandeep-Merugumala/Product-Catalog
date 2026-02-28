@@ -250,8 +250,30 @@ class WinterCollectionScreen extends StatelessWidget {
                     width: double.infinity,
                     height: 30,
                     child: ElevatedButton(
-                      onPressed: () {
-                        FirestoreService().addToCart(product);
+                      onPressed: () async {
+                        try {
+                          await FirestoreService().addToCart(product);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('added_to_bag'.tr()),
+                                backgroundColor: Colors.green,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'error_msg'.tr(args: [e.toString()]),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFF3F6C),
@@ -262,7 +284,7 @@ class WinterCollectionScreen extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'add_to_bag'.tr(),
+                        'ADD TO CART',
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,

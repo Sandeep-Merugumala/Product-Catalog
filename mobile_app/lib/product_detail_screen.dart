@@ -82,7 +82,7 @@ class ProductDetailScreen extends StatelessWidget {
                             );
                           },
                           icon: const Icon(Icons.shopping_bag_outlined),
-                          label: Text('add_to_bag'.tr()),
+                          label: Text('ADD TO CART'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFF3F6C),
                             foregroundColor: Colors.white,
