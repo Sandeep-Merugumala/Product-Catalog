@@ -178,7 +178,7 @@ class InsiderScreen extends StatelessWidget {
 
                 // Banner Carousel
                 SizedBox(
-                  height: 180,
+                  height: 240,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),

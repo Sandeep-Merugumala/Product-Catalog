@@ -10,6 +10,12 @@ import 'package:mobile_app/address_management.dart';
 import 'package:mobile_app/account_details.dart';
 import 'package:mobile_app/orders_screen.dart';
 import 'package:mobile_app/insider_screen.dart';
+import 'package:mobile_app/coupons_screen.dart';
+import 'package:mobile_app/help_center_screen.dart';
+import 'package:mobile_app/faq_screen.dart';
+import 'package:mobile_app/legal_screens.dart';
+import 'package:mobile_app/grievance_screen.dart';
+import 'package:mobile_app/wishlist_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -321,14 +327,28 @@ class ProfilePage extends StatelessWidget {
                         icon: Icons.help_outline,
                         title: 'help_center'.tr(),
                         subtitle: 'get_support_faqs'.tr(),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HelpCenterScreen(),
+                            ),
+                          );
+                        },
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.local_offer_outlined,
                         title: 'coupons'.tr(),
                         subtitle: 'view_available_offers'.tr(),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CouponsScreen(),
+                            ),
+                          );
+                        },
                       ),
                       Theme(
                         data: Theme.of(context).copyWith(
@@ -490,14 +510,14 @@ class ProfilePage extends StatelessWidget {
                         icon: Icons.favorite_border,
                         title: 'wishlist'.tr(),
                         subtitle: 'your_most_loved_styles'.tr(),
-                        onTap: () {},
-                      ),
-                      _buildMenuItem(
-                        context,
-                        icon: Icons.settings_outlined,
-                        title: 'settings'.tr(),
-                        subtitle: 'manage_notifications'.tr(),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WishlistPage(),
+                            ),
+                          );
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -641,11 +661,49 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildFooterLink('faqs'.tr()),
-                      _buildFooterLink('about_us'.tr()),
-                      _buildFooterLink('terms_of_use'.tr()),
-                      _buildFooterLink('privacy_policy'.tr()),
-                      _buildFooterLink('grievance_redressal'.tr()),
+                      _buildFooterLink(
+                        'faqs'.tr(),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const FaqScreen()),
+                        ),
+                      ),
+                      _buildFooterLink(
+                        'about_us'.tr(),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AboutUsScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFooterLink(
+                        'terms_of_use'.tr(),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const TermsOfUseScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFooterLink(
+                        'privacy_policy'.tr(),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PrivacyPolicyScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildFooterLink(
+                        'grievance_redressal'.tr(),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const GrievanceScreen(),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -757,15 +815,26 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildFooterLink(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.grey[600],
-          fontWeight: FontWeight.w500,
+  Widget _buildFooterLink(String text, {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right, size: 18, color: Colors.grey[400]),
+          ],
         ),
       ),
     );
