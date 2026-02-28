@@ -14,7 +14,10 @@ import 'luxe_page.dart';
 import 'wishlist_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/category_products_screen.dart';
+import 'package:mobile_app/brand_products_screen.dart';
 import 'notifications_page.dart';
+import 'package:mobile_app/widgets/product_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -239,34 +242,7 @@ class MyntraAppBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 // Search Bar
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: isDarkMode ? Colors.grey[900] : Colors.white,
-                      border: Border.all(
-                        color: isDarkMode
-                            ? Colors.grey[800]!
-                            : Colors.grey[300]!,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(Icons.search, color: Colors.grey[500], size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${"search".tr()} "Midi Skirt"',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
                 // Icons
                 GestureDetector(
@@ -1389,9 +1365,9 @@ class DealOfTheDay extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'flat_50_70percent_off',
-                  style: TextStyle(
+                Text(
+                  'flat_50_70percent_off'.tr(),
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFE65100),
@@ -1399,7 +1375,7 @@ class DealOfTheDay extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'on_trending_styles',
+                  'on_trending_styles'.tr(),
                   style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                 ),
                 const SizedBox(height: 12),
@@ -1773,6 +1749,15 @@ class FeaturedProductCarousel extends StatelessWidget {
                             onTap: () async {
                               try {
                                 await firestoreService.addToCart(product);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('added_to_bag'.tr()),
+                                      backgroundColor: Colors.green,
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
                               } catch (e) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -1893,13 +1878,13 @@ class BrandsInFocus extends StatelessWidget {
       "name": 'puma',
       "offer": "MIN 30% OFF",
       "img":
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Puma_Logo.svg/2560px-Puma_Logo.svg.png",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Puma_logo.svg/1024px-Puma_logo.svg.png",
     },
     {
       "name": "H&M",
       "offer": "MIN 60% OFF",
       "img":
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/H%26M-Logo.svg/2560px-H%26M-Logo.svg.png",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/H%26M-Logo.svg/1200px-H%26M-Logo.svg.png",
     },
     {
       "name": "Zara",
@@ -1911,7 +1896,7 @@ class BrandsInFocus extends StatelessWidget {
       "name": 'levis',
       "offer": "MIN 55% OFF",
       "img":
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Levis-logo-query.png/640px-Levis-logo-query.png",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Levi%27s_logo.svg/1200px-Levi%27s_logo.svg.png",
     },
   ];
 
@@ -1924,58 +1909,72 @@ class BrandsInFocus extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: brands.length,
         itemBuilder: (context, index) {
-          return Container(
-            width: 110,
-            margin: const EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[200]!),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 80,
-                  height: 60,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+          final brand = brands[index];
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BrandProductsScreen(
+                    brandName: brand["name"]!,
+                    brandLogo: brand["img"],
                   ),
-                  child: Center(
-                    child: Image.network(
-                      brands[index]["img"]!,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Text(
-                          brands[index]["name"]!.tr(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        );
-                      },
+                ),
+              );
+            },
+            child: Container(
+              width: 110,
+              margin: const EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[200]!),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 60,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Image.network(
+                        brand["img"]!,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Text(
+                            brand["name"]!.tr(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  brands[index]["offer"]!,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFFF3F6C),
+                  const SizedBox(height: 8),
+                  Text(
+                    brand["offer"]!,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFFF3F6C),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -1989,34 +1988,40 @@ class ShopByCategoryGrid extends StatelessWidget {
 
   final List<Map<String, dynamic>> categories = const [
     {
-      'name': 't_shirts',
+      'name': 'Topwear',
+      'id': 'Topwear',
       'image':
-          'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dCUyMHNoaXJ0c3xlbnwwfHwwfHx8MA%3D%3D',
+          'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&auto=format&fit=crop',
     },
     {
-      'name': 'jeans',
+      'name': 'Bottomwear',
+      'id': 'Bottomwear',
       'image':
           'https://media.istockphoto.com/id/2182097485/photo/serie-of-studio-photos-of-woman-in-classic-smart-casual-outfit-black-denim-trousers-black.webp?a=1&b=1&s=612x612&w=0&k=20&c=E-9k4wHthgTe9hhxWeprPC8cEt2DW_hdkbaQGlAwZlA=',
     },
     {
-      'name': 'dresses',
+      'name': 'Footwear',
+      'id': 'Footwear',
       'image':
-          'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZHJlc3Nlc3xlbnwwfHwwfHx8MA%3D%3D',
+          'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop',
     },
     {
-      'name': 'shoes',
+      'name': 'Accessories',
+      'id': 'Accessories',
       'image':
-          'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww',
+          'https://images.unsplash.com/photo-1590736969955-71cc94801759?w=600&auto=format&fit=crop',
     },
     {
-      'name': 'accessories',
+      'name': 'Grooming',
+      'id': 'Grooming',
       'image':
-          'https://images.unsplash.com/photo-1590736969955-71cc94801759?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGFjY2Vzc29yaWVzfGVufDB8fDB8fHww',
+          'https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=600&auto=format&fit=crop',
     },
     {
-      'name': 'watches',
+      'name': 'Toys',
+      'id': 'Toys',
       'image':
-          'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8d2F0Y2hlc3xlbnwwfHwwfHx8MA%3D%3D',
+          'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=600&auto=format&fit=crop',
     },
   ];
 
@@ -2035,53 +2040,65 @@ class ShopByCategoryGrid extends StatelessWidget {
         ),
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CategoryProductsScreen(
+                    category: categories[index]['id'] as String,
+                  ),
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    categories[index]['image'] as String,
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 8,
-                    left: 8,
-                    right: 8,
-                    child: Text(
-                      (categories[index]['name'] as String).tr(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      categories[index]['image'] as String,
+                      fit: BoxFit.cover,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.6),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 8,
+                      left: 8,
+                      right: 8,
+                      child: Text(
+                        (categories[index]['name'] as String).tr(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -2385,29 +2402,10 @@ class ProductGrid extends StatelessWidget {
                         height: 40,
                         child: ElevatedButton(
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('processing'.tr()),
-                                content: const Text(
-                                  'Adding item to your cart.',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text('ok'.tr()),
-                                  ),
-                                ],
-                              ),
-                            );
-
                             firestoreService
                                 .addToCart(product)
                                 .then((_) {
                                   if (!context.mounted) return;
-                                  Navigator.pop(
-                                    context,
-                                  ); // Close processing dialog
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
@@ -2420,9 +2418,6 @@ class ProductGrid extends StatelessWidget {
                                 })
                                 .catchError((e) {
                                   if (!context.mounted) return;
-                                  Navigator.pop(
-                                    context,
-                                  ); // Close processing dialog
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -2445,7 +2440,7 @@ class ProductGrid extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            'ADD TO BAG',
+                            'ADD TO CART',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 12,

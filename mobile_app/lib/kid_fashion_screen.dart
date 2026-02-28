@@ -9,6 +9,7 @@ import 'bag_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/widgets/product_search_bar.dart';
 
 class KidsSection extends StatefulWidget {
   const KidsSection({super.key});
@@ -163,30 +164,7 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
                 ),
                 const SizedBox(width: 12),
                 // Search Bar
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-                        Icon(Icons.search, color: Colors.grey[500], size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Search \"Kids Fashion\"",
-                          style: TextStyle(
-                            color: Theme.of(context).hintColor,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
                 _buildIconButton(Icons.notifications_outlined, () {}, 1),
                 _buildIconButton(Icons.favorite_border, () {
@@ -527,7 +505,7 @@ class KidsHorizontalCategories extends StatelessWidget {
       {
         'name': 'ethnic',
         'image':
-            'https://images.unsplash.com/photo-1612902376581-0a3b8bb4d13d?w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500&auto=format&fit=crop',
       },
     ];
 
@@ -1412,7 +1390,13 @@ class _KidsProductGridState extends State<KidsProductGrid> {
     List<Map<String, dynamic>> products =
         widget.category == null || widget.category == 'All'
         ? List.from(allProducts)
-        : allProducts.where((p) => p['category'] == widget.category).toList();
+        : allProducts
+              .where(
+                (p) =>
+                    p['category'].toString().toLowerCase() ==
+                    widget.category!.toLowerCase(),
+              )
+              .toList();
 
     // 1. Apply Discount Filter
     if (_currentDiscountFilter > 0) {

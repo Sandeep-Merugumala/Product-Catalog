@@ -3,15 +3,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/firestore_service.dart';
 import 'package:mobile_app/product_detail_screen.dart';
 
-class WeddingSeasonScreen extends StatelessWidget {
-  const WeddingSeasonScreen({super.key});
+class CategoryProductsScreen extends StatelessWidget {
+  final String category;
+
+  const CategoryProductsScreen({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('wedding_season'.tr()), centerTitle: true),
+      appBar: AppBar(title: Text(category.tr()), centerTitle: true),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: FirestoreService().getProductsByCategory('ethnic'),
+        future: FirestoreService().getProductsByCategory(category),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -26,83 +28,13 @@ class WeddingSeasonScreen extends StatelessWidget {
 
           return CustomScrollView(
             slivers: [
-              // Themed Hero Banner
-              SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height: 180,
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(
-                          0xFFFFD700,
-                        ).withValues(alpha: 0.2), // Gold tint
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
-                        ],
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    alignment: Alignment.bottomLeft,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'wedding_season'.tr(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Celebrate in style. Premium ethnic wear.',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
               if (products.isEmpty)
                 SliverFillRemaining(
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.celebration_outlined,
-                          size: 64,
-                          color: Colors.grey[400],
-                        ),
+                        Icon(Icons.category, size: 64, color: Colors.grey[400]),
                         const SizedBox(height: 16),
                         Text(
                           'no_products_found'.tr(),
@@ -120,7 +52,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
-                    vertical: 8,
+                    vertical: 16,
                   ),
                   sliver: SliverGrid(
                     gridDelegate:
@@ -221,7 +153,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    product['name'].toString().tr(),
+                    (product['name'] ?? product['title']).toString().tr(),
                     style: TextStyle(
                       fontSize: 11,
                       color: Theme.of(context).textTheme.bodySmall?.color,

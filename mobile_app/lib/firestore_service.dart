@@ -300,6 +300,37 @@ class FirestoreService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getProductsByBrand(String brand) async {
+    try {
+      // Typically, direct where clauses in firestore are case-sensitive exact match.
+      // Easiest is to fetch where brand matched via exact casing OR fetch and filter.
+      // Assuming brands are stored capitalized (like "Nike", "Puma").
+      // We will pull the whole collection or do a basic case-insensitive match locally if needed,
+      // but since 'brand' field exists, let's start with a direct query. Because "adidas" vs "Adidas"
+      // might occur, it's safer to fetch and do exact case-insensitive filter, OR query directly if stable.
+      // Let's query by the exact name since we populated via product_data with proper casing.
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .get();
+
+      // Filter locally for case-insensitive brand match due to Firestore limitations
+      final allProducts = snapshot.docs.map((doc) {
+        var data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+
+      return allProducts.where((p) {
+        final productBrand = (p['brand'] ?? '').toString().toLowerCase();
+        return productBrand == brand.toLowerCase();
+      }).toList();
+    } catch (e) {
+      print('❌ Error fetching products by brand: $e');
+      return [];
+    }
+  }
+
   // --- ORDERS ---
   Stream<QuerySnapshot> getOrdersStream() {
     final uid = FirebaseAuth.instance.currentUser?.uid;

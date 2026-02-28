@@ -367,7 +367,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                       )
                     : const Icon(Icons.shopping_bag_outlined),
-                label: Text(_isOutOfStock ? 'OUT OF STOCK' : 'ADD TO BAG'),
+                label: Text(_isOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isOutOfStock
                       ? Colors.grey

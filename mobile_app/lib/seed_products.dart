@@ -52,7 +52,7 @@ void main() async {
       'originalPrice': 8999,
       'category': 'winter_wear',
       'image':
-          'https://images.unsplash.com/photo-1544923408-55416040854c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+          'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop',
       'description':
           'Heavy-duty parka with soft fleece lining for extreme cold.',
     },
@@ -65,7 +65,7 @@ void main() async {
       'originalPrice': 24999,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1595152452543-e5fc28ebc2fc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+          'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop',
       'description': 'Exquisite silk sherwani with detailed hand embroidery.',
     },
     {
@@ -75,7 +75,7 @@ void main() async {
       'originalPrice': 28500,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1583391733958-650fac5eb369?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+          'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop',
       'description':
           'Stunning designer lehenga choli for the perfect bridal look.',
     },
@@ -86,7 +86,7 @@ void main() async {
       'originalPrice': 5999,
       'category': 'ethnic',
       'image':
-          'https://plus.unsplash.com/premium_photo-1682098616149-c18086202422?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+          'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&auto=format&fit=crop',
       'description': 'Comfortable and elegant kurta set for festive occasions.',
     },
     {
@@ -96,7 +96,7 @@ void main() async {
       'originalPrice': 18000,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1610189014605-e3b97b1ca7ec?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+          'https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=600&auto=format&fit=crop',
       'description': 'Authentic Banarasi silk saree with zari border.',
     },
   ];
