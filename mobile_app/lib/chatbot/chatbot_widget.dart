@@ -25,8 +25,7 @@ class ChatbotFAB extends StatefulWidget {
   State<ChatbotFAB> createState() => _ChatbotFABState();
 }
 
-class _ChatbotFABState extends State<ChatbotFAB>
-    with TickerProviderStateMixin {
+class _ChatbotFABState extends State<ChatbotFAB> with TickerProviderStateMixin {
   bool _isOpen = false;
 
   // Tap-press scale animation
@@ -37,6 +36,10 @@ class _ChatbotFABState extends State<ChatbotFAB>
   late final AnimationController _pulseCtrl;
   late final Animation<double> _pulseAnim;
 
+  // Floating hover animation
+  late final AnimationController _floatCtrl;
+  late final Animation<double> _floatAnim;
+
   @override
   void initState() {
     super.initState();
@@ -45,23 +48,35 @@ class _ChatbotFABState extends State<ChatbotFAB>
       vsync: this,
       duration: const Duration(milliseconds: 120),
     );
-    _pressAnim = Tween<double>(begin: 1.0, end: 0.88).animate(
-      CurvedAnimation(parent: _pressCtrl, curve: Curves.easeInOut),
-    );
+    _pressAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.88,
+    ).animate(CurvedAnimation(parent: _pressCtrl, curve: Curves.easeInOut));
 
     _pulseCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     )..repeat(reverse: true);
-    _pulseAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut),
-    );
+    _pulseAnim = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
+
+    _floatCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+    _floatAnim = Tween<double>(
+      begin: -4.0,
+      end: 4.0,
+    ).animate(CurvedAnimation(parent: _floatCtrl, curve: Curves.easeInOutSine));
   }
 
   @override
   void dispose() {
     _pressCtrl.dispose();
     _pulseCtrl.dispose();
+    _floatCtrl.dispose();
     super.dispose();
   }
 
@@ -141,7 +156,7 @@ class _ChatbotFABState extends State<ChatbotFAB>
     // overlaps the chat sheet or the send button.
     return Positioned(
       right: 16,
-      bottom: 24,
+      bottom: 90, // Increased bottom padding to float above the footer
       child: AnimatedScale(
         scale: _isOpen ? 0.0 : 1.0,
         duration: const Duration(milliseconds: 200),
@@ -153,48 +168,59 @@ class _ChatbotFABState extends State<ChatbotFAB>
             ignoring: _isOpen,
             child: ScaleTransition(
               scale: _pressAnim,
-              child: GestureDetector(
-                onTap: _toggleChat,
-                child: AnimatedBuilder(
-                  animation: _pulseAnim,
-                  builder: (_, child) {
-                    return Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFF3F6C), Color(0xFFFF7A9C)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          // Static shadow
-                          BoxShadow(
-                            color: const Color(0xFFFF3F6C).withValues(alpha: 0.35),
-                            blurRadius: 12,
-                            spreadRadius: 1,
-                            offset: const Offset(0, 4),
+              child: AnimatedBuilder(
+                animation: _floatAnim,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, _floatAnim.value),
+                    child: child,
+                  );
+                },
+                child: GestureDetector(
+                  onTap: _toggleChat,
+                  child: AnimatedBuilder(
+                    animation: _pulseAnim,
+                    builder: (_, child) {
+                      return Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFFF3F6C), Color(0xFFFF7A9C)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          // Pulsing glow
-                          BoxShadow(
-                            color: const Color(0xFFFF3F6C).withValues(
-                              alpha: 0.25 * _pulseAnim.value,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            // Static shadow
+                            BoxShadow(
+                              color: const Color(
+                                0xFFFF3F6C,
+                              ).withValues(alpha: 0.35),
+                              blurRadius: 12,
+                              spreadRadius: 1,
+                              offset: const Offset(0, 4),
                             ),
-                            blurRadius: 20 + 10 * _pulseAnim.value,
-                            spreadRadius: 2 + 4 * _pulseAnim.value,
-                            offset: Offset.zero,
-                          ),
-                        ],
+                            // Pulsing glow
+                            BoxShadow(
+                              color: const Color(
+                                0xFFFF3F6C,
+                              ).withValues(alpha: 0.25 * _pulseAnim.value),
+                              blurRadius: 20 + 10 * _pulseAnim.value,
+                              spreadRadius: 2 + 4 * _pulseAnim.value,
+                              offset: Offset.zero,
+                            ),
+                          ],
+                        ),
+                        child: child,
+                      );
+                    },
+                    child: const Center(
+                      child: Icon(
+                        Icons.chat_bubble_outline_rounded,
+                        color: Colors.white,
+                        size: 24,
                       ),
-                      child: child,
-                    );
-                  },
-                  child: const Center(
-                    child: Icon(
-                      Icons.chat_bubble_outline_rounded,
-                      color: Colors.white,
-                      size: 24,
                     ),
                   ),
                 ),
@@ -274,7 +300,9 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
 
     setState(() {
       _store.showQuickReplies = false;
-      _store.messages.add(ChatMessage(text: trimmed, sender: MessageSender.user));
+      _store.messages.add(
+        ChatMessage(text: trimmed, sender: MessageSender.user),
+      );
       _isTyping = true;
     });
     _scrollToBottom();
@@ -285,12 +313,14 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
     final response = _service.respond(trimmed);
     setState(() {
       _isTyping = false;
-      _store.messages.add(ChatMessage(
-        text: response.text,
-        sender: MessageSender.bot,
-        navigationAction: response.navigationAction,
-        navigationLabel: response.navigationLabel,
-      ));
+      _store.messages.add(
+        ChatMessage(
+          text: response.text,
+          sender: MessageSender.bot,
+          navigationAction: response.navigationAction,
+          navigationLabel: response.navigationLabel,
+        ),
+      );
     });
     _scrollToBottom();
   }
@@ -396,7 +426,10 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.22),
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withValues(alpha: 0.45), width: 1.5),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.45),
+                width: 1.5,
+              ),
             ),
             child: const Center(
               child: Icon(Icons.auto_awesome, color: Colors.white, size: 18),
@@ -421,7 +454,8 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                 Row(
                   children: [
                     Container(
-                      width: 6, height: 6,
+                      width: 6,
+                      height: 6,
                       decoration: const BoxDecoration(
                         color: Color(0xFF69F0AE),
                         shape: BoxShape.circle,
@@ -441,14 +475,18 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
           GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: Container(
-              width: 32, height: 32,
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.18),
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                child: Icon(Icons.keyboard_arrow_down_rounded,
-                    color: Colors.white, size: 22),
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
               ),
             ),
           ),
@@ -461,7 +499,9 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
   Widget _buildBotBubble(ChatMessage msg, bool isDark) {
     final bubbleBg = isDark ? const Color(0xFF272727) : const Color(0xFFF4F4F4);
     final textColor = isDark ? Colors.white : const Color(0xFF1A1A1A);
-    final borderColor = isDark ? const Color(0xFF363636) : const Color(0xFFEBEBEB);
+    final borderColor = isDark
+        ? const Color(0xFF363636)
+        : const Color(0xFFEBEBEB);
     final navInfo = msg.navigationAction != null
         ? NavigationInfo.forAction(msg.navigationAction!)
         : null;
@@ -472,7 +512,8 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
-            width: 28, height: 28,
+            width: 28,
+            height: 28,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFFFF3F6C), Color(0xFFFF7099)],
@@ -489,7 +530,10 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 13,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: bubbleBg,
                     borderRadius: const BorderRadius.only(
@@ -515,7 +559,10 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                   GestureDetector(
                     onTap: () => _handleNavigation(msg.navigationAction!),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFFF3F6C), Color(0xFFFF6B8A)],
@@ -523,7 +570,9 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFFF3F6C).withValues(alpha: 0.28),
+                            color: const Color(
+                              0xFFFF3F6C,
+                            ).withValues(alpha: 0.28),
                             blurRadius: 8,
                             offset: const Offset(0, 3),
                           ),
@@ -576,7 +625,10 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
                   constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.68,
                   ),
@@ -636,10 +688,12 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
-            width: 28, height: 28,
+            width: 28,
+            height: 28,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  colors: [Color(0xFFFF3F6C), Color(0xFFFF7099)]),
+                colors: [Color(0xFFFF3F6C), Color(0xFFFF7099)],
+              ),
               shape: BoxShape.circle,
             ),
             child: const Center(
@@ -658,7 +712,9 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                 bottomRight: Radius.circular(16),
               ),
               border: Border.all(
-                color: isDark ? const Color(0xFF363636) : const Color(0xFFEBEBEB),
+                color: isDark
+                    ? const Color(0xFF363636)
+                    : const Color(0xFFEBEBEB),
                 width: 0.8,
               ),
             ),
@@ -674,7 +730,8 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                       offset: Offset(0, dy),
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 3),
-                        width: 7, height: 7,
+                        width: 7,
+                        height: 7,
                         decoration: BoxDecoration(
                           color: isDark ? Colors.white54 : Colors.grey[400],
                           shape: BoxShape.circle,
@@ -704,10 +761,14 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
               onTap: () => _sendMessage(reply),
               child: Container(
                 margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 13,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF3F6C)
-                      .withValues(alpha: isDark ? 0.18 : 0.07),
+                  color: const Color(
+                    0xFFFF3F6C,
+                  ).withValues(alpha: isDark ? 0.18 : 0.07),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: const Color(0xFFFF3F6C).withValues(alpha: 0.38),
@@ -732,7 +793,9 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
 
   // ── Input bar ───────────────────────────────────────────────────────────────
   Widget _buildInputBar(bool isDark, double bottomPad) {
-    final borderColor = isDark ? const Color(0xFF3A3A3A) : const Color(0xFFE5E5E5);
+    final borderColor = isDark
+        ? const Color(0xFF3A3A3A)
+        : const Color(0xFFE5E5E5);
     final inputBg = isDark ? const Color(0xFF262626) : const Color(0xFFF8F8F8);
     final hintColor = isDark ? Colors.grey[600] : Colors.grey[400];
     final textColor = isDark ? Colors.white : const Color(0xFF1A1A1A);
@@ -751,7 +814,10 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
             // Text field
             Expanded(
               child: Container(
-                constraints: const BoxConstraints(minHeight: 44, maxHeight: 100),
+                constraints: const BoxConstraints(
+                  minHeight: 44,
+                  maxHeight: 100,
+                ),
                 decoration: BoxDecoration(
                   color: inputBg,
                   borderRadius: BorderRadius.circular(22),
@@ -768,7 +834,8 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                     hintStyle: TextStyle(color: hintColor, fontSize: 14),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 12,
+                      horizontal: 16,
+                      vertical: 12,
                     ),
                   ),
                   onSubmitted: _sendMessage,
@@ -780,7 +847,8 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
             GestureDetector(
               onTap: () => _sendMessage(_inputCtrl.text),
               child: Container(
-                width: 44, height: 44,
+                width: 44,
+                height: 44,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFFFF3F6C), Color(0xFFFF7099)],
@@ -790,7 +858,11 @@ class _ChatbotPanelState extends State<_ChatbotPanel>
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
-                  child: Icon(Icons.send_rounded, color: Colors.white, size: 19),
+                  child: Icon(
+                    Icons.send_rounded,
+                    color: Colors.white,
+                    size: 19,
+                  ),
                 ),
               ),
             ),
