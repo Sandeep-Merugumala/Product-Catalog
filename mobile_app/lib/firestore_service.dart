@@ -264,12 +264,35 @@ class FirestoreService {
         'items': cartSnapshot.docs.map((doc) => doc.data()).toList(),
       });
 
+      // Create notification
+      final notificationRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('notifications')
+          .doc();
+
+      final now = DateTime.now();
+      final dateString = "${now.day}/${now.month}/${now.year}";
+
+      batch.set(notificationRef, {
+        'id': notificationRef.id,
+        'title': 'Order Placed Successfully!',
+        'body':
+            'Your order of ₹${totalAmount.toStringAsFixed(0)} has been placed on $dateString.',
+        'type': 'order',
+        'isRead': false,
+        'createdAt': Timestamp.now(),
+        'orderId': orderRef.id,
+      });
+
       // Clear the cart
       for (var doc in cartSnapshot.docs) {
         batch.delete(doc.reference);
       }
       await batch.commit();
-      debugPrint('✅ Order placed and cart cleared successfully');
+      debugPrint(
+        '✅ Order placed, notification added, and cart cleared successfully',
+      );
     } catch (e) {
       debugPrint('❌ Error placing order: $e');
       rethrow;

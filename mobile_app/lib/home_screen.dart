@@ -202,6 +202,7 @@ class MyntraAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       floating: true,
       pinned: true,
       snap: true,
