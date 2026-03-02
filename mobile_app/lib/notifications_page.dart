@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app/firestore_service.dart';
+import 'package:intl/intl.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -23,74 +26,135 @@ class NotificationsPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Handle clear all
-            },
-            child: const Text(
-              'EDIT',
-              style: TextStyle(
-                color: Color(0xFFFF3F6C),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Lottie Animation
-              Lottie.asset(
-                'assets/bell_snooze.json',
-                width: 250,
-                height: 250,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'No new notifications',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirestoreService().getNotificationsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      'assets/bell_snooze.json',
+                      width: 250,
+                      height: 250,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.notifications_off,
+                        size: 80,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'No new notifications',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'We will notify you as soon as there is something new for you.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFFFF3F6C)),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        child: const Text(
+                          'START SHOPPING',
+                          style: TextStyle(
+                            color: Color(0xFFFF3F6C),
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 12),
-              const Text(
-                'We will notify you as soon as there is something new for you.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey, height: 1.5),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFFF3F6C)),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: const Text(
-                    'START SHOPPING',
-                    style: TextStyle(
-                      color: Color(0xFFFF3F6C),
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
+            );
+          }
+
+          final notifications = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: notifications.length,
+            itemBuilder: (context, index) {
+              final doc = notifications[index];
+              final data = doc.data() as Map<String, dynamic>;
+              final bool isRead = data['isRead'] ?? true;
+              final DateTime createdAt =
+                  (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now();
+
+              return ListTile(
+                tileColor: isRead
+                    ? Colors.white
+                    : Colors.blue.withValues(alpha: 0.05),
+                leading: CircleAvatar(
+                  backgroundColor: const Color(
+                    0xFFFF3F6C,
+                  ).withValues(alpha: 0.1),
+                  child: const Icon(
+                    Icons.shopping_bag,
+                    color: Color(0xFFFF3F6C),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+                title: Text(
+                  data['title'] ?? 'Notification',
+                  style: TextStyle(
+                    fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
+                  ),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 4),
+                    Text(
+                      data['body'] ?? '',
+                      style: TextStyle(
+                        color: isRead ? Colors.grey[700] : Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      DateFormat('MMM d, yyyy • h:mm a').format(createdAt),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  if (!isRead) {
+                    FirestoreService().markNotificationAsRead(doc.id);
+                  }
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

@@ -52,7 +52,7 @@ void main() async {
       'originalPrice': 8999,
       'category': 'winter_wear',
       'image':
-          'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1544642899-f0d6e5f6ed6f?auto=format&fit=crop&q=80&w=800',
       'description':
           'Heavy-duty parka with soft fleece lining for extreme cold.',
     },

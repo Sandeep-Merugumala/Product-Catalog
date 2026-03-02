@@ -21,21 +21,24 @@ import 'notifications_page.dart';
 
 import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'chatbot/chatbot_widget.dart';
+import 'package:mobile_app/widgets/custom_bottom_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialIndex;
+  const HomeScreen({super.key, this.initialIndex = 0});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
   OverlayEntry? _chatbotEntry;
 
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initialIndex;
     // Insert chatbot FAB into the Navigator's Overlay after first frame.
     // This makes it float above all pushed routes (Men's, Women's, etc.)
     // while only appearing when the user is logged in.
@@ -75,67 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
       const ProfilePage(),
     ];
 
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       body: SafeArea(child: widgetOptions.elementAt(_selectedIndex)),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 12,
-              offset: const Offset(0, -3),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.home_outlined),
-              activeIcon: const Icon(Icons.home),
-              label: 'home'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.flash_on_outlined),
-              activeIcon: const Icon(Icons.flash_on),
-              label: 'fwd'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.diamond_outlined),
-              activeIcon: const Icon(Icons.diamond),
-              label: 'luxe'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.shopping_bag_outlined),
-              activeIcon: const Icon(Icons.shopping_bag),
-              label: 'bag'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person_outline),
-              activeIcon: const Icon(Icons.person),
-              label: 'profile'.tr(),
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: const Color(0xFFFF3F6C),
-          unselectedItemColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          onTap: _onItemTapped,
-          selectedLabelStyle: const TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
-          ),
-          elevation: 0,
-          backgroundColor: Theme.of(
-            context,
-          ).bottomNavigationBarTheme.backgroundColor,
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
@@ -293,20 +240,31 @@ class MyntraAppBar extends StatelessWidget {
                         color: Theme.of(context).iconTheme.color,
                         size: 26,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFFF3F6C),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirestoreService()
+                            .getUnreadNotificationsStream(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          final count = snapshot.data!.docs.length;
+                          return Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFFF3F6C),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              '$count',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

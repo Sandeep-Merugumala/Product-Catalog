@@ -169,7 +169,17 @@ class WinterCollectionScreen extends StatelessWidget {
                   ),
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: Image.network(product['image'], fit: BoxFit.cover),
+                    child: Image.network(
+                      product['image'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // If the Unsplash image returns 403, fallback to a valid one
+                        return Image.network(
+                          'https://images.unsplash.com/photo-1544642899-f0d6e5f6ed6f?auto=format&fit=crop&q=80&w=800',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
                   ),
                 ),
                 Positioned(

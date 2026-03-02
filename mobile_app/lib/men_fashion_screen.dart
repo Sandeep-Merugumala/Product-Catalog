@@ -10,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app/widgets/sort_filter_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile_app/widgets/product_search_bar.dart';
+import 'package:mobile_app/widgets/custom_bottom_nav_bar.dart';
+import 'home_screen.dart';
 
 class MensSection extends StatefulWidget {
   final int? initialIndex;
@@ -67,6 +69,22 @@ class _MensSectionState extends State<MensSection>
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: 0,
+        onItemTapped: (index) {
+          if (index == 0) {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          } else {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (_) => HomeScreen(initialIndex: index),
+              ),
+              (route) => false,
+            );
+          }
+        },
       ),
     );
   }
