@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/firestore_service.dart';
 import 'package:mobile_app/product_detail_screen.dart';
+import 'package:mobile_app/widgets/particle_overlay.dart';
 
 class WeddingSeasonScreen extends StatelessWidget {
   const WeddingSeasonScreen({super.key});
@@ -10,134 +11,141 @@ class WeddingSeasonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('wedding_season'.tr()), centerTitle: true),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: FirestoreService().getProductsByCategory('ethnic'),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFF3F6C)),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('error_loading_products'.tr()));
-          }
+      body: Stack(
+        children: [
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: FirestoreService().getProductsByCategory('ethnic'),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFFFF3F6C)),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('error_loading_products'.tr()));
+              }
 
-          final products = snapshot.data ?? [];
+              final products = snapshot.data ?? [];
 
-          return CustomScrollView(
-            slivers: [
-              // Themed Hero Banner
-              SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height: 180,
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(
-                          0xFFFFD700,
-                        ).withValues(alpha: 0.2), // Gold tint
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
+              return CustomScrollView(
+                slivers: [
+                  // Themed Hero Banner
+                  SliverToBoxAdapter(
+                    child: Container(
+                      width: double.infinity,
+                      height: 180,
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(
+                              0xFFFFD700,
+                            ).withValues(alpha: 0.2), // Gold tint
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
                         ],
                       ),
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    alignment: Alignment.bottomLeft,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'wedding_season'.tr(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.6),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Celebrate in style. Premium ethnic wear.',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        padding: const EdgeInsets.all(20),
+                        alignment: Alignment.bottomLeft,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'wedding_season'.tr(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Celebrate in style. Premium ethnic wear.',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
 
-              if (products.isEmpty)
-                SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.celebration_outlined,
-                          size: 64,
-                          color: Colors.grey[400],
+                  if (products.isEmpty)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.celebration_outlined,
+                              size: 64,
+                              color: Colors.grey[400],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'no_products_found'.tr(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'no_products_found'.tr(),
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                      ),
+                    )
+                  else
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.65,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return _buildProductCard(context, products[index]);
+                        }, childCount: products.length),
+                      ),
                     ),
-                  ),
-                )
-              else
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.65,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return _buildProductCard(context, products[index]);
-                    }, childCount: products.length),
-                  ),
-                ),
-            ],
-          );
-        },
+                ],
+              );
+            },
+          ),
+          const Positioned.fill(
+            child: ParticleOverlay(type: ParticleType.sparkle),
+          ),
+        ],
       ),
     );
   }
@@ -175,7 +183,29 @@ class WeddingSeasonScreen extends StatelessWidget {
                   ),
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: Image.network(product['image'], fit: BoxFit.cover),
+                    child: Image.network(
+                      product['image'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        String fallback =
+                            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format';
+                        if (product['name'] == 'Embroidered Silk Sherwani') {
+                          fallback =
+                              'https://images.unsplash.com/photo-1727835523545-70ee992b5763?w=500&auto=format';
+                        } else if (product['name'] ==
+                            'Designer Lehenga Choli') {
+                          fallback =
+                              'https://images.pexels.com/photos/2592537/pexels-photo-2592537.jpeg?auto=compress&cs=tinysrgb&w=500';
+                        } else if (product['name'] == 'Festive Kurta Set') {
+                          fallback =
+                              'https://images.pexels.com/photos/3317429/pexels-photo-3317429.jpeg?auto=compress&cs=tinysrgb&w=500';
+                        } else if (product['name'] == 'Banarasi Silk Saree') {
+                          fallback =
+                              'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format';
+                        }
+                        return Image.network(fallback, fit: BoxFit.cover);
+                      },
+                    ),
                   ),
                 ),
                 Positioned(

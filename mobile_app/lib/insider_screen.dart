@@ -46,18 +46,6 @@ class InsiderScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Center(
-                          child: Text(
-                            'Welcome Sandeep!',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-
                         // Insider Logo/Text
                         Row(
                           children: [

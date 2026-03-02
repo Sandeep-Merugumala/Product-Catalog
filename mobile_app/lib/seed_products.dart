@@ -65,7 +65,7 @@ void main() async {
       'originalPrice': 24999,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1727835523545-70ee992b5763?w=500&auto=format',
       'description': 'Exquisite silk sherwani with detailed hand embroidery.',
     },
     {
@@ -75,7 +75,7 @@ void main() async {
       'originalPrice': 28500,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop',
+          'https://images.pexels.com/photos/2592537/pexels-photo-2592537.jpeg?auto=compress&cs=tinysrgb&w=500',
       'description':
           'Stunning designer lehenga choli for the perfect bridal look.',
     },
@@ -86,7 +86,7 @@ void main() async {
       'originalPrice': 5999,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&auto=format&fit=crop',
+          'https://images.pexels.com/photos/3317429/pexels-photo-3317429.jpeg?auto=compress&cs=tinysrgb&w=500',
       'description': 'Comfortable and elegant kurta set for festive occasions.',
     },
     {
@@ -96,7 +96,7 @@ void main() async {
       'originalPrice': 18000,
       'category': 'ethnic',
       'image':
-          'https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop',
       'description': 'Authentic Banarasi silk saree with zari border.',
     },
   ];

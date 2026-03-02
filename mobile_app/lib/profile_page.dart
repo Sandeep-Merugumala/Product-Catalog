@@ -109,35 +109,6 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
         elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFF3F6C).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.account_balance_wallet,
-                    size: 18,
-                    color: Color(0xFFFF3F6C),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '₹0',
-                    style: TextStyle(
-                      color: Color(0xFFFF3F6C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
       body: FutureBuilder<Map<String, dynamic>?>(
         future: _getUserData(),
