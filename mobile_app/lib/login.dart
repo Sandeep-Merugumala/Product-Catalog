@@ -194,6 +194,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               opacity: _fadeIn,
               child: Stack(
                 children: [
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(24, 50, 24, 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 16),
+                        _buildHeader(),
+                        const SizedBox(height: 32),
+                        _buildCard(),
+                        const SizedBox(height: 24),
+                        _buildToggleRow(),
+                      ],
+                    ),
+                  ),
                   Positioned(
                     top: 4,
                     left: 4,
@@ -216,20 +230,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           );
                         }
                       },
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 50, 24, 40),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(height: 16),
-                        _buildHeader(),
-                        const SizedBox(height: 32),
-                        _buildCard(),
-                        const SizedBox(height: 24),
-                        _buildToggleRow(),
-                      ],
                     ),
                   ),
                 ],
