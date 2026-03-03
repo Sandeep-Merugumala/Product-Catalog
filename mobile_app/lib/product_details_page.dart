@@ -16,7 +16,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   final FirestoreService _firestoreService = FirestoreService();
   bool _isAddingToCart = false;
 
-  int get _quantity => widget.product['quantity'] ?? 0;
+  int get _quantity =>
+      widget.product['quantity'] ?? 50; // Default to 50 if missing
   bool get _isOutOfStock => _quantity <= 0;
 
   Future<void> _addToCart() async {
@@ -88,16 +89,26 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     widget.product['image'] ?? '',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      );
+                      // Fallback for broken seasonal images
+                      final name = widget.product['name'] ?? '';
+                      String fallback =
+                          'https://images.unsplash.com/photo-1544642899-f0d6e5f6ed6f?auto=format&fit=crop&q=80&w=800';
+
+                      if (name.contains('Sherwani')) {
+                        fallback =
+                            'https://images.unsplash.com/photo-1727835523545-70ee992b5763?w=500&auto=format';
+                      } else if (name.contains('Lehenga')) {
+                        fallback =
+                            'https://images.pexels.com/photos/2592537/pexels-photo-2592537.jpeg?auto=compress&cs=tinysrgb&w=500';
+                      } else if (name.contains('Kurta')) {
+                        fallback =
+                            'https://images.pexels.com/photos/3317429/pexels-photo-3317429.jpeg?auto=compress&cs=tinysrgb&w=500';
+                      } else if (name.contains('Saree')) {
+                        fallback =
+                            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop';
+                      }
+
+                      return Image.network(fallback, fit: BoxFit.cover);
                     },
                   ),
                 ),

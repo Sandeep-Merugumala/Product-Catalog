@@ -91,23 +91,16 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFF59E0B), Color(0xFFEF4444)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
         title: const Text(
           'FAQs',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -120,35 +113,33 @@ class _FaqScreenState extends State<FaqScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFF59E0B), Color(0xFFEF4444)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: isDark ? theme.cardColor : const Color(0xFFFDE7EC),
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFF59E0B).withValues(alpha: 0.35),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+                border: isDark ? Border.all(color: Colors.white10) : null,
               ),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           '❓ Frequently Asked',
-                          style: TextStyle(color: Colors.white70, fontSize: 13),
+                          style: TextStyle(
+                            color: isDark
+                                ? Colors.white70
+                                : const Color(0xFFFF3F6C),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
                           'Find quick answers\nto common questions',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF282C3F),
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
                             height: 1.3,
@@ -160,12 +151,12 @@ class _FaqScreenState extends State<FaqScreen> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
+                      color: const Color(0xFFFF3F6C).withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.quiz_outlined,
-                      color: Colors.white,
+                      color: Color(0xFFFF3F6C),
                       size: 32,
                     ),
                   ),
@@ -177,6 +168,11 @@ class _FaqScreenState extends State<FaqScreen> {
 
             ...List.generate(_sections.length, (si) {
               final section = _sections[si];
+              // Use brand color if it's the first section, or theme colors for others
+              final sectionColor = si == 0
+                  ? const Color(0xFFFF3F6C)
+                  : section.color;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -186,12 +182,12 @@ class _FaqScreenState extends State<FaqScreen> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: section.color.withValues(alpha: 0.12),
+                          color: sectionColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
                           section.icon,
-                          color: section.color,
+                          color: sectionColor,
                           size: 18,
                         ),
                       ),
@@ -201,7 +197,7 @@ class _FaqScreenState extends State<FaqScreen> {
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: section.color,
+                          color: sectionColor,
                         ),
                       ),
                     ],
@@ -216,26 +212,28 @@ class _FaqScreenState extends State<FaqScreen> {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: theme.cardColor,
                         borderRadius: BorderRadius.circular(14),
                         border: isOpen
                             ? Border.all(
-                                color: section.color.withValues(alpha: 0.35),
+                                color: sectionColor.withValues(alpha: 0.35),
                                 width: 1.5,
                               )
-                            : null,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                            : (isDark
+                                  ? Border.all(color: Colors.white10)
+                                  : null),
+                        boxShadow: isDark
+                            ? null
+                            : [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                       ),
                       child: Theme(
-                        data: Theme.of(
-                          context,
-                        ).copyWith(dividerColor: Colors.transparent),
+                        data: theme.copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
                           tilePadding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -258,7 +256,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             isOpen
                                 ? Icons.remove_circle
                                 : Icons.add_circle_outline,
-                            color: section.color,
+                            color: sectionColor,
                             size: 22,
                           ),
                           title: Text(
@@ -267,17 +265,19 @@ class _FaqScreenState extends State<FaqScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: isOpen
-                                  ? section.color
-                                  : const Color(0xFF1E1B4B),
+                                  ? sectionColor
+                                  : (isDark
+                                        ? Colors.white
+                                        : const Color(0xFF1E1B4B)),
                             ),
                           ),
                           trailing: const SizedBox.shrink(),
                           children: [
                             Text(
                               item.a,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13.5,
-                                color: Colors.black54,
+                                color: isDark ? Colors.white70 : Colors.black54,
                                 height: 1.6,
                               ),
                             ),

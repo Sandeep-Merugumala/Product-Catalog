@@ -73,21 +73,33 @@ class FirestoreService {
   Future<void> seedAllProducts() async {
     debugPrint('🌱 Seeding all products...');
     for (var product in allAppProducts) {
-      // Check if product with same ID exists to avoid duplicates
-      // We use the 'id' field from our data as the document ID for consistency
+      // Use the 'id' field from our data as the document ID for consistency
       final docRef = _products.doc(product['id']);
-      final doc = await docRef.get();
 
-      if (!doc.exists) {
-        await docRef.set(product);
-        debugPrint('✅ Added ${product['name']}');
-      } else {
-        // Optional: Update existing product if data changed
-        // await docRef.update(product);
-        debugPrint('⚠️ Skipped ${product['name']} (Exists)');
-      }
+      // Always set (overwrite/update) to ensure data consistency
+      await docRef.set(product, SetOptions(merge: true));
+      debugPrint('✅ Synced ${product['name']}');
     }
     debugPrint('🎉 Seeding complete!');
+  }
+
+  /// Deletes all products in specific seasonal categories to avoid duplicates
+  /// with inconsistent IDs from previous seeding attempts.
+  Future<void> deleteAllSeasonalProducts() async {
+    debugPrint('🧹 Cleaning up seasonal products...');
+    final categories = ['winter_wear', 'ethnic'];
+    for (var cat in categories) {
+      final snapshot = await _products.where('category', isEqualTo: cat).get();
+      for (var doc in snapshot.docs) {
+        // Only delete if it's NOT using our new ID pattern (e.g., if it's an auto-ID)
+        // Auto-IDs are usually 20 characters long, while our IDs are like 'winter_001'
+        if (doc.id.length > 15) {
+          await doc.reference.delete();
+          debugPrint('🗑️ Deleted legacy doc: ${doc.id}');
+        }
+      }
+    }
+    debugPrint('✨ Cleanup complete!');
   }
 
   CollectionReference? get _cart {

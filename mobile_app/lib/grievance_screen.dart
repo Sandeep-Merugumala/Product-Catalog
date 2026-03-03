@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GrievanceScreen extends StatefulWidget {
   const GrievanceScreen({super.key});
@@ -11,7 +13,6 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
-  final _orderCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
 
   String _selectedType = 'Order Issues';
@@ -29,10 +30,44 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _prefillUserData();
+  }
+
+  Future<void> _prefillUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Set email immediately
+      _emailCtrl.text = user.email ?? '';
+
+      // Set name from displayName if available
+      if (user.displayName != null && user.displayName!.isNotEmpty) {
+        _nameCtrl.text = user.displayName!;
+      }
+
+      // Try fetching from Firestore to get the most accurate name
+      try {
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        final data = doc.data();
+        if (data != null && data['name'] != null) {
+          setState(() {
+            _nameCtrl.text = data['name'];
+          });
+        }
+      } catch (e) {
+        debugPrint('Error fetching user name for auto-fill: $e');
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _nameCtrl.dispose();
     _emailCtrl.dispose();
-    _orderCtrl.dispose();
     _descCtrl.dispose();
     super.dispose();
   }
@@ -45,30 +80,26 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF7C3AED), Color(0xFFDB2777)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
         title: const Text(
           'Grievance Redressal',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: _submitted ? _buildSuccessView() : _buildFormView(),
+      body: _submitted ? _buildSuccessView(context) : _buildFormView(context),
     );
   }
 
-  Widget _buildSuccessView() {
+  Widget _buildSuccessView(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = const Color(0xFFFF3F6C);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(32),
@@ -84,7 +115,7 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF7C3AED).withValues(alpha: 0.1),
+                  color: primaryColor.withValues(alpha: 0.1),
                 ),
               ),
               Container(
@@ -92,7 +123,7 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                 height: 90,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF7C3AED).withValues(alpha: 0.18),
+                  color: primaryColor.withValues(alpha: 0.18),
                 ),
               ),
               Container(
@@ -100,9 +131,7 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                 height: 66,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF7C3AED), Color(0xFFDB2777)],
-                  ),
+                  color: Color(0xFFFF3F6C),
                 ),
                 child: const Icon(
                   Icons.check_circle,
@@ -114,37 +143,36 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
           ),
 
           const SizedBox(height: 28),
-          ShaderMask(
-            shaderCallback: (bounds) => const LinearGradient(
-              colors: [Color(0xFF7C3AED), Color(0xFFDB2777)],
-            ).createShader(bounds),
-            child: const Text(
-              'Complaint Submitted!',
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-              ),
+          Text(
+            'Complaint Submitted!',
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w900,
+              color: isDark ? Colors.white : const Color(0xFF282C3F),
             ),
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             'Your grievance has been registered successfully.\nOur team will respond within 48 working hours.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black54, fontSize: 14, height: 1.6),
+            style: TextStyle(
+              color: isDark ? Colors.white70 : Colors.black54,
+              fontSize: 14,
+              height: 1.6,
+            ),
           ),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFEDE9FE),
+              color: primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               'Reference ID: GRV${DateTime.now().millisecondsSinceEpoch % 100000}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF7C3AED),
+                color: Color(0xFFFF3F6C),
                 fontSize: 13,
               ),
             ),
@@ -159,7 +187,7 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                backgroundColor: const Color(0xFF7C3AED),
+                backgroundColor: const Color(0xFFFF3F6C),
                 foregroundColor: Colors.white,
               ),
               child: const Text(
@@ -173,7 +201,7 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
             onPressed: () => Navigator.pop(context),
             child: const Text(
               'Go Back to Profile',
-              style: TextStyle(color: Color(0xFF7C3AED)),
+              style: TextStyle(color: Color(0xFFFF3F6C)),
             ),
           ),
         ],
@@ -181,7 +209,11 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
     );
   }
 
-  Widget _buildFormView() {
+  Widget _buildFormView(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = const Color(0xFFFF3F6C);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -194,44 +226,43 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF7C3AED), Color(0xFFDB2777)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: isDark ? theme.cardColor : const Color(0xFFFDE7EC),
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF7C3AED).withValues(alpha: 0.35),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+                border: isDark ? Border.all(color: Colors.white10) : null,
               ),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           '📋 Raise a Complaint',
-                          style: TextStyle(color: Colors.white70, fontSize: 13),
+                          style: TextStyle(
+                            color: isDark ? Colors.white70 : primaryColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
                           'We take every\nconcern seriously.',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF282C3F),
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
                             height: 1.3,
                           ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
                           'Response within 48 business hours.',
-                          style: TextStyle(color: Colors.white70, fontSize: 12),
+                          style: TextStyle(
+                            color: isDark ? Colors.white54 : Colors.grey[600],
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
@@ -239,12 +270,12 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
+                      color: primaryColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.support_agent,
-                      color: Colors.white,
+                      color: Color(0xFFFF3F6C),
                       size: 32,
                     ),
                   ),
@@ -258,21 +289,25 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                border: isDark ? Border.all(color: Colors.white10) : null,
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.06),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Full Name *'),
+                  _buildLabel(context, 'Full Name *'),
                   _buildTextField(
+                    context,
                     controller: _nameCtrl,
                     hint: 'Enter your full name',
                     icon: Icons.person_outline,
@@ -281,8 +316,9 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                   ),
 
                   const SizedBox(height: 16),
-                  _buildLabel('Email Address *'),
+                  _buildLabel(context, 'Email Address *'),
                   _buildTextField(
+                    context,
                     controller: _emailCtrl,
                     hint: 'Enter your email',
                     icon: Icons.email_outlined,
@@ -295,28 +331,43 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                   ),
 
                   const SizedBox(height: 16),
-                  _buildLabel('Complaint Type *'),
+                  _buildLabel(context, 'Complaint Type *'),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
+                      border: Border.all(
+                        color: isDark ? Colors.white24 : Colors.grey.shade300,
+                      ),
                       borderRadius: BorderRadius.circular(12),
-                      color: const Color(0xFFF8F9FF),
+                      color: isDark
+                          ? theme.scaffoldBackgroundColor
+                          : const Color(0xFFF8F9FF),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
                         value: _selectedType,
+                        dropdownColor: theme.cardColor,
                         icon: const Icon(
                           Icons.keyboard_arrow_down,
-                          color: Color(0xFF7C3AED),
+                          color: Color(0xFFFF3F6C),
                         ),
                         items: _types
                             .map(
-                              (t) => DropdownMenuItem(value: t, child: Text(t)),
+                              (t) => DropdownMenuItem(
+                                value: t,
+                                child: Text(
+                                  t,
+                                  style: TextStyle(
+                                    color: isDark
+                                        ? Colors.white
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              ),
                             )
                             .toList(),
                         onChanged: (v) => setState(() => _selectedType = v!),
@@ -325,37 +376,40 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
                   ),
 
                   const SizedBox(height: 16),
-                  _buildLabel('Order ID (optional)'),
-                  _buildTextField(
-                    controller: _orderCtrl,
-                    hint: 'e.g. ORD123456789',
-                    icon: Icons.receipt_outlined,
-                    validator: (v) => null,
-                  ),
-
-                  const SizedBox(height: 16),
-                  _buildLabel('Describe Your Issue *'),
+                  _buildLabel(context, 'Describe Your Issue *'),
                   TextFormField(
                     controller: _descCtrl,
                     maxLines: 5,
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
                     validator: (v) =>
                         v!.trim().isEmpty ? 'Please describe your issue' : null,
                     decoration: InputDecoration(
                       hintText: 'Please provide as much detail as possible...',
+                      hintStyle: TextStyle(
+                        color: isDark ? Colors.white38 : Colors.grey.shade500,
+                      ),
                       filled: true,
-                      fillColor: const Color(0xFFF8F9FF),
+                      fillColor: isDark
+                          ? theme.scaffoldBackgroundColor
+                          : const Color(0xFFF8F9FF),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(
+                          color: isDark ? Colors.white24 : Colors.grey.shade300,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(
+                          color: isDark ? Colors.white24 : Colors.grey.shade300,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
-                          color: Color(0xFF7C3AED),
+                          color: Color(0xFFFF3F6C),
                           width: 1.5,
                         ),
                       ),
@@ -365,59 +419,29 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
             // Submit button
             SizedBox(
               width: double.infinity,
+              height: 55,
               child: ElevatedButton(
                 onPressed: _submit,
-                style:
-                    ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                    ).copyWith(
-                      backgroundColor: WidgetStateProperty.all(
-                        Colors.transparent,
-                      ),
-                      overlayColor: WidgetStateProperty.all(
-                        Colors.white.withValues(alpha: 0.15),
-                      ),
-                    ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF7C3AED), Color(0xFFDB2777)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF3F6C),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF7C3AED).withValues(alpha: 0.4),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: const Center(
-                      child: Text(
-                        'SUBMIT COMPLAINT',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                  elevation: 8,
+                  shadowColor: const Color(0xFFFF3F6C).withValues(alpha: 0.4),
+                ),
+                child: const Text(
+                  'SUBMIT COMPLAINT',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
                   ),
                 ),
               ),
@@ -428,7 +452,10 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
               child: Text(
                 'Your data is handled securely and in accordance with our Privacy Policy.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                style: TextStyle(
+                  fontSize: 11,
+                  color: isDark ? Colors.white38 : Colors.grey.shade500,
+                ),
               ),
             ),
             const SizedBox(height: 32),
@@ -438,47 +465,62 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 13,
-          color: Color(0xFF1E1B4B),
+          color: isDark ? Colors.white70 : const Color(0xFF1E1B4B),
         ),
       ),
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildTextField(
+    BuildContext context, {
     required TextEditingController controller,
     required String hint,
     required IconData icon,
     TextInputType? keyboardType,
     required String? Function(String?) validator,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
+      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
       decoration: InputDecoration(
         hintText: hint,
-        prefixIcon: Icon(icon, color: const Color(0xFF7C3AED), size: 20),
+        hintStyle: TextStyle(
+          color: isDark ? Colors.white38 : Colors.grey.shade500,
+        ),
+        prefixIcon: Icon(icon, color: const Color(0xFFFF3F6C), size: 20),
         filled: true,
-        fillColor: const Color(0xFFF8F9FF),
+        fillColor: isDark
+            ? theme.scaffoldBackgroundColor
+            : const Color(0xFFF8F9FF),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(
+            color: isDark ? Colors.white24 : Colors.grey.shade300,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(
+            color: isDark ? Colors.white24 : Colors.grey.shade300,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF7C3AED), width: 1.5),
+          borderSide: const BorderSide(color: Color(0xFFFF3F6C), width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

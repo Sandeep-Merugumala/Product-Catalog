@@ -211,23 +211,17 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = const Color(0xFFFF3F6C);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF3B82F6), Color(0xFF6366F1)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
         title: const Text(
           'Help Center',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -240,44 +234,43 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(22),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF3B82F6), Color(0xFF6366F1)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: isDark ? theme.cardColor : const Color(0xFFFDE7EC),
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF3B82F6).withValues(alpha: 0.35),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+                border: isDark ? Border.all(color: Colors.white10) : null,
               ),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'How can we help you?',
-                          style: TextStyle(color: Colors.white70, fontSize: 13),
+                          style: TextStyle(
+                            color: isDark ? Colors.white70 : primaryColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
                           'We\'re here\nfor you!',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF282C3F),
                             fontSize: 24,
                             fontWeight: FontWeight.w900,
                             height: 1.3,
                           ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
                           'Tap any topic below to expand.',
-                          style: TextStyle(color: Colors.white60, fontSize: 12),
+                          style: TextStyle(
+                            color: isDark ? Colors.white60 : Colors.grey[600],
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
@@ -285,12 +278,12 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
+                      color: primaryColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.support_agent,
-                      color: Colors.white,
+                      color: Color(0xFFFF3F6C),
                       size: 36,
                     ),
                   ),
@@ -305,7 +298,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1E1B4B),
+                color: Color(0xFFFF3F6C),
               ),
             ),
             const SizedBox(height: 14),
@@ -319,23 +312,25 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                 curve: Curves.easeInOut,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: theme.cardColor,
                   borderRadius: BorderRadius.circular(16),
                   border: isOpen
                       ? Border.all(
                           color: topic.color.withValues(alpha: 0.4),
                           width: 1.5,
                         )
-                      : null,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(
-                        alpha: isOpen ? 0.1 : 0.05,
-                      ),
-                      blurRadius: isOpen ? 14 : 6,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
+                      : (isDark ? Border.all(color: Colors.white10) : null),
+                  boxShadow: isDark
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: isOpen ? 0.1 : 0.05,
+                            ),
+                            blurRadius: isOpen ? 14 : 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                 ),
                 child: Column(
                   children: [
@@ -351,7 +346,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: topic.bg,
+                                color: topic.bg.withValues(
+                                  alpha: isDark ? 0.2 : 1.0,
+                                ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -369,7 +366,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: isOpen
                                       ? topic.color
-                                      : const Color(0xFF1E1B4B),
+                                      : (isDark
+                                            ? Colors.white
+                                            : const Color(0xFF1E1B4B)),
                                 ),
                               ),
                             ),

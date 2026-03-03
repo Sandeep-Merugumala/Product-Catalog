@@ -4,35 +4,25 @@ import 'package:flutter/material.dart';
 class LegalScreen extends StatelessWidget {
   final String title;
   final String emoji;
-  final Color gradientStart;
-  final Color gradientEnd;
   final List<_LegalSection> sections;
 
   const LegalScreen({
     super.key,
     required this.title,
     required this.emoji,
-    required this.gradientStart,
-    required this.gradientEnd,
     required this.sections,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [gradientStart, gradientEnd],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -45,19 +35,9 @@ class LegalScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [gradientStart, gradientEnd],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: isDark ? theme.cardColor : const Color(0xFFFDE7EC),
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradientStart.withValues(alpha: 0.3),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+                border: isDark ? Border.all(color: Colors.white10) : null,
               ),
               child: Row(
                 children: [
@@ -67,16 +47,19 @@ class LegalScreen extends StatelessWidget {
                       children: [
                         Text(
                           '$emoji $title',
-                          style: const TextStyle(
-                            color: Colors.white70,
+                          style: TextStyle(
+                            color: isDark ? Colors.white70 : primaryColor,
                             fontSize: 13,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 6),
-                        const Text(
+                        Text(
                           'Please read\ncarefully',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF282C3F),
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                             height: 1.3,
@@ -86,7 +69,7 @@ class LegalScreen extends StatelessWidget {
                         Text(
                           'Last updated: February 2026',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: isDark ? Colors.white54 : Colors.grey[600],
                             fontSize: 11,
                           ),
                         ),
@@ -96,12 +79,12 @@ class LegalScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
+                      color: primaryColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.description_outlined,
-                      color: Colors.white,
+                      color: primaryColor,
                       size: 32,
                     ),
                   ),
@@ -118,15 +101,18 @@ class LegalScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 14),
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: theme.cardColor,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
+                  border: isDark ? Border.all(color: Colors.white10) : null,
+                  boxShadow: isDark
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,16 +123,14 @@ class LegalScreen extends StatelessWidget {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [gradientStart, gradientEnd],
-                            ),
+                            color: primaryColor.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Center(
                             child: Text(
                               '${i + 1}',
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
                               ),
@@ -160,7 +144,9 @@ class LegalScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: gradientStart,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF282C3F),
                             ),
                           ),
                         ),
@@ -169,9 +155,9 @@ class LegalScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     Text(
                       s.body,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13.5,
-                        color: Colors.black54,
+                        color: isDark ? Colors.white70 : Colors.black54,
                         height: 1.7,
                       ),
                     ),
@@ -201,7 +187,7 @@ class TermsOfUseScreen extends StatelessWidget {
     _LegalSection(
       heading: 'Acceptance of Terms',
       body:
-          'By accessing or using the Myntra app, you agree to be bound by these Terms of Use. If you do not agree to all the terms, please do not use our services. We reserve the right to update these terms at any time.',
+          'By accessing or using the StyleHub app, you agree to be bound by these Terms of Use. If you do not agree to all the terms, please do not use our services. We reserve the right to update these terms at any time.',
     ),
     _LegalSection(
       heading: 'User Accounts',
@@ -216,12 +202,12 @@ class TermsOfUseScreen extends StatelessWidget {
     _LegalSection(
       heading: 'Intellectual Property',
       body:
-          'All content on this platform — including text, graphics, logos, images, and software — is the property of Myntra or its content suppliers and is protected by applicable copyright and trademark laws.',
+          'All content on this platform — including text, graphics, logos, images, and software — is the property of StyleHub or its content suppliers and is protected by applicable copyright and trademark laws.',
     ),
     _LegalSection(
       heading: 'Limitation of Liability',
       body:
-          'To the fullest extent permitted by law, Myntra shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the app or any products purchased through it.',
+          'To the fullest extent permitted by law, StyleHub shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the app or any products purchased through it.',
     ),
     _LegalSection(
       heading: 'Governing Law',
@@ -232,11 +218,9 @@ class TermsOfUseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LegalScreen(
+    return const LegalScreen(
       title: 'Terms of Use',
       emoji: '📋',
-      gradientStart: const Color(0xFF2563EB),
-      gradientEnd: const Color(0xFF06B6D4),
       sections: _sections,
     );
   }
@@ -275,17 +259,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
     _LegalSection(
       heading: 'Your Rights',
       body:
-          'You have the right to access, correct, or delete your personal data. To exercise these rights, contact our Data Protection Officer at privacy@myntra.com. We will respond within 30 days.',
+          'You have the right to access, correct, or delete your personal data. To exercise these rights, contact our Data Protection Officer at privacy@stylehub.com. We will respond within 30 days.',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return LegalScreen(
+    return const LegalScreen(
       title: 'Privacy Policy',
       emoji: '🔒',
-      gradientStart: const Color(0xFF059669),
-      gradientEnd: const Color(0xFF34D399),
       sections: _sections,
     );
   }
@@ -299,7 +281,7 @@ class AboutUsScreen extends StatelessWidget {
     _LegalSection(
       heading: 'Who We Are',
       body:
-          'Myntra is India\'s leading fashion e-commerce platform. Founded in 2007, we connect millions of fashion lovers with the latest trends from thousands of brands — all in one place.',
+          'StyleHub is India\'s leading fashion e-commerce platform. Founded in 2007, we connect millions of fashion lovers with the latest trends from thousands of brands — all in one place.',
     ),
     _LegalSection(
       heading: 'Our Mission',
@@ -309,7 +291,7 @@ class AboutUsScreen extends StatelessWidget {
     _LegalSection(
       heading: 'Our Journey',
       body:
-          'From a small personalised gifting startup in Bangalore, Myntra has grown into a fashion powerhouse with over 5 million products across 7,000+ brands, serving customers in 19,000+ pin codes.',
+          'From a small personalised gifting startup in Bangalore, StyleHub has grown into a fashion powerhouse with over 5 million products across 7,000+ brands, serving customers in 19,000+ pin codes.',
     ),
     _LegalSection(
       heading: 'Sustainability',
@@ -319,17 +301,15 @@ class AboutUsScreen extends StatelessWidget {
     _LegalSection(
       heading: 'Contact Us',
       body:
-          'Registered Address: Myntra Designs Pvt. Ltd., Buildings Alyssa, Begonia & Clover,\nEmbassy Tech Village, Outer Ring Road,\nDevarabisanahalli, Bengaluru – 560103\n\nEmail: support@myntra.com\nPhone: 1800-102-8508 (Toll Free)',
+          'Registered Address: StyleHub Designs Pvt. Ltd., Buildings Alyssa, Begonia & Clover,\nEmbassy Tech Village, Outer Ring Road,\nDevarabisanahalli, Bengaluru – 560103\n\nEmail: support@stylehub.com\nPhone: 1800-102-8508 (Toll Free)',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return LegalScreen(
+    return const LegalScreen(
       title: 'About Us',
       emoji: '🏢',
-      gradientStart: const Color(0xFFFF3F6C),
-      gradientEnd: const Color(0xFFFA8231),
       sections: _sections,
     );
   }

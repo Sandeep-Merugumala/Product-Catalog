@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'splash_screen.dart';
 import 'firebase_options.dart';
+import 'firestore_service.dart';
 import 'package:mobile_app/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
@@ -15,6 +16,11 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   EasyLocalization.logger.enableBuildModes = [];
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Clean up and seed products to Firestore
+  final fs = FirestoreService();
+  await fs.deleteAllSeasonalProducts(); // Remove inconsistent legacy data
+  await fs.seedAllProducts(); // Sync fresh data with consistent fields
 
   runApp(
     EasyLocalization(

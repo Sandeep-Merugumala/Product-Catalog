@@ -434,11 +434,6 @@ class CategoryList extends StatelessWidget {
       "img":
           "https://images.unsplash.com/photo-1627094522148-ac0c843a1383?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2F0Y2hlcyUyMGFuZCUyMGJhZ3N8ZW58MHx8MHx8fDA%3D",
     },
-    {
-      "name": "gadgets",
-      "img":
-          "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGdhZGdldHN8ZW58MHx8MHx8fDA%3D",
-    },
   ];
 
   @override
@@ -455,38 +450,72 @@ class CategoryList extends StatelessWidget {
             children: categories.map((category) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 65,
-                      height: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          16,
-                        ), // Rounded square
-                        image: DecorationImage(
-                          image: NetworkImage(category["img"] as String),
-                          fit: BoxFit.cover,
+                child: InkWell(
+                  onTap: () {
+                    // Map UI names to Firestore categories
+                    String firestoreCategory = '';
+                    String displayTitle = (category['name'] as String).tr();
+
+                    switch (category['name']) {
+                      case 'fashion':
+                        firestoreCategory = 'Topwear';
+                        displayTitle = 'fashion'.tr();
+                        break;
+                      case 'beauty':
+                        firestoreCategory = 'Grooming';
+                        displayTitle = 'beauty'.tr();
+                        break;
+                      case 'footwear':
+                        firestoreCategory = 'Footwear';
+                        break;
+                      case 'accessories':
+                        firestoreCategory = 'Accessories';
+                        break;
+                      default:
+                        firestoreCategory = category['name'] as String;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryProductsScreen(
+                          category: firestoreCategory,
+                          displayTitle: displayTitle,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 65,
+                        height: 65,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: NetworkImage(category["img"] as String),
+                            fit: BoxFit.cover,
                           ),
-                        ],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      (category["name"] as String).tr(),
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      const SizedBox(height: 6),
+                      Text(
+                        (category["name"] as String).tr(),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }).toList(),
