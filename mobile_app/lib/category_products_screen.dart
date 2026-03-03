@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/firestore_service.dart';
-import 'package:mobile_app/product_detail_screen.dart';
+import 'package:mobile_app/product_details_page.dart';
 
 class CategoryProductsScreen extends StatelessWidget {
   final String category;
@@ -80,7 +80,7 @@ class CategoryProductsScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(product: product),
+            builder: (context) => ProductDetailsPage(product: product),
           ),
         );
       },
