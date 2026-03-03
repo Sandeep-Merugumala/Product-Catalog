@@ -353,20 +353,6 @@ class MyntraAppBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.white.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.grid_view,
-                    color: isDarkMode ? Colors.white : Colors.grey[800],
-                    size: 20,
-                  ),
-                ),
               ],
             ),
           ),
@@ -1819,7 +1805,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          product['offer'],
+                          product['offer'].toString().tr(),
                           style: const TextStyle(
                             color: Color(0xFFFF3F6C),
                             fontSize: 11,
