@@ -65,61 +65,6 @@ class OrdersScreen extends StatelessWidget {
       ),
       body: CustomScrollView(
         slivers: [
-          // Search and Filter Section
-          SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search in orders',
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.tune,
-                      color: Colors.black87,
-                      size: 20,
-                    ),
-                    label: const Text(
-                      'FILTER',
-                      style: TextStyle(color: Colors.black87),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      side: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
           // Promotional Banner
           SliverToBoxAdapter(
             child: Container(
@@ -222,56 +167,6 @@ class OrdersScreen extends StatelessWidget {
             ),
           ),
 
-          // Frequently Bought Section
-          SliverToBoxAdapter(
-            child: Container(
-              color: const Color(0xFFE8EAF6), // Light blue-grey background
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Frequently bought by shoppers like you',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Color(0xFF3F51B5),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 140,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      children: [
-                        _buildSuggestedProductCard(
-                          'Wild stone',
-                          'Men Edge Eau de...',
-                          '419',
-                          '699',
-                          '40% OFF',
-                          'assets/wild_stone.jpg',
-                        ),
-                        _buildSuggestedProductCard(
-                          'Nivea',
-                          'Men Dark Spot...',
-                          '285',
-                          '450',
-                          '35% OFF',
-                          'assets/nivea.jpg',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
           // Orders List
           StreamBuilder<QuerySnapshot>(
             stream: FirestoreService().getOrdersStream(),
@@ -333,91 +228,6 @@ class OrdersScreen extends StatelessWidget {
                 }, childCount: orders.length),
               );
             },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuggestedProductCard(
-    String brand,
-    String title,
-    String price,
-    String oldPrice,
-    String discount,
-    String imagePath,
-  ) {
-    return Container(
-      width: 260,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Center(
-              child: Icon(Icons.image, color: Colors.grey),
-            ), // Placeholder for actual image
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  brand,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 12, color: Colors.black87),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      '₹$oldPrice',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        decoration: TextDecoration.lineThrough,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '₹$price',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  discount,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.orange,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
@@ -600,41 +410,13 @@ class OrdersScreen extends StatelessWidget {
                       size: 36,
                     ), // Mock coin
                     const SizedBox(width: 12),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.star_border,
-                                color: Colors.grey,
-                                size: 28,
-                              ),
-                              Icon(
-                                Icons.star_border,
-                                color: Colors.grey,
-                                size: 28,
-                              ),
-                              Icon(
-                                Icons.star_border,
-                                color: Colors.grey,
-                                size: 28,
-                              ),
-                              Icon(
-                                Icons.star_border,
-                                color: Colors.grey,
-                                size: 28,
-                              ),
-                              Icon(
-                                Icons.star_border,
-                                color: Colors.grey,
-                                size: 28,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Text(
+                          _RatingStars(size: 28),
+                          const SizedBox(height: 4),
+                          const Text(
                             'Rate & Review to win Myncash!',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
@@ -651,6 +433,40 @@ class OrdersScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _RatingStars extends StatefulWidget {
+  final double size;
+  const _RatingStars({this.size = 30});
+
+  @override
+  State<_RatingStars> createState() => _RatingStarsState();
+}
+
+class _RatingStarsState extends State<_RatingStars> {
+  int _rating = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        final starIndex = index + 1;
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _rating = starIndex;
+            });
+          },
+          child: Icon(
+            starIndex <= _rating ? Icons.star : Icons.star_border,
+            color: starIndex <= _rating ? Colors.amber : Colors.grey,
+            size: widget.size,
+          ),
+        );
+      }),
     );
   }
 }

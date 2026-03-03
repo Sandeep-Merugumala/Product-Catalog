@@ -1,0 +1,11 @@
+﻿Analyzing mobile_app...                                         
+
+   info - Unnecessary use of multiple underscores - lib\chatbot\chatbot_widget.dart:726:32 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\coupons_screen.dart:678:26 - unnecessary_underscores
+   info - Invalid use of a private type in a public API - lib\legal_screens.dart:9:14 - library_private_types_in_public_api
+   info - Unnecessary use of multiple underscores - lib\login.dart:182:26 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\login.dart:530:33 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\login.dart:530:37 - unnecessary_underscores
+   info - Don't invoke 'print' in production code - lib\seed_products.dart:13:3 - avoid_print
+   info - Don't invoke 'print' in production code - lib\seed_products.dart:108:3 - avoid_print
+

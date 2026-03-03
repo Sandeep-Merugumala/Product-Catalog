@@ -11,10 +11,10 @@ import 'package:mobile_app/account_details.dart';
 import 'package:mobile_app/orders_screen.dart';
 import 'package:mobile_app/insider_screen.dart';
 import 'package:mobile_app/coupons_screen.dart';
-import 'package:mobile_app/help_center_screen.dart';
 import 'package:mobile_app/faq_screen.dart';
 import 'package:mobile_app/legal_screens.dart';
 import 'package:mobile_app/grievance_screen.dart';
+import 'package:mobile_app/help_center_screen.dart';
 import 'package:mobile_app/wishlist_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -184,19 +184,14 @@ class ProfilePage extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors:
-                                Theme.of(context).brightness == Brightness.dark
-                                ? [
-                                    const Color(0xFF2C1E22),
-                                    const Color(0xFF3E1E22),
-                                  ]
-                                : [
-                                    const Color(0xFFFFE5EC),
-                                    const Color(0xFFFFF0F5),
-                                  ],
-                          ),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? const Color(0xFF2D2D2D)
+                              : const Color(0xFFFDE7EC),
                           borderRadius: BorderRadius.circular(12),
+                          border:
+                              Theme.of(context).brightness == Brightness.dark
+                              ? Border.all(color: Colors.white10)
+                              : null,
                         ),
                         child: Row(
                           children: [

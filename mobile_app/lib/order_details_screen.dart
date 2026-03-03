@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/grievance_screen.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> order;
@@ -28,19 +29,33 @@ class OrderDetailsScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.support_agent, color: Colors.black54, size: 18),
-                  SizedBox(width: 4),
-                  Text('Help', style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GrievanceScreen(),
+                  ),
+                );
+              },
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.support_agent, color: Colors.black54, size: 18),
+                    SizedBox(width: 4),
+                    Text('Help', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
               ),
             ),
           ),
@@ -199,7 +214,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
                   const SizedBox(width: 16),
 
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -212,78 +227,10 @@ class OrderDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                              size: 30,
-                            ),
-                            Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                              size: 30,
-                            ),
-                            Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                              size: 30,
-                            ),
-                            Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                              size: 30,
-                            ),
-                            Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                              size: 30,
-                            ),
-                          ],
-                        ),
+                        _RatingStars(size: 30),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            // Items that go well with this item
-            Container(
-              color: Colors.white,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Items that go well with this item',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Color(0xFF2C3240),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 180,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      children: [
-                        _buildSuggestedItemCard(
-                          'assets/pants.jpg',
-                        ), // Placeholder images
-                        _buildSuggestedItemCard('assets/dhoti.jpg'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16), // Padding at the bottom
                 ],
               ),
             ),
@@ -292,18 +239,38 @@ class OrderDetailsScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSuggestedItemCard(String imagePath) {
-    return Container(
-      width: 140,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: const Center(
-        child: Icon(Icons.image, color: Colors.grey, size: 40),
-      ), // Placeholder for image
+class _RatingStars extends StatefulWidget {
+  final double size;
+  const _RatingStars({this.size = 30});
+
+  @override
+  State<_RatingStars> createState() => _RatingStarsState();
+}
+
+class _RatingStarsState extends State<_RatingStars> {
+  int _rating = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        final starIndex = index + 1;
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _rating = starIndex;
+            });
+          },
+          child: Icon(
+            starIndex <= _rating ? Icons.star : Icons.star_border,
+            color: starIndex <= _rating ? Colors.amber : Colors.grey,
+            size: widget.size,
+          ),
+        );
+      }),
     );
   }
 }

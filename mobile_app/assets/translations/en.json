@@ -339,5 +339,8 @@
   "featuredbrands": "#FeaturedBrands",
   "classic_denim": "Classic Denim",
   "premium_jeans": "Premium Jeans •",
+  "no_products_found": "No products found",
+  "try_another_category": "Try exploring another category",
+  "added_to_bag": "Added to Bag Successfully!",
   "sign_in_with_google": "Sign in with Google"
 }
