@@ -13,6 +13,7 @@ import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'package:mobile_app/widgets/custom_bottom_nav_bar.dart';
 import 'home_screen.dart';
 import 'package:mobile_app/notifications_page.dart';
+import 'package:mobile_app/product_details_page.dart';
 
 class WomensSection extends StatefulWidget {
   final int initialTabIndex;
@@ -1063,21 +1064,6 @@ class WomensProductCategories extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Container(
-            alignment: Alignment.center,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -1215,226 +1201,226 @@ class _WomensProductGridState extends State<WomensProductGrid> {
       {
         'image':
             'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&auto=format&fit=crop',
-        'brand': 'highlander',
+        'brand': 'Highlander',
         'name': 'women_solid_t_shirt',
         'price': 499,
         'originalPrice': 999,
         'discount': 50,
         'rating': 4.3,
         'reviews': 1560,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1554568218-ffd1e72a2151?w=600&auto=format&fit=crop',
-        'brand': 'puma',
+        'brand': 'Puma',
         'name': 'essential_logo_crew_sweatshirt',
         'price': 1199,
         'originalPrice': 2999,
         'discount': 60,
         'rating': 4.2,
         'reviews': 890,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://media.istockphoto.com/id/1258119410/photo/young-stylish-sexy-woman-in-pajamas-standing-on-terrace-in-tropical-hotel-palm-trees.webp?a=1&b=1&s=612x612&w=0&k=20&c=SOPBPs1BaAQD6bXK_99UJg5GAuHwx_F1vhjq4l9wfns=',
-        'brand': 'biba',
+        'brand': 'Biba',
         'name': 'printed_anarkali_kurta',
         'price': 2499,
         'originalPrice': 4999,
         'discount': 50,
         'rating': 4.4,
         'reviews': 3200,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?w=500&auto=format&fit=crop',
-        'brand': 'only',
+        'brand': 'Only',
         'name': 'floral_a_line_dress',
         'price': 1799,
         'originalPrice': 3499,
         'discount': 48,
         'rating': 4.3,
         'reviews': 1200,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
 
       // BOTTOMWEAR
       {
         'image':
             'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=500&auto=format&fit=crop',
-        'brand': 'roadster',
+        'brand': 'Roadster',
         'name': 'women_slim_fit_jeans',
         'price': 899,
         'originalPrice': 1499,
         'discount': 40,
         'rating': 4.2,
         'reviews': 2400,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1638396637969-956ca903df87?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHdvbWVuJTIwZm9ybWFsJTIwdHJvdXNlcnN8ZW58MHx8MHx8fDA%3D',
-        'brand': 'marks_and_spencer',
+        'brand': 'Marks & Spencer',
         'name': 'formal_trousers',
         'price': 1999,
         'originalPrice': 2999,
         'discount': 33,
         'rating': 4.1,
         'reviews': 850,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1706219413873-74517aea8585?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        'brand': 'zara',
+        'brand': 'Zara',
         'name': 'pleated_midi_skirt',
         'price': 2290,
         'originalPrice': 2290,
         'discount': 0,
         'rating': 4.2,
         'reviews': 450,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&auto=format&fit=crop',
-        'brand': 'levis',
+        'brand': 'Levis',
         'name': 'high_rise_denim_shorts',
         'price': 1299,
         'originalPrice': 2499,
         'discount': 48,
         'rating': 4.5,
         'reviews': 1100,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
 
       // FOOTWEAR
       {
         'image':
             'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop',
-        'brand': 'catwalk',
+        'brand': 'Catwalk',
         'name': 'women_heels',
         'price': 1995,
         'originalPrice': 3995,
         'discount': 50,
         'rating': 4.5,
         'reviews': 1200,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&auto=format&fit=crop',
-        'brand': 'nike',
+        'brand': 'Nike',
         'name': 'women_running_shoes',
         'price': 4495,
         'originalPrice': 8995,
         'discount': 50,
         'rating': 4.6,
         'reviews': 4100,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=500&auto=format&fit=crop',
-        'brand': 'bata',
+        'brand': 'Bata',
         'name': 'flat_sandals',
         'price': 699,
         'originalPrice': 999,
         'discount': 30,
         'rating': 3.9,
         'reviews': 1500,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&auto=format&fit=crop',
-        'brand': 'skechers',
+        'brand': 'Skechers',
         'name': 'walking_shoes',
         'price': 3200,
         'originalPrice': 4500,
         'discount': 28,
         'rating': 4.7,
         'reviews': 900,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
 
       // ACCESSORIES
       {
         'image':
             'https://images.unsplash.com/photo-1657159810148-f6a1f3d74f7e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d29tZW4lMjB3YXRjaGVzfGVufDB8fDB8fHww',
-        'brand': 'titan',
+        'brand': 'Titan',
         'name': 'women_watch',
         'price': 4595,
         'originalPrice': 6595,
         'discount': 30,
         'rating': 4.4,
         'reviews': 2100,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&auto=format&fit=crop',
-        'brand': 'lavie',
+        'brand': 'Lavie',
         'name': 'textured_handbag',
         'price': 1299,
         'originalPrice': 3999,
         'discount': 67,
         'rating': 4.0,
         'reviews': 5600,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&auto=format&fit=crop',
-        'brand': 'ray_ban',
+        'brand': 'Ray-Ban',
         'name': 'aviator_sunglasses',
         'price': 6590,
         'originalPrice': 8590,
         'discount': 23,
         'rating': 4.7,
         'reviews': 980,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://plus.unsplash.com/premium_photo-1674748384594-47e6b69793fe?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHNpbHZlciUyMG5lY2tsYWNlfGVufDB8fDB8fHww',
-        'brand': 'giva',
+        'brand': 'Giva',
         'name': 'silver_pendant_necklace',
         'price': 1899,
         'originalPrice': 2500,
         'discount': 24,
         'rating': 4.8,
         'reviews': 1500,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
 
       // GROOMING (BEAUTY)
       {
         'image':
             'https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=500&auto=format&fit=crop',
-        'brand': 'lakme',
+        'brand': 'Lakme',
         'name': 'absolute_matte_lipstick',
         'price': 499,
         'originalPrice': 750,
         'discount': 33,
         'rating': 4.1,
         'reviews': 3500,
-        'category': 'grooming',
+        'category': 'Grooming',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&auto=format&fit=crop',
-        'brand': 'maybelline',
+        'brand': 'Maybelline',
         'name': 'fit_me_foundation',
         'price': 599,
         'originalPrice': 799,
         'discount': 25,
         'rating': 4.5,
         'reviews': 8900,
-        'category': 'grooming',
+        'category': 'Grooming',
       },
       {
         'image':
@@ -1446,7 +1432,7 @@ class _WomensProductGridState extends State<WomensProductGrid> {
         'discount': 18,
         'rating': 4.4,
         'reviews': 6700,
-        'category': 'grooming',
+        'category': 'Grooming',
       },
       {
         'image':
@@ -1551,7 +1537,7 @@ class _WomensProductGridState extends State<WomensProductGrid> {
           sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.48, // Adjusted height for Add to Cart button
+              childAspectRatio: 0.53,
               mainAxisSpacing: 12,
               crossAxisSpacing: 10,
             ),
@@ -1570,35 +1556,43 @@ class _WomensProductGridState extends State<WomensProductGrid> {
     Map<String, dynamic> product,
     FirestoreService firestoreService,
   ) {
-    // Determine the product title to use (some have 'name', some have 'title')
     final title = product['name'] ?? product['title'] ?? 'Product';
     final subtitle = product['brand'] ?? product['subtitle'] ?? '';
-    // Ensure ID exists for Firestore operations
     if (!product.containsKey('id')) {
       product['id'] = '${subtitle}_$title'.hashCode.toString();
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Stack(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsPage(product: product),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[200]!),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(8),
                   ),
-                  child: Image.network(
-                    product['image'],
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Image.network(
+                      product['image'],
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -1637,7 +1631,7 @@ class _WomensProductGridState extends State<WomensProductGrid> {
                                       content: Text(
                                         'removed_from_wishlist'.tr(),
                                       ),
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 }
@@ -1647,7 +1641,7 @@ class _WomensProductGridState extends State<WomensProductGrid> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text('added_to_wishlist'.tr()),
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 }
@@ -1682,136 +1676,118 @@ class _WomensProductGridState extends State<WomensProductGrid> {
                 ),
               ],
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text(
+                    subtitle.toString().tr(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      color: Colors.black87,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    title.toString().tr(),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 11),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
                     children: [
                       Text(
-                        (product['brand'] as String).tr(),
+                        '₹${product['price']}',
                         style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                           color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(width: 4),
                       Text(
-                        (product['name'] as String).tr(),
-                        style: TextStyle(color: Colors.grey[600], fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        '₹${product['originalPrice']}',
+                        style: TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey[500],
+                          fontSize: 11,
+                        ),
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '₹${product['price']}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.color,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '₹${product['originalPrice']}',
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey[500],
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
+                  const SizedBox(height: 2),
+                  Text(
+                    '(${product['discount']}% OFF)',
+                    style: const TextStyle(
+                      color: Color(0xFFFF6F00),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 36,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        firestoreService
+                            .addToCart(product)
+                            .then((_) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      '✅ Added to Bag Successfully!',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
+                            })
+                            .catchError((e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'error_with_icon'.tr(
+                                        args: [e.toString()],
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                            });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFF3F6C),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '(${product['discount']}% OFF)',
-                        style: const TextStyle(
-                          color: Color(0xFFFF6F00),
+                      child: const Text(
+                        'ADD TO CART',
+                        style: TextStyle(
                           fontSize: 11,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      // NEW ELEVATED BUTTON
-                      SizedBox(
-                        width: double.infinity,
-                        height: 36,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            firestoreService
-                                .addToCart(product)
-                                .then((_) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          '✅ Added to Bag Successfully!',
-                                        ),
-                                        backgroundColor: Colors.green,
-                                        duration: Duration(seconds: 1),
-                                      ),
-                                    );
-                                  }
-                                })
-                                .catchError((e) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'error_with_icon'.tr(
-                                            args: [e.toString()],
-                                          ),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
-                                  }
-                                });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(
-                              0xFFFF3F6C,
-                            ), // Pink for Women
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          child: const Text(
-                            'ADD TO CART',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

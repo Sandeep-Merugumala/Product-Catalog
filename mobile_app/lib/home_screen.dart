@@ -270,7 +270,8 @@ class MyntraAppBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),                const SizedBox(width: 12),
+                ),
+                const SizedBox(width: 12),
                 InkWell(
                   onTap: () {
                     Navigator.push(
@@ -286,7 +287,6 @@ class MyntraAppBar extends StatelessWidget {
                     size: 26,
                   ),
                 ),
-
 
                 const SizedBox(width: 12),
                 InkWell(
@@ -806,9 +806,107 @@ class _FlashSaleSectionState extends State<FlashSaleSection> {
     final minutes = (_timeLeft.inMinutes % 60).toString().padLeft(2, '0');
     final seconds = (_timeLeft.inSeconds % 60).toString().padLeft(2, '0');
 
+    final List<Map<String, dynamic>> flashSaleProducts = [
+      {
+        'id': 'Flash_Nike_Flyknit_01',
+        'image':
+            'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmlrZSUyMHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Nike Flyknit Max',
+        'subtitle': 'Running Shoes',
+        'category': 'footwear',
+        'brand': 'nike',
+        'price': 4599,
+        'originalPrice': 11499,
+        'rating': 4.8,
+        'ratingCount': '5.2k',
+        'offer': '60% OFF',
+        'description':
+            'Premium Nike Flyknit running shoes available today only at an extensive discount.',
+      },
+      {
+        'id': 'Flash_Puma_RS_02',
+        'image':
+            'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
+        'title': 'Puma RS-Fast',
+        'subtitle': 'Sneakers',
+        'category': 'footwear',
+        'brand': 'puma',
+        'price': 3199,
+        'originalPrice': 7999,
+        'rating': 4.6,
+        'ratingCount': '3.1k',
+        'offer': '60% OFF',
+        'description': 'Chunky RS-Fast Puma sneakers with advanced cushioning.',
+      },
+      {
+        'id': 'Flash_Adidas_Boost_03',
+        'image':
+            'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
+        'title': 'Adidas Solar Boost',
+        'subtitle': 'Performance Wear',
+        'category': 'footwear',
+        'brand': 'adidas',
+        'price': 3999,
+        'originalPrice': 9999,
+        'rating': 4.5,
+        'ratingCount': '2.4k',
+        'offer': '60% OFF',
+        'description':
+            'High-performance running shoes featuring responsive Boost cushioning.',
+      },
+      {
+        'id': 'Flash_Reebok_Zig_04',
+        'image':
+            'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Reebok Zig Kinetica',
+        'subtitle': 'Everyday Comfort',
+        'category': 'footwear',
+        'brand': 'reebok',
+        'price': 2799,
+        'originalPrice': 6999,
+        'rating': 4.4,
+        'ratingCount': '1.8k',
+        'offer': '60% OFF',
+        'description':
+            'Unique zigzag midsole that channels and returns kinetic energy.',
+      },
+      {
+        'id': 'Flash_Nike_Zoom_05',
+        'image':
+            'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjZ8fGZhc2hpb258ZW58MHx8MHx8fDA%3D',
+        'title': 'Nike Air Zoom',
+        'subtitle': 'Training Shoes',
+        'category': 'footwear',
+        'brand': 'nike',
+        'price': 4299,
+        'originalPrice': 10749,
+        'rating': 4.7,
+        'ratingCount': '4.1k',
+        'offer': '60% OFF',
+        'description':
+            'Versatile training shoe that offers supreme responsiveness.',
+      },
+      {
+        'id': 'Flash_Skechers_06',
+        'image':
+            'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNob2VzfGVufDB8fDB8fHww',
+        'title': 'Skechers Max Cushion',
+        'subtitle': 'Walking Shoes',
+        'category': 'footwear',
+        'brand': 'skechers',
+        'price': 2399,
+        'originalPrice': 5999,
+        'rating': 4.3,
+        'ratingCount': '2.1k',
+        'offer': '60% OFF',
+        'description':
+            'Ultra-cushioned shoes perfect for being on your feet all day.',
+      },
+    ];
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFFFF3F6C), Color(0xFFFF1744)],
@@ -840,7 +938,7 @@ class _FlashSaleSectionState extends State<FlashSaleSection> {
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
+                        letterSpacing: 0.5,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -893,102 +991,109 @@ class _FlashSaleSectionState extends State<FlashSaleSection> {
             height: 140,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 6,
+              itemCount: flashSaleProducts.length,
               itemBuilder: (context, index) {
-                return Container(
-                  width: 110,
-                  margin: const EdgeInsets.only(right: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(8),
-                          ),
-                          child: Stack(
-                            children: [
-                              Image.network(
-                                [
-                                  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmlrZSUyMHNob2VzfGVufDB8fDB8fHww',
-                                  'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-                                  'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-                                  'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww',
-                                  'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjZ8fGZhc2hpb258ZW58MHx8MHx8fDA%3D',
-                                  'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNob2VzfGVufDB8fDB8fHww',
-                                ][index],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFF3F6C),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Text(
-                                    '60% OFF',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                final product = flashSaleProducts[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetailsPage(product: product),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Product ${index + 1}',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              maxLines: 1,
+                    );
+                  },
+                  child: Container(
+                    width: 110,
+                    margin: const EdgeInsets.only(right: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(8),
                             ),
-                            const SizedBox(height: 2),
-                            Row(
+                            child: Stack(
                               children: [
-                                const Text(
-                                  '₹799',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFF3F6C),
-                                  ),
+                                Image.network(
+                                  product['image'],
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
                                 ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '₹1999',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    decoration: TextDecoration.lineThrough,
-                                    color: Colors.grey[500],
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFF3F6C),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      product['offer'],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product['title'],
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Text(
+                                    '₹${product['price']}',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFFF3F6C),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '₹${product['originalPrice']}',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -1001,7 +1106,7 @@ class _FlashSaleSectionState extends State<FlashSaleSection> {
 
   Widget _buildTimeBox(String time) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(4),
@@ -1479,73 +1584,97 @@ class FeaturedProductCarousel extends StatelessWidget {
         'id': 'Nike_Shoe_001',
         'image':
             'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmlrZSUyMHNob2VzfGVufDB8fDB8fHww',
-        'title': 'nike_air_max',
-        'subtitle': 'running_shoes',
+        'title': 'Nike Air Max',
+        'subtitle': 'Running Shoes',
+        'category': 'footwear',
+        'brand': 'nike',
         'price': 4995,
         'originalPrice': 8995,
         'rating': 4.5,
         'ratingCount': '2.4k',
-        'offer': 'n_45percent_off',
+        'offer': '45% OFF',
+        'description':
+            'Classic Nike Air Max running shoes providing incredible comfort and timeless style.',
       },
       {
         'id': 'Adidas_Shoe_002',
         'image':
             'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-        'title': 'adidas_ultraboost',
-        'subtitle': 'performance_wear',
+        'title': 'Adidas Ultraboost',
+        'subtitle': 'Performance Wear',
+        'category': 'footwear',
+        'brand': 'adidas',
         'price': 6500,
         'originalPrice': 12000,
         'rating': 4.7,
         'ratingCount': '1.8k',
-        'offer': 'n_46percent_off',
+        'offer': '46% OFF',
+        'description':
+            'High-performance running shoes featuring responsive Boost cushioning.',
       },
       {
         'id': 'Puma_Shoe_003',
         'image':
             'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
-        'title': 'puma_rs_x',
-        'subtitle': 'casual_sneakers',
+        'title': 'Puma RS-X',
+        'subtitle': 'Casual Sneakers',
+        'category': 'footwear',
+        'brand': 'puma',
         'price': 3999,
         'originalPrice': 7999,
         'rating': 4.3,
         'ratingCount': '950',
-        'offer': 'n_50percent_off',
+        'offer': '50% OFF',
+        'description':
+            'Retro-inspired sneakers with bold colors and chunky silhouette.',
       },
       {
         'id': 'Reebok_Shoe_004',
         'image':
             'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww',
-        'title': 'reebok_classic',
-        'subtitle': 'everyday_comfort',
+        'title': 'Reebok Classic',
+        'subtitle': 'Everyday Comfort',
+        'category': 'footwear',
+        'brand': 'reebok',
         'price': 2499,
         'originalPrice': 4999,
         'rating': 4.2,
         'ratingCount': '1.2k',
-        'offer': 'n_50percent_off',
+        'offer': '50% OFF',
+        'description':
+            'A clean, timeless classic shoe designed for everyday wear.',
       },
       {
         'id': 'UnderArmour_Shoe_005',
         'image':
             'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww',
-        'title': 'under_armour',
-        'subtitle': 'sport_style',
+        'title': 'Under Armour',
+        'subtitle': 'Sport Style',
+        'category': 'footwear',
+        'brand': 'underarmour',
         'price': 5500,
         'originalPrice': 8000,
         'rating': 4.6,
         'ratingCount': '500',
-        'offer': 'n_30percent_off',
+        'offer': '30% OFF',
+        'description':
+            'Durable and lightweight shoes made for high-intensity training.',
       },
       {
         'id': 'Skechers_Shoe_006',
         'image':
             'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNob2VzfGVufDB8fDB8fHww',
-        'title': 'skechers_gowalk',
-        'subtitle': 'walking_shoes',
+        'title': 'Skechers GOwalk',
+        'subtitle': 'Walking Shoes',
+        'category': 'footwear',
+        'brand': 'skechers',
         'price': 2999,
         'originalPrice': 4500,
         'rating': 4.4,
         'ratingCount': '3.1k',
-        'offer': 'n_33percent_off',
+        'offer': '33% OFF',
+        'description':
+            'Slip-on walking shoes built for extreme comfort during long walks.',
       },
     ];
 
@@ -1767,7 +1896,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product['title'].toString().tr(),
+                                    product['title'].toString(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,
@@ -1777,7 +1906,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    product['subtitle'].toString().tr(),
+                                    product['subtitle'].toString(),
                                     style: TextStyle(
                                       color: Colors.grey[600],
                                       fontSize: 11,
@@ -1853,7 +1982,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          product['offer'].toString().tr(),
+                          product['offer'].toString(),
                           style: const TextStyle(
                             color: Color(0xFFFF3F6C),
                             fontSize: 11,
@@ -2224,278 +2353,297 @@ class ProductGrid extends StatelessWidget {
           // Use data from the list, cycling through if index > length
           final product = products[index % products.length];
 
-          return Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.grey[800]!
-                    : Colors.grey[200]!,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailsPage(product: product),
                 ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(10),
-                        ),
-                        child: Image.network(
-                          product['image'],
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        right: 8,
-                        top: 8,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 4,
-                              ),
-                            ],
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.grey[800]!
+                      : Colors.grey[200]!,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(10),
                           ),
-                          child: StreamBuilder<DocumentSnapshot>(
-                            stream: FirebaseAuth.instance.currentUser != null
-                                ? FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                      )
-                                      .collection('wishlist')
-                                      .doc(product['id'].toString())
-                                      .snapshots()
-                                : null,
-                            builder: (context, snapshot) {
-                              bool isWishlisted = false;
-                              if (snapshot.hasData && snapshot.data!.exists) {
-                                isWishlisted = true;
-                              }
-                              return IconButton(
-                                icon: Icon(
-                                  isWishlisted
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  size: 18,
-                                  color: isWishlisted
-                                      ? const Color(0xFFFF3F6C)
-                                      : Colors.black87,
+                          child: Image.network(
+                            product['image'],
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 4,
                                 ),
-                                constraints: const BoxConstraints(),
-                                padding: const EdgeInsets.all(6),
-                                onPressed: () async {
-                                  try {
-                                    if (isWishlisted) {
-                                      await firestoreService.removeFromWishlist(
-                                        product['id'].toString(),
-                                      );
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Removed from Wishlist',
+                              ],
+                            ),
+                            child: StreamBuilder<DocumentSnapshot>(
+                              stream: FirebaseAuth.instance.currentUser != null
+                                  ? FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(
+                                          FirebaseAuth
+                                              .instance
+                                              .currentUser!
+                                              .uid,
+                                        )
+                                        .collection('wishlist')
+                                        .doc(product['id'].toString())
+                                        .snapshots()
+                                  : null,
+                              builder: (context, snapshot) {
+                                bool isWishlisted = false;
+                                if (snapshot.hasData && snapshot.data!.exists) {
+                                  isWishlisted = true;
+                                }
+                                return IconButton(
+                                  icon: Icon(
+                                    isWishlisted
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    size: 18,
+                                    color: isWishlisted
+                                        ? const Color(0xFFFF3F6C)
+                                        : Colors.black87,
+                                  ),
+                                  constraints: const BoxConstraints(),
+                                  padding: const EdgeInsets.all(6),
+                                  onPressed: () async {
+                                    try {
+                                      if (isWishlisted) {
+                                        await firestoreService
+                                            .removeFromWishlist(
+                                              product['id'].toString(),
+                                            );
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Removed from Wishlist',
+                                              ),
+                                              duration: Duration(seconds: 1),
                                             ),
-                                            duration: Duration(seconds: 1),
-                                          ),
+                                          );
+                                        }
+                                      } else {
+                                        await firestoreService.addToWishlist(
+                                          product,
                                         );
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'added_to_wishlist'.tr(),
+                                              ),
+                                              duration: Duration(seconds: 1),
+                                            ),
+                                          );
+                                        }
                                       }
-                                    } else {
-                                      await firestoreService.addToWishlist(
-                                        product,
-                                      );
+                                    } catch (e) {
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              'added_to_wishlist'.tr(),
+                                              'error_msg'.tr(
+                                                args: [e.toString()],
+                                              ),
                                             ),
-                                            duration: Duration(seconds: 1),
+                                            backgroundColor: Colors.red,
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
                                           ),
                                         );
                                       }
                                     }
-                                  } catch (e) {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'error_msg'.tr(
-                                              args: [e.toString()],
-                                            ),
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          top: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF3F6C),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(4),
+                                bottomRight: Radius.circular(4),
+                              ),
+                            ),
+                            child: const Text(
+                              'NEW',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product['title'].toString().tr(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          product['subtitle'].toString().tr(),
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 11,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Text(
+                              '₹${product['price']}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyLarge?.color,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '₹${product['originalPrice']}',
+                              style: TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                color: Colors.grey[500],
+                                fontSize: 11,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              product['discount'],
+                              style: const TextStyle(
+                                color: Color(0xFFFF3F6C),
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              firestoreService
+                                  .addToCart(product)
+                                  .then((_) {
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          '✅ Added to Bag Successfully!',
+                                        ),
+                                        backgroundColor: Colors.green,
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  })
+                                  .catchError((e) {
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'error_with_icon'.tr(
+                                            args: [e.toString()],
                                           ),
-                                          backgroundColor: Colors.red,
-                                          duration: const Duration(seconds: 2),
                                         ),
-                                      );
-                                    }
-                                  }
-                                },
-                              );
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(seconds: 3),
+                                      ),
+                                    );
+                                  });
                             },
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        top: 12,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF3F6C),
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(4),
-                              bottomRight: Radius.circular(4),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFF3F6C),
+                              foregroundColor: Colors.white,
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'NEW',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                            child: const Text(
+                              'ADD TO CART',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        product['title'].toString().tr(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        product['subtitle'].toString().tr(),
-                        style: TextStyle(color: Colors.grey[600], fontSize: 11),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Text(
-                            '₹${product['price']}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge?.color,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '₹${product['originalPrice']}',
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey[500],
-                              fontSize: 11,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            product['discount'],
-                            style: const TextStyle(
-                              color: Color(0xFFFF3F6C),
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            firestoreService
-                                .addToCart(product)
-                                .then((_) {
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        '✅ Added to Bag Successfully!',
-                                      ),
-                                      backgroundColor: Colors.green,
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                })
-                                .catchError((e) {
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'error_with_icon'.tr(
-                                          args: [e.toString()],
-                                        ),
-                                      ),
-                                      backgroundColor: Colors.red,
-                                      duration: const Duration(seconds: 3),
-                                    ),
-                                  );
-                                });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFF3F6C),
-                            foregroundColor: Colors.white,
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'ADD TO CART',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }, childCount: 12),
@@ -2503,6 +2651,3 @@ class ProductGrid extends StatelessWidget {
     );
   }
 }
-
-
-

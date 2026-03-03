@@ -35,12 +35,17 @@ class _AIRecommendationCarouselState extends State<AIRecommendationCarousel> {
   }
 
   Future<void> _loadRecommendations() async {
-    final products = await _service.getRecommendations(
-      type: widget.type,
-      categoryId: widget.categoryId,
-      brandId: widget.brandId,
-      productId: widget.productId,
-    );
+    List<Map<String, dynamic>> products;
+    if (widget.type == RecommendationType.orderBased) {
+      products = await _service.getOrderBasedRecommendations();
+    } else {
+      products = await _service.getRecommendations(
+        type: widget.type,
+        categoryId: widget.categoryId,
+        brandId: widget.brandId,
+        productId: widget.productId,
+      );
+    }
     if (mounted) {
       setState(() {
         _products = products;

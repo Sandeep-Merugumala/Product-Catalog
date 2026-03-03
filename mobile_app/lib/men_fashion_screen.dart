@@ -13,6 +13,7 @@ import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'package:mobile_app/widgets/custom_bottom_nav_bar.dart';
 import 'home_screen.dart';
 import 'package:mobile_app/notifications_page.dart';
+import 'package:mobile_app/product_details_page.dart';
 
 class MensSection extends StatefulWidget {
   final int? initialIndex;
@@ -1066,21 +1067,6 @@ class MensProductCategories extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Container(
-            alignment: Alignment.center,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -1213,187 +1199,187 @@ class _MensProductGridState extends State<MensProductGrid> {
       {
         'image':
             'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&auto=format&fit=crop',
-        'brand': 'roadster',
+        'brand': 'Roadster',
         'name': 'men_typography_printed_t_shirt',
         'price': 499,
         'originalPrice': 1499,
         'discount': 67,
         'rating': 4.3,
         'reviews': 2100,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop',
-        'brand': 'highlander',
+        'brand': 'Highlander',
         'name': 'men_slim_fit_casual_shirt',
         'price': 699,
         'originalPrice': 1999,
         'discount': 65,
         'rating': 4.1,
         'reviews': 1800,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop',
-        'brand': 'levis',
+        'brand': 'Levis',
         'name': 'n_511_slim_fit_jeans',
         'price': 1799,
         'originalPrice': 3999,
         'discount': 55,
         'rating': 4.5,
         'reviews': 3200,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&auto=format&fit=crop',
-        'brand': 'wrogn',
+        'brand': 'Wrogn',
         'name': 'men_solid_bomber_jacket',
         'price': 1299,
         'originalPrice': 3999,
         'discount': 68,
         'rating': 4.2,
         'reviews': 980,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop',
-        'brand': 'nike',
+        'brand': 'Nike',
         'name': 'air_max_270_running_shoes',
         'price': 8995,
         'originalPrice': 12995,
         'discount': 31,
         'rating': 4.6,
         'reviews': 4500,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&auto=format&fit=crop',
-        'brand': 'hrx',
+        'brand': 'HRX',
         'name': 'rapid_dry_training_t_shirt',
         'price': 599,
         'originalPrice': 1299,
         'discount': 54,
         'rating': 4.4,
         'reviews': 2800,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://media.istockphoto.com/id/692909922/photo/hes-off-on-an-adventure.webp?a=1&b=1&s=612x612&w=0&k=20&c=d-bqdMaEQakXXATRVAAy9EhXDm0zSsiAKevpLlkuKBE=',
-        'brand': 'jack_and_jones',
+        'brand': 'Jack & Jones',
         'name': 'men_slim_fit_chinos',
         'price': 1499,
         'originalPrice': 2999,
         'discount': 50,
         'rating': 4.3,
         'reviews': 1560,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1554568218-ffd1e72a2151?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHN3ZWF0c2hpcnR8ZW58MHx8MHx8fDA%3D',
-        'brand': 'puma',
+        'brand': 'Puma',
         'name': 'essential_logo_crew_sweatshirt',
         'price': 1199,
         'originalPrice': 2999,
         'discount': 60,
         'rating': 4.2,
         'reviews': 890,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500&auto=format&fit=crop',
-        'brand': 'fossil',
+        'brand': 'Fossil',
         'name': 'men_leather_watch',
         'price': 5995,
         'originalPrice': 8995,
         'discount': 33,
         'rating': 4.5,
         'reviews': 1200,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop',
-        'brand': 'beardo',
+        'brand': 'Beardo',
         'name': 'beard_growth_oil',
         'price': 499,
         'originalPrice': 750,
         'discount': 33,
         'rating': 4.1,
         'reviews': 3500,
-        'category': 'grooming',
+        'category': 'Grooming',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&auto=format&fit=crop',
-        'brand': 'adidas',
+        'brand': 'Adidas',
         'name': 'ultraboost_21',
         'price': 14999,
         'originalPrice': 17999,
         'discount': 17,
         'rating': 4.8,
         'reviews': 3200,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&auto=format&fit=crop',
-        'brand': 'puma',
+        'brand': 'Puma',
         'name': 'rs_x_reinvention',
         'price': 8999,
         'originalPrice': 9999,
         'discount': 10,
         'rating': 4.5,
         'reviews': 1500,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1627094522148-ac0c843a1383?w=500&auto=format&fit=crop',
-        'brand': 'titan',
+        'brand': 'Titan',
         'name': 'neo_men_leather_watch',
         'price': 4595,
         'originalPrice': 6595,
         'discount': 30,
         'rating': 4.4,
         'reviews': 2100,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&auto=format&fit=crop',
-        'brand': 'ray_ban',
+        'brand': 'Ray-Ban',
         'name': 'aviator_sunglasses',
         'price': 8590,
         'originalPrice': 10590,
         'discount': 19,
         'rating': 4.7,
         'reviews': 4100,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&auto=format&fit=crop',
-        'brand': 'u_s_polo_assn',
+        'brand': 'U.S. Polo Assn.',
         'name': 'men_cotton_sweater',
         'price': 1899,
         'originalPrice': 3299,
         'discount': 42,
         'rating': 4.3,
         'reviews': 1800,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1727835523545-70ee992b5763?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWVucyUyMGt1cnRhfGVufDB8fDB8fHww',
-        'brand': 'manyavar',
+        'brand': 'Manyavar',
         'name': 'men_kurta_set',
         'price': 3999,
         'originalPrice': 5999,
@@ -1406,14 +1392,14 @@ class _MensProductGridState extends State<MensProductGrid> {
       {
         'image':
             'https://images.unsplash.com/photo-1559563458-527698bf5295?w=500&auto=format&fit=crop',
-        'brand': 'the_man_company',
+        'brand': 'The Man Company',
         'name': 'charcoal_face_wash',
         'price': 299,
         'originalPrice': 349,
         'discount': 14,
         'rating': 4.2,
         'reviews': 5600,
-        'category': 'grooming',
+        'category': 'Grooming',
       },
       {
         'image':
@@ -1519,7 +1505,7 @@ class _MensProductGridState extends State<MensProductGrid> {
           sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.48, // Adjusted height for Add to Cart button
+              childAspectRatio: 0.53,
               mainAxisSpacing: 12,
               crossAxisSpacing: 10,
             ),
@@ -1548,27 +1534,37 @@ class _MensProductGridState extends State<MensProductGrid> {
       product['id'] = '${subtitle}_$title'.hashCode.toString();
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Stack(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsPage(product: product),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[200]!),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(8),
                   ),
-                  child: Image.network(
-                    product['image'],
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Image.network(
+                      product['image'],
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -1607,7 +1603,7 @@ class _MensProductGridState extends State<MensProductGrid> {
                                       content: Text(
                                         'removed_from_wishlist'.tr(),
                                       ),
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 }
@@ -1617,7 +1613,7 @@ class _MensProductGridState extends State<MensProductGrid> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text('added_to_wishlist'.tr()),
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 }
@@ -1652,134 +1648,122 @@ class _MensProductGridState extends State<MensProductGrid> {
                 ),
               ],
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        product['brand'].toString().tr(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          color: Colors.black87,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        product['name'].toString().tr(),
-                        style: TextStyle(color: Colors.grey[600], fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  Text(
+                    product['brand'] ?? '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 2),
+                  Text(
+                    product['name'].toString().tr(),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                      height: 1.2,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            '₹${product['price']}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '₹${product['originalPrice']}',
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey[500],
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
                       Text(
-                        '(${product['discount']}% OFF)',
+                        '₹${product['price']}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '₹${product['originalPrice']}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '(${product['discount']})',
                         style: const TextStyle(
                           color: Color(0xFFFF6F00),
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      // NEW ELEVATED BUTTON WITH DIALOG LOGIC
-                      SizedBox(
-                        width: double.infinity,
-                        height: 36,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            firestoreService
-                                .addToCart(product)
-                                .then((_) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          '✅ Added to Bag Successfully!',
-                                        ),
-                                        backgroundColor: Colors.green,
-                                        duration: Duration(seconds: 1),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 36,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        firestoreService
+                            .addToCart(product)
+                            .then((_) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      '✅ Added to Bag Successfully!',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
+                            })
+                            .catchError((e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'error_with_icon'.tr(
+                                        args: [e.toString()],
                                       ),
-                                    );
-                                  }
-                                })
-                                .catchError((e) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'error_with_icon'.tr(
-                                            args: [e.toString()],
-                                          ),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
-                                  }
-                                });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(
-                              0xFF1E88E5,
-                            ), // Keep Blue for Men? Or Pink? Let's use Pink for consistency or Blue if per design. Steps used Pink in Home. Men's section uses Blue usually? Code had Blue. I'll stick to Blue for Men but use ElevatedButton style.
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          child: const Text(
-                            'ADD TO CART',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                            });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1E88E5),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                    ],
+                      child: const Text(
+                        'ADD TO CART',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

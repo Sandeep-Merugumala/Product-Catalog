@@ -13,6 +13,7 @@ import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'package:mobile_app/widgets/custom_bottom_nav_bar.dart';
 import 'home_screen.dart';
 import 'package:mobile_app/notifications_page.dart';
+import 'package:mobile_app/product_details_page.dart';
 
 class KidsSection extends StatefulWidget {
   const KidsSection({super.key});
@@ -718,32 +719,32 @@ class _KidsFeaturedBannerState extends State<KidsFeaturedBanner> {
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&auto=format&fit=crop',
                         'GAP KIDS',
-                        'new_arrivals_spaced',
+                        'New Arrivals',
                         'Colorful Styles •',
-                        'featured_brands',
+                        'Featured Brands',
                         onTap: () => widget.onTabSelected?.call(1), // Topwear
                       ),
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=800&auto=format&fit=crop',
                         'MOTHERCARE',
-                        'party_collection',
+                        'Party Collection',
                         'Special Occasions •',
-                        'trending_hashtag',
+                        'Trending',
                         onTap: () =>
                             widget.onTabSelected?.call(2), // Bottomwear
                       ),
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=800&auto=format&fit=crop',
                         'PUMA KIDS',
-                        'active_wear',
+                        'Active Wear',
                         'Sports & Play •',
-                        'new_arrivals',
+                        'New Arrivals',
                         onTap: () => widget.onTabSelected?.call(3), // Footwear
                       ),
                       _buildBannerItem(
                         'https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=800&auto=format&fit=crop',
                         'KIDS PLACE',
-                        'school_ready',
+                        'School Ready',
                         'Back to School •',
                         '#Fashion',
                         onTap: () =>
@@ -1058,21 +1059,6 @@ class KidsProductCategories extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Container(
-            alignment: Alignment.center,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -1208,214 +1194,214 @@ class _KidsProductGridState extends State<KidsProductGrid> {
       {
         'image':
             'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500&auto=format&fit=crop',
-        'brand': 'handm_kids',
+        'brand': 'H&M Kids',
         'name': 'boys_cotton_t_shirt',
         'price': 399,
         'originalPrice': 799,
         'discount': 50,
         'rating': 4.3,
         'reviews': 1260,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=500&auto=format&fit=crop',
-        'brand': 'gap_kids',
+        'brand': 'Gap Kids',
         'name': 'girls_graphic_sweatshirt',
         'price': 899,
         'originalPrice': 1999,
         'discount': 55,
         'rating': 4.2,
         'reviews': 890,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=500&auto=format&fit=crop',
-        'brand': 'mothercare',
+        'brand': 'Mothercare',
         'name': 'floral_print_dress',
         'price': 1499,
         'originalPrice': 2999,
         'discount': 50,
         'rating': 4.4,
         'reviews': 2200,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1522771930-78848d9293e8?w=500&auto=format&fit=crop',
-        'brand': 'ucb_kids',
+        'brand': 'UCB Kids',
         'name': 'boys_striped_polo',
         'price': 799,
         'originalPrice': 1599,
         'discount': 50,
         'rating': 4.1,
         'reviews': 1100,
-        'category': 'topwear',
+        'category': 'Topwear',
       },
 
       // BOTTOMWEAR
       {
         'image':
             'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=500&auto=format&fit=crop',
-        'brand': 'levis_kids',
+        'brand': 'Levis Kids',
         'name': 'boys_slim_fit_jeans',
         'price': 1199,
         'originalPrice': 2199,
         'discount': 45,
         'rating': 4.3,
         'reviews': 1800,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500&auto=format&fit=crop',
-        'brand': 'marks_and_spencer',
+        'brand': 'Marks & Spencer',
         'name': 'girls_cotton_shorts',
         'price': 599,
         'originalPrice': 999,
         'discount': 40,
         'rating': 4.0,
         'reviews': 750,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1643641437540-e72c6f3e01c4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8a2lkcyUyMGNhcmdvJTIwcGFudHN8ZW58MHx8MHx8fDA%3D',
-        'brand': 'gap_kids',
+        'brand': 'Gap Kids',
         'name': 'boys_cargo_pants',
         'price': 1099,
         'originalPrice': 1999,
         'discount': 45,
         'rating': 4.2,
         'reviews': 950,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1503919005314-30d93d07d823?w=500&auto=format&fit=crop',
-        'brand': 'zara_kids',
+        'brand': 'Zara Kids',
         'name': 'girls_denim_skirt',
         'price': 899,
         'originalPrice': 1499,
         'discount': 40,
         'rating': 4.4,
         'reviews': 1200,
-        'category': 'bottomwear',
+        'category': 'Bottomwear',
       },
 
       // FOOTWEAR
       {
         'image':
             'https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=500&auto=format&fit=crop',
-        'brand': 'nike_kids',
+        'brand': 'Nike Kids',
         'name': 'kids_sports_shoes',
         'price': 2495,
         'originalPrice': 4995,
         'discount': 50,
         'rating': 4.6,
         'reviews': 3100,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=500&auto=format&fit=crop',
-        'brand': 'puma_kids',
+        'brand': 'Puma Kids',
         'name': 'boys_running_shoes',
         'price': 1995,
         'originalPrice': 3995,
         'discount': 50,
         'rating': 4.5,
         'reviews': 2400,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&auto=format&fit=crop',
-        'brand': 'crocs_kids',
+        'brand': 'Crocs Kids',
         'name': 'kids_clogs',
         'price': 1299,
         'originalPrice': 2499,
         'discount': 48,
         'rating': 4.2,
         'reviews': 1900,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&auto=format&fit=crop',
-        'brand': 'bata_kids',
+        'brand': 'Bata Kids',
         'name': 'school_shoes',
         'price': 899,
         'originalPrice': 1499,
         'discount': 40,
         'rating': 4.0,
         'reviews': 2200,
-        'category': 'footwear',
+        'category': 'Footwear',
       },
 
       // ACCESSORIES
       {
         'image':
             'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&auto=format&fit=crop',
-        'brand': 'skybags',
+        'brand': 'Skybags',
         'name': 'kids_school_bag',
         'price': 1299,
         'originalPrice': 2499,
         'discount': 48,
         'rating': 4.4,
         'reviews': 2800,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&auto=format&fit=crop',
-        'brand': 'wildcraft',
+        'brand': 'Wildcraft',
         'name': 'kids_bottle_pack',
         'price': 699,
         'originalPrice': 999,
         'discount': 30,
         'rating': 4.3,
         'reviews': 1500,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1604482858862-1db908a653e4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8a2lkcyUyMHdpdGglMjBjYXBzfGVufDB8fDB8fHww',
-        'brand': 'fabseasons',
+        'brand': 'Fabseasons',
         'name': 'kids_sun_cap',
         'price': 299,
         'originalPrice': 599,
         'discount': 50,
         'rating': 4.1,
         'reviews': 980,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=500&auto=format&fit=crop',
-        'brand': 'titan_kids',
+        'brand': 'Titan Kids',
         'name': 'kids_digital_watch',
         'price': 1599,
         'originalPrice': 2599,
         'discount': 38,
         'rating': 4.5,
         'reviews': 1800,
-        'category': 'accessories',
+        'category': 'Accessories',
       },
 
       // TOYS
       {
         'image':
             'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=500&auto=format&fit=crop',
-        'brand': 'lego',
+        'brand': 'Lego',
         'name': 'city_building_blocks',
         'price': 2499,
         'originalPrice': 3999,
         'discount': 37,
         'rating': 4.8,
         'reviews': 5600,
-        'category': 'toys',
+        'category': 'Toys',
       },
       {
         'image':
@@ -1427,19 +1413,19 @@ class _KidsProductGridState extends State<KidsProductGrid> {
         'discount': 35,
         'rating': 4.6,
         'reviews': 4200,
-        'category': 'toys',
+        'category': 'Toys',
       },
       {
         'image':
             'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=500&auto=format&fit=crop',
-        'brand': 'hot_wheels',
+        'brand': 'Hot Wheels',
         'name': 'car_track_set',
         'price': 899,
         'originalPrice': 1499,
         'discount': 40,
         'rating': 4.4,
         'reviews': 3100,
-        'category': 'toys',
+        'category': 'Toys',
       },
       {
         'image':
@@ -1451,7 +1437,7 @@ class _KidsProductGridState extends State<KidsProductGrid> {
         'discount': 37,
         'rating': 4.2,
         'reviews': 1900,
-        'category': 'toys',
+        'category': 'Toys',
       },
     ];
 
@@ -1544,7 +1530,7 @@ class _KidsProductGridState extends State<KidsProductGrid> {
           sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.48,
+              childAspectRatio: 0.53,
               mainAxisSpacing: 12,
               crossAxisSpacing: 10,
             ),
@@ -1563,35 +1549,43 @@ class _KidsProductGridState extends State<KidsProductGrid> {
     Map<String, dynamic> product,
     FirestoreService firestoreService,
   ) {
-    // Determine the product title to use (some have 'name', some have 'title')
     final title = product['name'] ?? product['title'] ?? 'Product';
     final subtitle = product['brand'] ?? product['subtitle'] ?? '';
-    // Ensure ID exists for Firestore operations
     if (!product.containsKey('id')) {
       product['id'] = '${subtitle}_$title'.hashCode.toString();
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Stack(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsPage(product: product),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[200]!),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(8),
                   ),
-                  child: Image.network(
-                    product['image'],
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Image.network(
+                      product['image'],
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -1630,7 +1624,7 @@ class _KidsProductGridState extends State<KidsProductGrid> {
                                       content: Text(
                                         'removed_from_wishlist'.tr(),
                                       ),
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 }
@@ -1640,7 +1634,7 @@ class _KidsProductGridState extends State<KidsProductGrid> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text('added_to_wishlist'.tr()),
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 }
@@ -1665,7 +1659,7 @@ class _KidsProductGridState extends State<KidsProductGrid> {
                                 : Icons.favorite_border,
                             size: 16,
                             color: isWishlisted
-                                ? const Color(0xFFFF3F6C)
+                                ? const Color(0xFFFFB300)
                                 : Colors.black54,
                           ),
                         );
@@ -1675,136 +1669,118 @@ class _KidsProductGridState extends State<KidsProductGrid> {
                 ),
               ],
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text(
+                    subtitle.toString().tr(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    title.toString().tr(),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 11),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
                     children: [
                       Text(
-                        (product['brand'] as String).tr(),
+                        '₹${product['price']}',
                         style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                           color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(width: 4),
                       Text(
-                        (product['name'] as String).tr(),
-                        style: TextStyle(color: Colors.grey[600], fontSize: 11),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        '₹${product['originalPrice']}',
+                        style: TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey[500],
+                          fontSize: 11,
+                        ),
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '₹${product['price']}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.color,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '₹${product['originalPrice']}',
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey[500],
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
+                  const SizedBox(height: 2),
+                  Text(
+                    '(${product['discount']}% OFF)',
+                    style: const TextStyle(
+                      color: Color(0xFFFF6F00),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 36,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        firestoreService
+                            .addToCart(product)
+                            .then((_) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      '✅ Added to Bag Successfully!',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
+                            })
+                            .catchError((e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'error_with_icon'.tr(
+                                        args: [e.toString()],
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                            });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFB300),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '(${product['discount']}% OFF)',
-                        style: const TextStyle(
-                          color: Color(0xFFFF6F00),
+                      child: const Text(
+                        'ADD TO CART',
+                        style: TextStyle(
                           fontSize: 11,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      // NEW ELEVATED BUTTON
-                      SizedBox(
-                        width: double.infinity,
-                        height: 36,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            firestoreService
-                                .addToCart(product)
-                                .then((_) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          '✅ Added to Bag Successfully!',
-                                        ),
-                                        backgroundColor: Colors.green,
-                                        duration: Duration(seconds: 1),
-                                      ),
-                                    );
-                                  }
-                                })
-                                .catchError((e) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'error_with_icon'.tr(
-                                            args: [e.toString()],
-                                          ),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
-                                  }
-                                });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(
-                              0xFFFFB300,
-                            ), // Amber for Kids
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          child: const Text(
-                            'ADD TO CART',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
