@@ -18,6 +18,8 @@ import 'package:mobile_app/product_details_page.dart';
 import 'package:mobile_app/category_products_screen.dart';
 import 'package:mobile_app/brand_products_screen.dart';
 import 'notifications_page.dart';
+import 'package:mobile_app/ai_recommendations_screen.dart';
+import 'package:mobile_app/ai_recommendations_screen.dart';
 
 import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'chatbot/chatbot_widget.dart';
@@ -268,7 +270,24 @@ class MyntraAppBar extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),                const SizedBox(width: 12),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AiRecommendationsScreen(),
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.auto_awesome,
+                    color: Color(0xFFFF3F6C),
+                    size: 26,
+                  ),
                 ),
+
+
                 const SizedBox(width: 12),
                 InkWell(
                   onTap: () {
@@ -2469,3 +2488,6 @@ class ProductGrid extends StatelessWidget {
     );
   }
 }
+
+
+

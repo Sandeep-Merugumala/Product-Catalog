@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/firestore_service.dart';
-import 'package:mobile_app/product_detail_screen.dart';
+import 'package:mobile_app/product_details_page.dart';
 import 'package:mobile_app/widgets/particle_overlay.dart';
 
 class WeddingSeasonScreen extends StatelessWidget {
