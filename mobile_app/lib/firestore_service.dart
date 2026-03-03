@@ -404,6 +404,31 @@ class FirestoreService {
     }
   }
 
+  Future<void> clearAllNotifications() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    try {
+      final notificationsRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('notifications');
+
+      final snapshot = await notificationsRef.get();
+      if (snapshot.docs.isEmpty) return;
+
+      final batch = FirebaseFirestore.instance.batch();
+      for (var doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      debugPrint('✅ All notifications cleared successfully');
+    } catch (e) {
+      debugPrint('❌ Error clearing all notifications: $e');
+      rethrow;
+    }
+  }
+
   // --- ORDERS ---
   Stream<QuerySnapshot> getOrdersStream() {
     final uid = FirebaseAuth.instance.currentUser?.uid;

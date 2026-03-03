@@ -129,7 +129,7 @@ class WeddingSeasonScreen extends StatelessWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 0.65,
+                              childAspectRatio: 0.53,
                               crossAxisSpacing: 12,
                               mainAxisSpacing: 12,
                             ),

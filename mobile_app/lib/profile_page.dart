@@ -688,7 +688,7 @@ class ProfilePage extends StatelessWidget {
 
                         try {
                           // 2. Disconnect Google session to force account chooser on next login
-                          await GoogleSignIn().disconnect();
+                          await GoogleSignIn.instance.disconnect();
                         } catch (_) {}
 
                         // 3. Fallback: Force navigation reset to the AuthWrapper

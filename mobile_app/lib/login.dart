@@ -120,17 +120,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         await FirebaseAuth.instance.signOut();
         uc = await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
       } else {
-        final g = await GoogleSignIn().signIn();
-        if (g == null) {
-          setState(() => _isLoading = false);
-          return;
-        }
-        final ga = await g.authentication;
+        final g = await GoogleSignIn.instance.authenticate();
+        final ga = g.authentication;
         uc = await FirebaseAuth.instance.signInWithCredential(
-          GoogleAuthProvider.credential(
-            accessToken: ga.accessToken,
-            idToken: ga.idToken,
-          ),
+          GoogleAuthProvider.credential(idToken: ga.idToken),
         );
       }
       final doc = await FirebaseFirestore.instance
@@ -151,6 +144,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
+      }
+    } on GoogleSignInException catch (e) {
+      // Ignore user cancellation, don't show snackbar
+      if (e.code != 'canceled' && e.code != 'interrupted') {
+        if (mounted) _snack(e.toString(), Colors.redAccent);
       }
     } catch (e) {
       if (mounted) _snack(e.toString(), Colors.redAccent);
