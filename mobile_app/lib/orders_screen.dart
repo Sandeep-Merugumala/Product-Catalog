@@ -229,6 +229,9 @@ class OrdersScreen extends StatelessWidget {
               );
             },
           ),
+
+          // Added padding at the bottom for scroll clearance
+          const SliverPadding(padding: EdgeInsets.only(bottom: 24)),
         ],
       ),
     );

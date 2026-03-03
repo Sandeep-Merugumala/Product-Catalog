@@ -123,11 +123,22 @@ class FirestoreService {
     debugPrint('✅ User authenticated: ${user.uid}');
 
     try {
+      // Ensure the product has an ID
+      final productId =
+          product['id']?.toString() ??
+          '${product['brand']}_${product['name']}'
+              .replaceAll(' ', '_')
+              .toLowerCase();
+
+      // Ensure the generated ID is added to the product map so it's saved in the document
+      final productWithId = Map<String, dynamic>.from(product);
+      productWithId['id'] = productId;
+
       final cartRef = FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .collection('cart')
-          .doc(product['id'].toString());
+          .doc(productId);
 
       final doc = await cartRef.get();
 
@@ -143,13 +154,13 @@ class FirestoreService {
         await cartRef.update({'quantity': currentQty + 1});
       } else {
         // Add new item with quantity 1
-        final stock = product['quantity'] ?? 9999;
+        final stock = productWithId['quantity'] ?? 9999;
         if (1 > stock) {
           throw Exception('Product is out of stock!');
         }
 
         await cartRef.set({
-          ...product,
+          ...productWithId,
           'addedAt': Timestamp.now(),
           'quantity': 1,
         });
@@ -212,12 +223,21 @@ class FirestoreService {
     debugPrint('✅ User authenticated: ${user.uid}');
 
     try {
+      final productId =
+          product['id']?.toString() ??
+          '${product['brand']}_${product['name']}'
+              .replaceAll(' ', '_')
+              .toLowerCase();
+
+      final productWithId = Map<String, dynamic>.from(product);
+      productWithId['id'] = productId;
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .collection('wishlist')
-          .doc(product['id'].toString())
-          .set({...product, 'addedAt': Timestamp.now()});
+          .doc(productId)
+          .set({...productWithId, 'addedAt': Timestamp.now()});
       debugPrint('✅ Item added to wishlist successfully');
     } catch (e) {
       debugPrint('❌ Error adding to wishlist: $e');
