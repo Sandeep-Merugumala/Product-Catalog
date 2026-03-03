@@ -26,6 +26,27 @@ class NotificationsPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          StreamBuilder<QuerySnapshot>(
+            stream: FirestoreService().getNotificationsStream(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return TextButton(
+                onPressed: () => _showClearConfirmation(context),
+                child: const Text(
+                  'CLEAR ALL',
+                  style: TextStyle(
+                    color: Color(0xFFFF3F6C),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirestoreService().getNotificationsStream(),
@@ -155,6 +176,47 @@ class NotificationsPage extends StatelessWidget {
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showClearConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Clear Notifications?'),
+        content: const Text(
+          'Are you sure you want to remove all notifications?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('CANCEL', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              FirestoreService().clearAllNotifications().then((_) {
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('All notifications cleared'),
+                      backgroundColor: Colors.black87,
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                }
+              });
+            },
+            child: const Text(
+              'CLEAR ALL',
+              style: TextStyle(
+                color: Color(0xFFFF3F6C),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

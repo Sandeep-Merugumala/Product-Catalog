@@ -3,7 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'splash_screen.dart';
 import 'firebase_options.dart';
-import 'firestore_service.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:mobile_app/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
@@ -17,10 +19,21 @@ void main() async {
   EasyLocalization.logger.enableBuildModes = [];
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  try {
+    await GoogleSignIn.instance.initialize(
+      serverClientId:
+          '393025467926-hah1jss558o8h06h6ps742ur782ubcv4.apps.googleusercontent.com',
+    );
+  } catch (e) {
+    debugPrint('GoogleSignIn initialization failed: $e');
+  }
+
   // Clean up and seed products to Firestore
-  final fs = FirestoreService();
-  await fs.deleteAllSeasonalProducts(); // Remove inconsistent legacy data
-  await fs.seedAllProducts(); // Sync fresh data with consistent fields
+  // Note: These should ideally be run via an admin panel or a one-off script,
+  // not on every app startup, as it causes permission-denied errors for regular users.
+  // final fs = FirestoreService();
+  // await fs.deleteAllSeasonalProducts(); // Remove inconsistent legacy data
+  // await fs.seedAllProducts(); // Sync fresh data with consistent fields
 
   runApp(
     EasyLocalization(
