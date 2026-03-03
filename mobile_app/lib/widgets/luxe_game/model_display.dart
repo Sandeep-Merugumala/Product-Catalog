@@ -573,6 +573,33 @@ class _FashionModelPainter extends CustomPainter {
           Rect.fromLTWH(cx - w * 0.22, h * 0.228, w * 0.44, h * 0.232),
         ),
       );
+      // Default Undergarment Top (Formal Dress Bodice)
+      canvas.save();
+      canvas.clipPath(torsoPath);
+      // Main bodice
+      canvas.drawRect(
+        Rect.fromLTWH(cx - w * 0.25, h * 0.26, w * 0.5, h * 0.21),
+        Paint()..color = const Color(0xFFF3F4F6),
+      );
+      // Elegant thin straps
+      canvas.drawRect(
+        Rect.fromLTWH(cx - w * 0.10, h * 0.22, w * 0.015, h * 0.06),
+        Paint()..color = const Color(0xFFF3F4F6),
+      );
+      canvas.drawRect(
+        Rect.fromLTWH(cx + w * 0.085, h * 0.22, w * 0.015, h * 0.06),
+        Paint()..color = const Color(0xFFF3F4F6),
+      );
+      // Sweetheart / plunging neckline cutout
+      canvas.drawOval(
+        Rect.fromCenter(
+          center: Offset(cx, h * 0.26),
+          width: w * 0.15,
+          height: h * 0.04,
+        ),
+        Paint()..color = _skin,
+      );
+      canvas.restore();
     }
   }
 
@@ -661,6 +688,14 @@ class _FashionModelPainter extends CustomPainter {
         skinPath,
         _skinPaint(Rect.fromLTWH(cx - w * 0.18, h * 0.46, w * 0.36, h * 0.15)),
       );
+      // Default Undergarment Bottom (Dress Hips)
+      canvas.save();
+      canvas.clipPath(skinPath);
+      canvas.drawRect(
+        Rect.fromLTWH(cx - w * 0.25, h * 0.46, w * 0.5, h * 0.16),
+        Paint()..color = const Color(0xFFF3F4F6),
+      );
+      canvas.restore();
     }
   }
 
@@ -777,6 +812,47 @@ class _FashionModelPainter extends CustomPainter {
           height: h * 0.022,
         ),
         Paint()..color = Colors.white.withValues(alpha: 0.22),
+      );
+
+      // Default Long Dress Skirt Flowing Down
+      final skirtPath = Path()
+        ..moveTo(cx - w * 0.175, legTop)
+        ..lineTo(cx + w * 0.175, legTop)
+        ..cubicTo(
+          cx + w * 0.25,
+          legTop + h * 0.1,
+          cx + w * 0.28,
+          legTop + h * 0.2,
+          cx + w * 0.24,
+          legBot - h * 0.02,
+        )
+        ..lineTo(cx - w * 0.24, legBot - h * 0.02)
+        ..cubicTo(
+          cx - w * 0.28,
+          legTop + h * 0.2,
+          cx - w * 0.25,
+          legTop + h * 0.1,
+          cx - w * 0.175,
+          legTop,
+        )
+        ..close();
+      canvas.drawPath(skirtPath, Paint()..color = const Color(0xFFF3F4F6));
+      // Subtle dress folds
+      canvas.drawPath(
+        skirtPath,
+        Paint()
+          ..shader =
+              LinearGradient(
+                colors: [
+                  Colors.black.withValues(alpha: 0.0),
+                  Colors.black.withValues(alpha: 0.05),
+                  Colors.black.withValues(alpha: 0.0),
+                  Colors.black.withValues(alpha: 0.03),
+                ],
+                stops: const [0, 0.3, 0.6, 1],
+              ).createShader(
+                Rect.fromLTWH(cx - w * 0.25, legTop, w * 0.5, legBot - legTop),
+              ),
       );
     }
   }

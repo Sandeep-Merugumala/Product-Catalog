@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobile_app/firestore_service.dart';
-import 'package:mobile_app/product_details_page.dart';
+import 'package:mobile_app/product_detail_screen.dart';
+import 'package:mobile_app/widgets/particle_overlay.dart';
 
 class WinterCollectionScreen extends StatelessWidget {
   const WinterCollectionScreen({super.key});
@@ -10,128 +11,139 @@ class WinterCollectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('winter_collection'.tr()), centerTitle: true),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: FirestoreService().getProductsByCategory('winter_wear'),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFF3F6C)),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('error_loading_products'.tr()));
-          }
+      body: Stack(
+        children: [
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: FirestoreService().getProductsByCategory('winter_wear'),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFFFF3F6C)),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('error_loading_products'.tr()));
+              }
 
-          final products = snapshot.data ?? [];
+              final products = snapshot.data ?? [];
 
-          return CustomScrollView(
-            slivers: [
-              // Themed Hero Banner
-              SliverToBoxAdapter(
-                child: Container(
-                  width: double.infinity,
-                  height: 180,
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blueGrey.withValues(alpha: 0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
+              return CustomScrollView(
+                slivers: [
+                  // Themed Hero Banner
+                  SliverToBoxAdapter(
+                    child: Container(
+                      width: double.infinity,
+                      height: 180,
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blueGrey.withValues(alpha: 0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
                         ],
                       ),
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    alignment: Alignment.bottomLeft,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'winter_collection'.tr(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.6),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Stay warm. Stay stylish.',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        padding: const EdgeInsets.all(20),
+                        alignment: Alignment.bottomLeft,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'winter_collection'.tr(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Stay warm. Stay stylish.',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
 
-              if (products.isEmpty)
-                SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.ac_unit, size: 64, color: Colors.grey[400]),
-                        const SizedBox(height: 16),
-                        Text(
-                          'no_products_found'.tr(),
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
+                  if (products.isEmpty)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.ac_unit,
+                              size: 64,
+                              color: Colors.grey[400],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'no_products_found'.tr(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    )
+                  else
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.65,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return _buildProductCard(context, products[index]);
+                        }, childCount: products.length),
+                      ),
                     ),
-                  ),
-                )
-              else
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.65,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return _buildProductCard(context, products[index]);
-                    }, childCount: products.length),
-                  ),
-                ),
-            ],
-          );
-        },
+                ],
+              );
+            },
+          ),
+          const Positioned.fill(
+            child: ParticleOverlay(type: ParticleType.snow),
+          ),
+        ],
       ),
     );
   }

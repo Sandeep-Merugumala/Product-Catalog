@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'package:mobile_app/widgets/custom_bottom_nav_bar.dart';
 import 'home_screen.dart';
+import 'package:mobile_app/notifications_page.dart';
 
 class MensSection extends StatefulWidget {
   final int? initialIndex;
@@ -187,7 +188,66 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                 // Search Bar
                 const Expanded(child: ProductSearchBar()),
                 const SizedBox(width: 12),
-                _buildIconButton(Icons.notifications_outlined, () {}, 1),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsPage(),
+                        ),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(20),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Icon(
+                          Icons.notifications_outlined,
+                          color: Theme.of(context).iconTheme.color,
+                          size: 26,
+                        ),
+                        StreamBuilder<QuerySnapshot>(
+                          stream: FirestoreService()
+                              .getUnreadNotificationsStream(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data!.docs.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+                            final count = snapshot.data!.docs.length;
+                            return Positioned(
+                              right: -4,
+                              top: -4,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFF3F6C),
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '$count',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 _buildIconButton(Icons.favorite_border, () {
                   Navigator.push(
                     context,
