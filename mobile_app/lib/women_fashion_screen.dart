@@ -318,18 +318,6 @@ class _WomensFashionHeaderState extends State<WomensFashionHeader> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.grid_view,
-                    color: Theme.of(context).iconTheme.color,
-                    size: 20,
-                  ),
-                ),
               ],
             ),
           ),

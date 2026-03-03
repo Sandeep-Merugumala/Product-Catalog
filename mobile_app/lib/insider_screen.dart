@@ -1,7 +1,44 @@
 import 'package:flutter/material.dart';
 
-class InsiderScreen extends StatelessWidget {
+class InsiderScreen extends StatefulWidget {
   const InsiderScreen({super.key});
+
+  @override
+  State<InsiderScreen> createState() => _InsiderScreenState();
+}
+
+class _InsiderScreenState extends State<InsiderScreen> {
+  bool _isSubscribed = false;
+
+  void _showPaymentPopup(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _PaymentBottomSheet(
+        onPayClicked: () {
+          // Close the bottom sheet first
+          Navigator.pop(context);
+          // Show the processing dialog in the center
+          _showProcessingDialog(context);
+        },
+      ),
+    );
+  }
+
+  void _showProcessingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => _PaymentProcessingDialog(
+        onSuccess: () {
+          setState(() {
+            _isSubscribed = true;
+          });
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,15 +46,15 @@ class InsiderScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'MYNTRA INSIDER',
+          'INSIDER PRIME',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
             letterSpacing: 1.2,
           ),
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: const Color(0xFF16151A),
+        foregroundColor: const Color(0xFFD4AF37),
         elevation: 0,
         centerTitle: false,
       ),
@@ -26,495 +63,569 @@ class InsiderScreen extends StatelessWidget {
           children: [
             // Dark Header Section
             Container(
-              color: const Color(0xFF16151A), // Very dark slate/black
+              color: const Color(0xFF16151A),
               width: double.infinity,
-              child: Stack(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Decorative background lines (simulated with an icon for now, would ideally be an SVG or CustomPainter)
-                  Positioned(
-                    right: -50,
-                    top: 50,
-                    child: Icon(
-                      Icons.waves,
-                      color: Colors.amber.withValues(alpha: 0.1),
-                      size: 300,
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.workspace_premium,
+                        color: Color(0xFFD4AF37),
+                        size: 28,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'INSIDER PRIME',
+                        style: TextStyle(
+                          color: Color(0xFFD4AF37),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _isSubscribed
+                        ? 'Welcome to the club! You are now an Insider Prime member.'
+                        : 'Join the ultimate fashion club. Get benefits like never before.',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      height: 1.5,
                     ),
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Insider Logo/Text
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.workspace_premium,
-                              color: Color(0xFFD4AF37),
-                              size: 20,
+                  const SizedBox(height: 30),
+                  if (!_isSubscribed)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFD4AF37), Color(0xFFB89151)],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(
+                              0xFFD4AF37,
+                            ).withValues(alpha: 0.3),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          const Text(
+                            '₹999 / year',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'INSIDER',
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Cancel anytime',
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () => _showPaymentPopup(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black87,
+                              foregroundColor: const Color(0xFFD4AF37),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 40,
+                                vertical: 16,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              elevation: 4,
+                            ),
+                            child: const Text(
+                              'SUBSCRIBE NOW',
                               style: TextStyle(
-                                color: const Color(0xFFD4AF37), // Gold color
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                letterSpacing: 2.0,
+                                letterSpacing: 1.2,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-
-                        const Text(
-                          'SELECT MEMBER',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.5,
                           ),
-                        ),
-                        const SizedBox(height: 8),
-
-                        const Text(
-                          'Member since July, 2024',
-                          style: TextStyle(color: Colors.white70, fontSize: 13),
-                        ),
-                        const SizedBox(height: 40),
-
-                        // Action Buttons Layer
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _buildDarkActionButton(
-                              Icons.card_giftcard,
-                              '20',
-                              'Available Rewards',
-                            ),
-                            _buildDarkActionButton(
-                              Icons.payments_outlined,
-                              '₹515',
-                              'Your Savings',
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 40),
-
-                        // Progress Bar Area
-                        _buildProgressBar(),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  if (_isSubscribed)
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF232228),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(0xFFD4AF37),
+                          width: 2,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.check_circle,
+                            color: Color(0xFFD4AF37),
+                            size: 36,
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Active Subscription',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                Text(
+                                  'Valid until Mar 2027',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
 
-            // Upgrade Prompt Banner
-            Container(
-              width: double.infinity,
-              color: const Color(0xFFB89151), // Mustard/Gold
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Row(
+            // Benefits Section
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.info_outline, color: Colors.white, size: 24),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Text(
-                      'Shop for ₹10000 before 11th Jul, 2026 to upgrade your benefits. Shop Now!',
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                  const Text(
+                    'Exclusive Benefits',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF2C3240),
+                      letterSpacing: 0.5,
                     ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildBenefitItem(
+                    Icons.local_shipping_outlined,
+                    'Free Shipping',
+                    'On all orders with no minimum spend.',
+                  ),
+                  _buildBenefitItem(
+                    Icons.access_time_outlined,
+                    'Early Access',
+                    'Shop the sales before anyone else.',
+                  ),
+                  _buildBenefitItem(
+                    Icons.local_offer_outlined,
+                    'Extra 10% Off',
+                    'On selected premium brands.',
+                  ),
+                  _buildBenefitItem(
+                    Icons.support_agent_outlined,
+                    'Priority Support',
+                    '24/7 dedicated customer service.',
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 24),
-
-            // Spotlight Section
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 1,
-                      width: 40,
-                      color: const Color(0xFFD4AF37),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Spotlight',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Color(0xFF2C3240),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 1,
-                      width: 40,
-                      color: const Color(0xFFD4AF37),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Banner Carousel
-                SizedBox(
-                  height: 240,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    children: [
-                      _buildPromoBanner(),
-                      const SizedBox(width: 16),
-                      _buildPromoBanner(
-                        color: const Color(0xFFE1BEE7),
-                      ), // A different colored mockup
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Pagination Dots
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: Colors.black54,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 40),
-
-            // Trending Now (Placeholder based on bottom of mockup)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(height: 1, width: 40, color: Colors.grey.shade300),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Trending Now',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Color(0xFF2C3240),
-                    ),
-                  ),
-                ),
-                Container(height: 1, width: 40, color: Colors.grey.shade300),
-              ],
-            ),
-            const SizedBox(height: 40), // Bottom padding
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDarkActionButton(IconData icon, String value, String subtitle) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-            color: const Color(0xFF232228), // Slightly lighter than background
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white12),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: const Color(0xFFD4AF37), size: 18),
-              const SizedBox(width: 8),
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Icon(Icons.chevron_right, color: Colors.white54, size: 16),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: const TextStyle(color: Colors.white70, fontSize: 12),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProgressBar() {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.centerLeft,
-          children: [
-            // Track
-            Container(height: 4, width: double.infinity, color: Colors.white24),
-            // Progress
-            Container(
-              height: 4,
-              width: 40, // Small amount of horizontal progress
-              color: const Color(0xFFD4AF37),
-            ),
-            // Nodes
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD4AF37),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white30, width: 4),
-                  ),
-                ),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'SELECT',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
-            Column(
-              children: const [
-                Text(
-                  'ELITE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-                Text(
-                  '₹10000',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
-            Column(
-              children: const [
-                Text(
-                  'ICON',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-                Text(
-                  '₹35000',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPromoBanner({Color color = const Color(0xFFFFD54F)}) {
-    return Container(
-      width: 300,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
+  Widget _buildBenefitItem(IconData icon, String title, String description) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Simulated content for the banner
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF8E1), // Light amber
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.amber.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: const Color(0xFFD4AF37), size: 28),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(Icons.stars, color: Colors.pinkAccent, size: 14),
-                      SizedBox(width: 4),
-                      Text(
-                        'INSIDER',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ],
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3240),
                   ),
                 ),
-                const SizedBox(height: 12),
-                const Text(
-                  'EXTRA',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const Text(
-                  '10% OFF',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 28),
-                ),
-                const Text('On Home & Living', style: TextStyle(fontSize: 14)),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black54,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  child: const Text(
-                    'Use Code: INSIDERHOME',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.black87),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Text(
-                        'Shop Now',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Icon(Icons.play_circle_filled, size: 14),
-                    ],
+                const SizedBox(height: 6),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    height: 1.4,
                   ),
                 ),
               ],
-            ),
-          ),
-
-          // Placeholder for the image portion of the banner on the right
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: 140,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-              child: Container(
-                color: Colors.white.withValues(alpha: 0.3),
-                child: const Center(
-                  child: Icon(Icons.image, size: 50, color: Colors.black26),
-                ),
-              ),
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class _PaymentBottomSheet extends StatelessWidget {
+  final VoidCallback onPayClicked;
+
+  const _PaymentBottomSheet({required this.onPayClicked});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.all(24),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 48,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Complete Payment',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF2C3240),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              '₹999 will be charged to your selected method',
+              style: TextStyle(color: Colors.black54, fontSize: 14),
+            ),
+            const SizedBox(height: 28),
+            _buildPaymentOption(Icons.credit_card, 'Credit / Debit Card', true),
+            _buildPaymentOption(
+              Icons.account_balance,
+              'UPI / Netbanking',
+              false,
+            ),
+            _buildPaymentOption(Icons.account_balance_wallet, 'Wallets', false),
+            const SizedBox(height: 28),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onPayClicked,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFD4AF37),
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'PAY ₹999',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentOption(IconData icon, String title, bool isSelected) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isSelected ? const Color(0xFFD4AF37) : Colors.grey.shade200,
+          width: isSelected ? 2 : 1,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        color: isSelected ? const Color(0xFFFFF8E1) : Colors.grey.shade50,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: isSelected ? const Color(0xFFD4AF37) : Colors.grey.shade600,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? Colors.black87 : Colors.black87,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          if (isSelected)
+            const Icon(Icons.radio_button_checked, color: Color(0xFFD4AF37))
+          else
+            Icon(Icons.radio_button_unchecked, color: Colors.grey.shade400),
+        ],
+      ),
+    );
+  }
+}
+
+class _PaymentProcessingDialog extends StatefulWidget {
+  final VoidCallback onSuccess;
+
+  const _PaymentProcessingDialog({required this.onSuccess});
+
+  @override
+  State<_PaymentProcessingDialog> createState() =>
+      _PaymentProcessingDialogState();
+}
+
+class _PaymentProcessingDialogState extends State<_PaymentProcessingDialog>
+    with TickerProviderStateMixin {
+  bool _isSuccess = false;
+
+  late AnimationController _scaleController;
+  late Animation<double> _scaleAnimation;
+
+  late AnimationController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scaleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _scaleAnimation = CurvedAnimation(
+      parent: _scaleController,
+      curve: Curves.elasticOut,
+    );
+
+    _confettiController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
+    _processPayment();
+  }
+
+  @override
+  void dispose() {
+    _scaleController.dispose();
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void _processPayment() {
+    // Simulate network delay for processing
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+
+      setState(() {
+        _isSuccess = true;
+      });
+
+      _scaleController.forward();
+      _confettiController.forward();
+
+      // Close dialog after showing success for a while
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+        Navigator.pop(context);
+        widget.onSuccess();
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: Center(
+        child: Container(
+          width: 300,
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.2),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!_isSuccess) ...[
+                const CircularProgressIndicator(
+                  color: Color(0xFFD4AF37),
+                  strokeWidth: 4,
+                ),
+                const SizedBox(height: 32),
+                const Text(
+                  'Processing Payment...',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3240),
+                  ),
+                ),
+              ] else ...[
+                Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 80,
+                        ),
+                      ),
+                    ),
+                    // Confetti particles
+                    ...List.generate(12, (index) {
+                      final angle = (index * 30) * 3.14159 / 180;
+                      return AnimatedBuilder(
+                        animation: _confettiController,
+                        builder: (context, child) {
+                          final value = Curves.easeOutQuad.transform(
+                            _confettiController.value,
+                          );
+                          return Positioned(
+                            left:
+                                60 +
+                                (value *
+                                    80 *
+                                    1.5 *
+                                    (index % 2 == 0 ? 1 : -1) *
+                                    0.8),
+                            top:
+                                60 +
+                                (value *
+                                    80 *
+                                    1.5 *
+                                    (index % 3 == 0 ? 1 : -1) *
+                                    1.2),
+                            child: Transform.translate(
+                              offset: Offset(
+                                80 * value * 1.2 * _cos(angle),
+                                80 * value * 1.2 * _sin(angle),
+                              ),
+                              child: Opacity(
+                                opacity: 1 - value,
+                                child: Text(
+                                  index % 2 == 0 ? '✨' : '🎉',
+                                  style: TextStyle(
+                                    fontSize: 16 + (index % 3) * 4,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                const Text(
+                  'Payment Successful!',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.green,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Welcome to Insider Prime.',
+                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _cos(double x) {
+    return 1 - (x * x) / 2 + (x * x * x * x) / 24;
+  }
+
+  double _sin(double x) {
+    return x - (x * x * x) / 6 + (x * x * x * x * x) / 120;
   }
 }

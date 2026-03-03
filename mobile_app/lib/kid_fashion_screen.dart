@@ -113,6 +113,8 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
     }
   }
 
+  bool get isDarkMode => Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -311,18 +313,6 @@ class _KidsFashionHeaderState extends State<KidsFashionHeader> {
                       ),
                       _buildTextTabItem("kids".tr(), isSelected: true),
                     ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.grid_view,
-                    color: Colors.grey[800],
-                    size: 20,
                   ),
                 ),
               ],
