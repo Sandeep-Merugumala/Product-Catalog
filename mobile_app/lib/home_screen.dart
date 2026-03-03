@@ -18,6 +18,8 @@ import 'package:mobile_app/product_details_page.dart';
 import 'package:mobile_app/category_products_screen.dart';
 import 'package:mobile_app/brand_products_screen.dart';
 import 'notifications_page.dart';
+import 'package:mobile_app/ai_recommendations_screen.dart';
+import 'package:mobile_app/ai_recommendations_screen.dart';
 
 import 'package:mobile_app/widgets/product_search_bar.dart';
 import 'chatbot/chatbot_widget.dart';
@@ -268,7 +270,24 @@ class MyntraAppBar extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),                const SizedBox(width: 12),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AiRecommendationsScreen(),
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.auto_awesome,
+                    color: Color(0xFFFF3F6C),
+                    size: 26,
+                  ),
                 ),
+
+
                 const SizedBox(width: 12),
                 InkWell(
                   onTap: () {
@@ -351,20 +370,6 @@ class MyntraAppBar extends StatelessWidget {
                         child: _buildTabItem("kids".tr(), context),
                       ),
                     ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.white.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.grid_view,
-                    color: isDarkMode ? Colors.white : Colors.grey[800],
-                    size: 20,
                   ),
                 ),
               ],
@@ -1848,7 +1853,7 @@ class FeaturedProductCarousel extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          product['offer'],
+                          product['offer'].toString().tr(),
                           style: const TextStyle(
                             color: Color(0xFFFF3F6C),
                             fontSize: 11,
@@ -2498,3 +2503,6 @@ class ProductGrid extends StatelessWidget {
     );
   }
 }
+
+
+

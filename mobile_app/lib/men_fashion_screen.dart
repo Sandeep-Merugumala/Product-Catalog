@@ -319,18 +319,6 @@ class _MensFashionHeaderState extends State<MensFashionHeader> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.grid_view,
-                    color: Colors.grey[800],
-                    size: 20,
-                  ),
-                ),
               ],
             ),
           ),
