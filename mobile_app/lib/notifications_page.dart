@@ -9,21 +9,25 @@ class NotificationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Notifications',
           style: TextStyle(
-            color: Colors.black,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.5,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0.5,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -74,12 +78,12 @@ class NotificationsPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text(
+                    Text(
                       'No new notifications',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -133,7 +137,7 @@ class NotificationsPage extends StatelessWidget {
 
               return ListTile(
                 tileColor: isRead
-                    ? Colors.white
+                    ? Theme.of(context).cardColor
                     : Colors.blue.withValues(alpha: 0.05),
                 leading: CircleAvatar(
                   backgroundColor: const Color(
@@ -157,7 +161,9 @@ class NotificationsPage extends StatelessWidget {
                     Text(
                       data['body'] ?? '',
                       style: TextStyle(
-                        color: isRead ? Colors.grey[700] : Colors.black87,
+                        color: isRead
+                            ? (isDark ? Colors.grey[400] : Colors.grey[700])
+                            : Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                     const SizedBox(height: 4),

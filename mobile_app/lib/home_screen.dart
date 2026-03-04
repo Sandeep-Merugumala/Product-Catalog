@@ -2131,6 +2131,7 @@ class BrandsInFocus extends StatelessWidget {
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
+                              color: Colors.black,
                             ),
                           );
                         },

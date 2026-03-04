@@ -58,18 +58,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           widget.product['brand'] ?? 'Product',
-          style: const TextStyle(fontWeight: FontWeight.w500),
+          style: TextStyle(fontWeight: FontWeight.w500, color: textColor),
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Theme.of(context).iconTheme.color,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -124,10 +130,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       // Brand Name
                       Text(
                         widget.product['brand'] ?? 'Brand Name',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: textColor,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -149,8 +155,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                               vertical: 3,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              border: Border.all(color: Colors.grey[300]!),
+                              color: isDark
+                                  ? Colors.grey[800]
+                                  : Colors.grey[100],
+                              border: Border.all(
+                                color: isDark
+                                    ? Colors.grey[700]!
+                                    : Colors.grey[300]!,
+                              ),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
@@ -189,10 +201,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         children: [
                           Text(
                             '₹${widget.product['price'] ?? 0}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: textColor,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -281,12 +293,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
 
                       // Description
-                      const Text(
+                      Text(
                         'Product Details',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: textColor,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -314,10 +326,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             child: Container(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: isDark
+                        ? Colors.black.withValues(alpha: 0.2)
+                        : Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, -5),
                   ),
@@ -389,17 +403,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             style: TextStyle(
                               color: isWishlisted
                                   ? const Color(0xFFFF3F6C)
-                                  : Colors.black87,
+                                  : textColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.black87,
+                            foregroundColor: textColor,
                             side: BorderSide(
                               color: isWishlisted
                                   ? const Color(0xFFFF3F6C)
-                                  : Colors.grey[400]!,
+                                  : (isDark
+                                        ? Colors.grey[600]!
+                                        : Colors.grey[400]!),
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
