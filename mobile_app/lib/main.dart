@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'splash_screen.dart';
 import 'firebase_options.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:mobile_app/login.dart';
@@ -19,7 +19,14 @@ void main() async {
   EasyLocalization.logger.enableBuildModes = [];
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // GoogleSignIn.initialize is handled per-platform or not needed for web popup
+  const String googleClientId =
+      '393025467926-hah1jss558o8h06h6ps742ur782ubcv4.apps.googleusercontent.com';
+
+  if (kIsWeb) {
+    await GoogleSignIn.instance.initialize(clientId: googleClientId);
+  } else {
+    await GoogleSignIn.instance.initialize(serverClientId: googleClientId);
+  }
 
   // Clean up and seed products to Firestore
   // Note: These should ideally be run via an admin panel or a one-off script,
