@@ -1,0 +1,8 @@
+{
+    "name": "flutter-vercel-build",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "flutter/bin/flutter clean && flutter/bin/flutter pub get && flutter/bin/flutter build web --release",
+        "install-flutter": "git clone https://github.com/flutter/flutter.git -b stable"
+    }
+}
